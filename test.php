@@ -80,19 +80,30 @@ function QueryInsert()
 
 // QueryInsert();
 
-var_dump(mysqli_query(mysqli_connect('127.0.0.1:3306', 'root', '', 'uh347272_med24'), "SELECT id FROM med_organization"));
-$query = mysqli_query(mysqli_connect('127.0.0.1:3306', 'root', '', 'uh347272_med24'), "SELECT id FROM med_organization");
-echo "<br>ss<br>";
-var_dump($resultAssoc = mysqli_fetch_assoc($query));
+//код для тестированиея БД
+var_dump(mysqli_query(mysqli_connect('127.0.0.1:3306', 'root', '', 'uh347272_med24'), "SELECT * FROM med_district_region WHERE id=12"));
+echo "<hr/>";
+$query = mysqli_query(mysqli_connect('127.0.0.1:3306', 'root', '', 'uh347272_med24'), "SELECT * FROM med_district_region WHERE id=12");
 
-//получить индекс последнего id
-while ($ss = mysqli_fetch_assoc($tt)) {
-    
-    echo $ss['id']."-- значение";
-    $end = $ss['id'];
-}
-echo $end."<<<-----------";
+echo $resultAssoc.":  ";
+$resultAssoc = mysqli_fetch_assoc($query);
+var_dump($resultAssoc);
+echo "<br>----------------<br>";
 
+// while ($result = mysqli_fetch_assoc($query)) {
+//     if ('ТОВ "МДЦ ЕКСПЕРТ-КІРОВОГРАД"' == $result['name']) {
+// //         echo $result['id'];
+//         echo true;
+//     }
+// }
+// $result = mysqli_fetch_assoc($query);
+// foreach ($result as $key => $value) {
+//     echo $key ."=>". $value;
+// }
+
+
+echo $resultAssoc["id"]."<br>";
+echo $resultAssoc['region_fk'];
     
     
 /* вывод данных из объекта
