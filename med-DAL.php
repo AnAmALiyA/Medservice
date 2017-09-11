@@ -132,7 +132,7 @@ class MedDB
   }
   
   private function GetArrayAllCol($table){
-      $obj = $this->medDB->QuerySelectAll($table);
+      $obj = $this->QuerySelectAll($table);
       
       $arr = array();
       $i=1;
@@ -256,9 +256,42 @@ class MedDB
       return mysqli_fetch_assoc($result);
   }
   
+  private function GetIdByDataArray($query, $arrayData, $arrayNameTable){
+      $flag = true;
+      while ($result = mysqli_fetch_assoc($query)) {
+          $flag = true;
+          for ($i = 1; $i < count($nameTableArray); $i++) {
+              if ($result[$nameTableArray[$i]] != $arrayData[$i]) {
+                  return false;
+              }
+          }
+          if ($flag) {
+              
+              return $result['id'];
+          }
+      }
+      return -1;
+  }
+  
   private function ComparisonData($query, $data, $nameTable){//запрос искомые данные имя таблицы
       while ($result = mysqli_fetch_assoc($query)) {
           if ($data == $result[$nameTable]) {
+              return true;
+          }
+      }
+      return false;
+  }
+  
+  private function ComparisonDataArray($query, $arrayData, $nameTableArray){//запрос искомые данные имя таблицы
+      $flag = true;
+      while ($result = mysqli_fetch_assoc($query)) {
+          $flag = true;
+          for ($i = 1; $i < count($nameTableArray); $i++) {
+              if ($result[$nameTableArray[$i]] != $arrayData[$i]) {
+                  return false;
+              }
+          }
+          if ($flag) {
               return true;
           }
       }
@@ -297,7 +330,7 @@ class MedDB
           $lastId++;   
     
           $arrayValuesTabelRows = array($lastId, '', $ownership, $company, '');
-          $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
           if ($getResult) {
               return $lastId;
           }else {
@@ -324,7 +357,7 @@ class MedDB
           
           $arrayValuesTabelRows = array($lastId, $region);
           
-          $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
           if ($getResult) {
               return $lastId;
           }else {
@@ -360,7 +393,7 @@ class MedDB
           
       $arrayValuesTabelRows = array($lastId, $district, $regionId);
           
-      $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+      $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
           return $lastId;
       }else {
@@ -397,7 +430,7 @@ class MedDB
       
       $arrayValuesTabelRows = array($lastId, $town, $typeLocalityFkData, $DistrictRegionId);
       
-      $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+      $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
           return $lastId;
       }else {
@@ -431,7 +464,7 @@ class MedDB
       
       $arrayValuesTabelRows = array($lastId, $actualLocation, $townId);
       
-      $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+      $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
           return $lastId;
       }else {
@@ -465,7 +498,7 @@ class MedDB
       
       $arrayValuesTabelRows = array($lastId, $home, $actualLocationId);
       
-      $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+      $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
           return $lastId;
       }else {
@@ -489,7 +522,7 @@ class MedDB
           $lastId++;
           
           $arrayValuesTabelRows = array($lastId, $phone);
-          $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
           if ($getResult) {
               return $lastId;
           }else {
@@ -516,7 +549,7 @@ class MedDB
           $lastId++;
           
           $arrayValuesTabelRows = array($lastId, $typeDescription);
-          $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
           if ($getResult) {
               return $lastId;
           }else {
@@ -525,36 +558,127 @@ class MedDB
       }
   }
   
-//   function GetIdInsertServices ($param) {
-//       $table = 'med_services';
-//       $nameTable = 'type_description';
-//       $arrayNamesTabelRows = array('id', $nameTable);
+  function GetIdInsertServices ($arrayServices) {
+      $table = 'med_services';
+      $nameTables = array(
+          'dentistry', 'childrens_dentistry', 'therapeutic_dentistry',
+          'aesthetic_dentistry', 'orthodontics', 'dental _othopedics', 
+          'dental_surgery', 'dental_Implantology', 'periodontology',
+          'dental_prophylaxis', 'dentistry_pregnant_women', 'tooth_whitening',
+          'gnathology', 'dental_bone_plastics', 'dentistry_at_home', 'allergy',
+          'alcoholism', 'gastroenterology', 'childrens_consultation', 'ecg', 'ct',
+          'mammography', 'mri', 'oncology', 'wounded', 'otorhinolaryngology',
+          'radiology', 'sports_medicine', 'surgery', 'ultrasound_diagnosis',
+          'call_doctor_home', 'family_medicine', 'timpanometry'          
+      );
+      $arrayNamesTabelRows = array('id', $nameTable);
       
-//       $result = QuerySelectAll($table);
+      $result = QuerySelectAll($table);
       
-//       //узнаю уществует ли
-//       $isExist = $this->ComparisonData($result, $typeDescription, $nameTable);
-//       if ($isExist) {//если да
-//           //нахожу id
-//           $idTypeDescription = $this->GetIdByData($result, $typeDescription, $nameTable);
-//           return $idTypeDescription;
-//       }else{
-//           $lastId = $this->GetLastId($result);
-//           $lastId++;
+      //узнаю уществует ли
+      $isExist = $this->ComparisonDataArray($result, $arrayServices, $nameTables);
+      if ($isExist) {//если да
+          //нахожу id
+          $idServices = $this->GetIdByDataArray($result, $arrayServices, $nameTables);
+          return $idServices;
+      }else{
+          $lastId = $this->GetLastId($result);
+          $lastId++;
           
-//           $arrayValuesTabelRows = array($lastId, $typeDescription);
-//           $getResult = $this->medDB->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-//           if ($getResult) {
-//               return $lastId;
-//           }else {
-//               return -1;
-//           }
-//       }
-//   }
+          $arrayValuesTabelRows = array($lastId, $arrayServices);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          if ($getResult) {
+              return $lastId;
+          }else {
+              return -1;
+          }
+      }
+  }
   
-//   function InsertInsuranceCompany ($insuranceCompany) {
-//       ;
-//   }
+  function GetIdInsertDayWork($dayWork) {
+      $table = 'med_day_work';
+      $nameTable = 'day_work';
+      $arrayNamesTabelRows = array('id', $nameTable);
+      
+      $result = QuerySelectAll($table);
+      
+      //узнаю уществует ли
+      $isExist = $this->ComparisonData($result, $typeDescription, $nameTable);
+      if ($isExist) {//если да
+          //нахожу id
+          $idDayWork = $this->GetIdByData($result, $typeDescription, $nameTable);
+          return $idDayWork;
+      }else{
+          $lastId = $this->GetLastId($result);
+          $lastId++;
+          
+          $arrayValuesTabelRows = array($lastId, $typeDescription);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          if ($getResult) {
+              return $lastId;
+          }else {
+              return -1;
+          }
+      }
+  }
   
+  function GetIdInsertTimeWork($arraDatas) {
+      $table = 'med_time_work';
+      $nameTables = array('time_work', 'time_work_weekend');
+//       $arraDatas = array($timeWork, $timeWorkWeekend);
+      $arrayNamesTabelRows = array('id', $workDay, $workWeekend);
+      
+      $result = QuerySelectAll($table);
+      
+      //узнаю уществует ли
+      $isExist = $this->ComparisonDataArray($result, $arraDatas, $nameTables);
+      if ($isExist) {//если да
+          //нахожу id
+          $idTimeWork = GetIdByDataArray($result, $arraDatas, $nameTables);
+          return $idTimeWork;
+      }else{
+          $lastId = $this->GetLastId($result);
+          $lastId++;
+          
+          $arrayValuesTabelRows = array($lastId, $arraDatas); //array_unshift($lastId, $arraDatas);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          if ($getResult) {
+              return $lastId;
+          }else {
+              return -1;
+          }
+      }
+  }
+  
+  function GetIdInsertSummaryTable($arraDatas) {//med_summary_table
+      $table = 'med_services';
+      $nameTables = array(
+          'id', 'actual_location_fk', 'organization_fk', 'type_works_fk',
+          'type_institution_fk', 'phone_fk', 'day_work_kf', 'time_work_fk',
+          'insurance_companies_fk', 'services_fk'
+      );
+      $arrayNamesTabelRows = array('id', $nameTable);
+      
+      $result = QuerySelectAll($table);
+      
+      //узнаю уществует ли
+      $isExist = $this->ComparisonDataArray($result, $arraDatas, $nameTables);
+      if ($isExist) {//если да
+          //нахожу id
+          $idSummaryTable = $this->GetIdByDataArray($result, $arraDatas, $nameTables);
+          return $idSummaryTable;
+      }else{
+          $lastId = $this->GetLastId($result);
+          $lastId++;
+          
+          $arrayValuesTabelRows = array($lastId, $arrayServices);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          if ($getResult) {
+              return $lastId;
+          }else {
+              return -1;
+          }
+      }
+  }
 }
  ?>
