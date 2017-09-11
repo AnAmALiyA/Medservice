@@ -69,13 +69,13 @@ class MedDB
   }
 */
 
-  private function QueryInsert($table, $strNamesTabelRows, $strValuesTabelRows)
+  private function QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns)
   {
 /*  $arrayNamesTabelRows и $arrayValuesTabelRows принемаемые массивы имен столбцов и значений
     $strNamesTabelRows = GetStrNames($arrayNamesTabelRows);
     $strValuesTabelRows = GetStrValues($arrayValuesTabelRows);
 */
-    $query = "INSERT INTO $table($strNamesTabelRows) VALUES($strValuesTabelRows)";
+    $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
     $link = ConnectDB();
 
     $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -83,7 +83,7 @@ class MedDB
     $this->CloseConnectDB($link);
     return $result;
   }
-
+/* дополнительные методы
   private function QueryDelete($tabel, $id)
   {
     $query = "DELETE FROM $tabel WHERE id=$id";
@@ -119,7 +119,8 @@ class MedDB
     $this->CloseConnectDB($link);
     return $result;
   }
- 
+ */
+  
   private function GetArrayOneCol($table, $nameFilldArray){
       $obj = $this->QuerySelectAll($table);
       
@@ -310,7 +311,9 @@ class MedDB
       return $flag;
   }
   
-
+  //----для рефакторинга разбить метод на 2 действия---
+  //получить id
+  //вставить данные
   
   //вставка Название(Компания) 
   function GetIdInsertOrganization($company){
@@ -366,41 +369,6 @@ class MedDB
       }
   }
   
-  //вставка региона области
-  function GetIdInsertGetDistrictRegion ($district, $regionId) {
-      $table = 'med_district_region';
-      $nameTable = 'district';
-      $regionFk = 'region_fk';
-      $arrayNamesTabelRows = array('id', $nameTable, $regionFk);
-      
-      $result = QuerySelectAll($table);
-      
-      $isExist = $this->ComparisonData($result, $district, $nameTable);//существует
-      if ($isExist) {
-          $idDistrict = $this->GetIdByData($result, $district, $nameTable);//получаю сущ id
-          
-          $arrayNames = array($nameTable, $regionFk);
-          $arrayDatas = array($district, $regionId);
-          
-          $isCoincides = $this->ComparisonManyData($table, $idDistrict, $arrayNames, $arrayDatas);
-          if ($isCoincides) { //если совпали данные, то возвращаю текущий id
-              return $idDistrict;
-          }
-      }
-          //если не совпали, то добовляю
-      $lastId = $this->GetLastId($result);
-      $lastId++;
-          
-      $arrayValuesTabelRows = array($lastId, $district, $regionId);
-          
-      $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-      if ($getResult) {
-          return $lastId;
-      }else {
-          return -1;
-      }
-  }
-    
   //вставка город
   function GetIdInsertLocality($town, $DistrictRegionId){
       $table = 'med_locality';
@@ -429,6 +397,41 @@ class MedDB
       $lastId++;
       
       $arrayValuesTabelRows = array($lastId, $town, $typeLocalityFkData, $DistrictRegionId);
+      
+      $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+      if ($getResult) {
+          return $lastId;
+      }else {
+          return -1;
+      }
+  }
+  
+  //вставка региона город
+  function GetIdInsertGetDistrictCity ($districtCity, $localityId) {
+      $localityId = 'med_district_region';
+      $nameTable = 'district';
+      $localityFk = 'region_fk';
+      $arrayNamesTabelRows = array('id', $nameTable, $localityId);
+      
+      $result = QuerySelectAll($table);
+      
+      $isExist = $this->ComparisonData($result, $districtCity, $nameTable);//существует
+      if ($isExist) {
+          $idDistrictCity = $this->GetIdByData($result, $districtCity, $nameTable);//получаю сущ id
+          
+          $arrayNames = array($nameTable, $localityFk);
+          $arrayDatas = array($districtCity, $localityId);
+          
+          $isCoincides = $this->ComparisonManyData($table, $idDistrictCity, $arrayNames, $arrayDatas);
+          if ($isCoincides) { //если совпали данные, то возвращаю текущий id
+              return $idDistrictCity;
+          }
+      }
+      //если не совпали, то добовляю
+      $lastId = $this->GetLastId($result);
+      $lastId++;
+      
+      $arrayValuesTabelRows = array($lastId, $districtCity, $localityId);
       
       $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
@@ -472,7 +475,7 @@ class MedDB
       }
   }
   
-  function GetIdInsertHome ($home, $actualLocationId) {
+  function GetIdInsertHome($home, $actualLocationId) {
       $table = 'med_home';
       $nameTable = 'number_home';
       $actualLocationFk = 'actual_location_fk';

@@ -393,7 +393,7 @@
                                 <label for="district">Район</label>
                             </div>
                             <div class="col2">
-                                <input type="text" placeholder="" id="district" name="district" value="Обилиск">
+                                <input type="text" placeholder="" id="district" name="districtCity" value="Обилиск">
                             </div>
                         </div>
                         <div class="row">
@@ -426,7 +426,7 @@
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
-<!--                             тут генерировать телефоны на id phones-->
+<!--                             тут генерировать телефоны средствами JS на id phones-->
                             <div class="col2 phone">
                                 <input id="phone3" type="tel" name="3-phone" placeholder="(___) 000 00 00" value="">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
