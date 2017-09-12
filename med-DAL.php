@@ -214,7 +214,7 @@ class MedDB
     
   //Тип учереждения
   function GetTypeInstitutionOneCol()
-  {
+  {     
       $table = 'med_type_institution';
       $nameFilldArray = 'type_description';
       return $this->GetArrayOneCol($table, $nameFilldArray);
@@ -223,9 +223,14 @@ class MedDB
   //страховая компания
   function GetInsuranceCompanyOneCol()
   {
-      $table = 'med_insurance_companies';
-      $nameFilldArray='name_companie';
-      return $this->GetArrayOneCol($table, $nameFilldArray);
+      $arrayInsuranceCompanyes = array(
+          'usk' => 'УСК', 
+          'aska' => 'АСКА'
+      );
+//       $table = 'med_insurance_companies';
+//       $nameFilldArray='name_companie';
+//       return $this->GetArrayOneCol($table, $nameFilldArray);
+      return $arrayInsuranceCompanyes;
   }
   
   //суммарную таблицу 10 колонки
@@ -342,6 +347,33 @@ class MedDB
       }
   }
   
+  function GetIdInsertInsuranceCompany($arrayInsuranceCompany) {
+      $table = 'med_insurance_companies';
+      $nameTables = array('usk', 'aska');
+      $arrayNamesTabelRows = array('id', $nameTable);
+      
+      $result = QuerySelectAll($table);
+      
+      //узнаю уществует ли
+      $isExist = $this->ComparisonDataArray($result, $arrayInsuranceCompany, $nameTables);
+      if ($isExist) {//если да
+          //нахожу id
+          $idInsuranceCompany = $this->GetIdByDataArray($result, $arrayInsuranceCompany, $nameTables);
+          return $idInsuranceCompany;
+      }else{
+          $lastId = $this->GetLastId($result);
+          $lastId++;
+          
+          $arrayValuesTabelRows = array($lastId, $arrayInsuranceCompany);
+          $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+          if ($getResult) {
+              return $lastId;
+          }else {
+              return -1;
+          }
+      }
+  }
+  
   //вставка области - тут либо делаю вставку или нахожу существующую и возвращаю id области
   function GetIdInsertGetRegion($region){
       $table = 'med_region';
@@ -441,6 +473,7 @@ class MedDB
       }
   }
   
+  //улица
   function GetIdInsertActualLocation($actualLocation, $townId) {
       $table = 'med_actual_location';
       $nameTable = 'actual_location';
@@ -475,6 +508,7 @@ class MedDB
       }
   }
   
+  //дом
   function GetIdInsertHome($home, $actualLocationId) {
       $table = 'med_home';
       $nameTable = 'number_home';
@@ -509,6 +543,7 @@ class MedDB
       }
   }
   
+  //телефон
   function GetIdInsertPhone($phone) {
       $table = 'med_phone';
       $nameTable = 'phone';
@@ -534,7 +569,8 @@ class MedDB
       }
   }
   
-  function GetIdInsertTypeInstitution($typeDescription) {
+  //тип учереждение
+  function GetIdInsertTypeInstitution($typeCompany) {
       $table = 'med_type_institution';
       $nameTable = 'type_description';
       $arrayNamesTabelRows = array('id', $nameTable);
@@ -542,16 +578,16 @@ class MedDB
       $result = QuerySelectAll($table);
       
       //узнаю уществует ли
-      $isExist = $this->ComparisonData($result, $typeDescription, $nameTable);
+      $isExist = $this->ComparisonData($result, $typeCompany, $nameTable);
       if ($isExist) {//если да
           //нахожу id
-          $idTypeDescription = $this->GetIdByData($result, $typeDescription, $nameTable);
+          $idTypeDescription = $this->GetIdByData($result, $typeCompany, $nameTable);
           return $idTypeDescription;
       }else{
           $lastId = $this->GetLastId($result);
           $lastId++;
           
-          $arrayValuesTabelRows = array($lastId, $typeDescription);
+          $arrayValuesTabelRows = array($lastId, $typeCompany);
           $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
           if ($getResult) {
               return $lastId;
@@ -561,6 +597,7 @@ class MedDB
       }
   }
   
+  //сервисы
   function GetIdInsertServices ($arrayServices) {
       $table = 'med_services';
       $nameTables = array(
@@ -598,6 +635,7 @@ class MedDB
       }
   }
   
+  //дени работы
   function GetIdInsertDayWork($dayWork) {
       $table = 'med_day_work';
       $nameTable = 'day_work';
@@ -625,6 +663,7 @@ class MedDB
       }
   }
   
+  //время работы
   function GetIdInsertTimeWork($arraDatas) {
       $table = 'med_time_work';
       $nameTables = array('time_work', 'time_work_weekend');

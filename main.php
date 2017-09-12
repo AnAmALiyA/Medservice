@@ -331,7 +331,7 @@
                                       $itemInsuranceOption = 1;
                                       foreach ($controller->GetInsuranceCompanyAll() as $key => $value)
                                       {
-                                        echo "<option value=\"$itemInsuranceOption\">$value</option>";
+                                          echo "<option value=\"$key\">$value</option>";
                                         $itemInsuranceOption++;
                                       }
                                     ?>
@@ -345,7 +345,7 @@
                               $itemInsuranceInput = 1;
                               foreach ($controller->GetInsuranceCompanyAll() as $key => $value)
                              {
-                                 echo "<input type=\"checkbox\" name=\"$itemInsuranceInput-insurance\" value=\"$itemInsuranceInput\">$value</input>";
+                                 echo "<input type=\"checkbox\" name=\"$key\" value=\"\">$value</input>";
 //                                  //Нужно будет в том случае, если человек не использует JavaScript
 //                                  $checked = ($sessionFlag && $_SESSION[$itemInsuranceInput.'-insurance'] == $key)?'checked':'';
 //                                  echo "<input type=\"checkbox\" name=\"$itemInsuranceInput-insurance\" value=\"$itemInsuranceInput\" $checked>$value</input>";
@@ -354,9 +354,7 @@
                                    //$itemInsuranceInput я потом смогу использовать для быстрого поиска по массиву $arrayNamesServices
                                $itemInsuranceInput++;
                              }
-                              ?>
-                              <input type="checkbox" name="usk" value="УСК" checked>
-                              <input type="checkbox" name="aska" value="АСКА">
+                              ?>                              
                             </div>
                         </div>
                         <div class="row">
@@ -452,7 +450,7 @@
                                     ?>
                                 </select>
                                 <span>до</span>
-                                <select name="monday" class="time" id="mondayEnd">
+                                <select name="mondayEnd" class="time" id="mondayEnd">
                                     <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
@@ -461,14 +459,14 @@
                             </div>
                             <div class="col2">
                                 <span>вт</span>
-                                <select name="tuesday" class="time" id="tuesdayStart">
+                                <select name="tuesdayStart" class="time" id="tuesdayStart">
                                     <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
-                                <select name="tuesday" class="time" id="tuesdayEnd">
+                                <select name="tuesdayEnd" class="time" id="tuesdayEnd">
                                     <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
@@ -477,14 +475,14 @@
                             </div>
                             <div class="col2">
                                 <span>ср</span>
-                                <select name="wednesday" class="time" id="wednesdayStart">
+                                <select name="wednesdayStart" class="time" id="wednesdayStart">
                                     <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
-                                <select name="wednesday" class="time" id="wednesdayEnd">
+                                <select name="wednesdayEnd" class="time" id="wednesdayEnd">
                                     <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
@@ -493,14 +491,14 @@
                             </div>
                             <div class="col2">
                                 <span>чт</span>
-                                <select name="thursday" class="time" id="thursdayStart">
+                                <select name="thursdayStart" class="time" id="thursdayStart">
                                     <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
-                                <select name="thursday" class="time" id="thursdayEnd">
+                                <select name="thursdayEnd" class="time" id="thursdayEnd">
                                     <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
@@ -509,14 +507,14 @@
                             </div>
                             <div class="col2">
                                 <span>пт</span>
-                                <select name="friday" class="time" id="fridayStart">
+                                <select name="fridayStart" class="time" id="fridayStart">
                                     <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
-                                <select name="friday" class="time" id="fridayEnd">
+                                <select name="fridayEnd" class="time" id="fridayEnd">
                                     <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
@@ -525,14 +523,14 @@
                             </div>
                             <div class="col2">
                                 <span>сб</span>
-                                <select name="saturday" class="time" id="saturdayStart">
+                                <select name="saturdayStart" class="time" id="saturdayStart">
                                     <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
-                                <select name="saturday" class="time" id="saturdayEnd">
+                                <select name="saturdayEnd" class="time" id="saturdayEnd">
                                     <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
