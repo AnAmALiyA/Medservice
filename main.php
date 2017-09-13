@@ -1,3 +1,4 @@
+<?php session_start();?>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -199,7 +200,7 @@
                     <li><a class="lightbox" href="#login-form">Войти</a></li>
                     <div id="login-form">
                         <div class="zm_alr_form_container zm_alr_login_form_container ajax-login-register-login-container zm_alr_design_default">
-                            <form action="javascript://" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
+                            <form action="action.php" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
                                 <div class="form-wrapper">
                                     <div class="ajax-login-register-status-container">
                                         <div class="ajax-login-register-msg-target"></div>
@@ -697,7 +698,7 @@
             <h2>По вопросам сотрудничества обращайтесь</h2>
             <div role="form" class="wpcf7" id="wpcf7-f90-o2" dir="ltr" lang="en-GB">
                 <div class="screen-reader-response"></div>
-                <form action="/#wpcf7-f90-o2" method="post" class="wpcf7-form" novalidate="novalidate">
+                <form action="action.php" method="post" class="wpcf7-form" novalidate="novalidate">
                     <div style="display: none;">
                         <input name="_wpcf7" value="90" type="hidden">
                         <input name="_wpcf7_version" value="4.6" type="hidden">

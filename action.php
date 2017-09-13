@@ -1,22 +1,24 @@
 <?php
+session_start();
+require_once 'check.php';
 require_once 'med-BAL.php';
 require_once 'validate.php';
 
 class HandlingData
 {
-    private $arrHoliday = array('none', 'monday', 'tuesday', 'wednesday', 'thursday', 
-        'friday', 'saturday', 'sunday');    
+    private $arrHoliday = array('none', 'monday', 'tuesday', 'wednesday', 'thursday',
+        'friday', 'saturday', 'sunday');
     private $timeWork = array('Start', 'End');
-
+    
     private $controller;
     private $validateData;
-
+    
     function __construct()
     {
         $this->controller = new Controller();
         $this->validateData = new ValidateData();
     }
-
+    
     // private function SetEmpty($key)
     // {
     // $_POST[$key.'_error']='empty';
@@ -32,15 +34,15 @@ class HandlingData
             case 'em':
                 $_POST[$value . '_error'] = 'empty';
                 break;
-            
+                
             case 'notCh':
                 $_POST[$value . '_error'] = 'notChosen';
                 break;
-            
+                
             case 'notVStr':
                 $_POST[$value . '_error'] = 'notValidateString';
                 break;
-            
+                
             case 'notP':
                 $_POST[$value . '_error'] = 'notPhone';
                 break;
@@ -48,13 +50,13 @@ class HandlingData
             case 'notV':
                 $_POST[$value . '_error'] = 'notValide';
                 break;
-            
-            // default:
-            // # code...
-            // break;
+                
+                // default:
+                // # code...
+                // break;
         }
     }
-
+    
     private function IsFillField()
     {
         $flag = true;
@@ -147,22 +149,20 @@ class HandlingData
         // Время работы - заранее установленно
         foreach ($this->timeWork as $item => $period) {
             foreach ($this->arrHoliday as $number => $day) {
-                if (!$this->validateData->IsExist($_POST[$day . $period])) 
+                if (!$this->validateData->IsExist($_POST[$day . $period]))
                 {
                     $this->SetError('$day . $period', 'em');
                     $flag = false;
                 }
             }
         }
-                    
-                    
-                
+        
         // Выходной
         if (! $validateData->IsExist($_POST['none']) || ! $validateData->IsExist($_POST['monday']) || ! $validateData->IsExist($_POST['tuesday']) || ! $validateData->IsExist($_POST['wednesday']) || ! $validateData->IsExist($_POST['thursday']) || ! $validateData->IsExist($_POST['saturday']) || ! $validateData->IsExist($_POST['sunday'])) {
             $this->SetError('holiday', 'em');
         }
     }
-
+    
     private function IsValidFild()
     {
         $flag = true;
@@ -222,7 +222,7 @@ class HandlingData
         $_POST['street'] = $this->validateData->FilterStringOnHtmlSql($_POST['street']);
         if (! $this->validateData->ValidIntegerString($_POST['street'])) {
             $this->SetError('street', 'notVStr');
-        }        
+        }
         
         // необязательные параметры
         if ($validateData->IsExist($_POST['home'])) {
@@ -241,7 +241,7 @@ class HandlingData
             }
         }
         
-        //время работы        
+        //время работы
         foreach ($this->timeWork as $item => $period) {
             foreach ($this->arrHoliday as $number => $day) { //
                 $_POST[$day . $period] = $this->validateData->FilterStringOnHtmlSql($_POST[$day . $period]);
@@ -272,7 +272,7 @@ class HandlingData
     {
         $conclusion = true;
         //загрузить компания(наименование) - сравнить, если нет - добавить, если есть использовать id(если такая есть - выкинуть ошибку)
-        $organization = $this->controller->GetOrganizationAll();        
+        $organization = $this->controller->GetOrganizationAll();
         foreach ($organizationPost as $key => $value) {
             if ($value == $_POST['nameCompany']) {
                 return false;
@@ -281,7 +281,7 @@ class HandlingData
         
         $this->controller->InsertOrganization($_POST['nameCompany']);
         
-        //загрузить области - сравнить, если нет - добавить, если есть использовать id        
+        //загрузить области - сравнить, если нет - добавить, если есть использовать id
         $region = $this->controller->GetRegionAll();
         
         //загрузить районы - сравнить, если нет - добавить, если есть использовать id
@@ -301,7 +301,7 @@ class HandlingData
         
         //загрузить время работы - сравнить, если нет - добавить, если есть использовать id
         $timeWork = $this->controller->GetTimeWorkAll();
-                
+        
         //загрузить дни работы - сравнить, если нет - добавить, если есть использовать id
         $dayWork = $this->controller->GetDayWorkAll();
         
@@ -320,174 +320,238 @@ class HandlingData
     }
     
     //Нужно будет в том случае, если человек не использует JavaScript
-//     private function SaveIntoSessions()
-//     {
-// //         Удаление переменных из сессии. Если у вас register_globals=off, то достаточно написать
-// //         unset($_SESSION['var']);
-// //         Если же нет, то тогда рядом с ней надо написать:        
-// //         session_unregister('var');
-//         unset($_SESSION['submit']);
-//         foreach ($_POST as $key => $value) {
-//             if ($key!='authorization' && $$key!='key')
-//             {
-//                 unset($_SESSION[$key]);
-//             }            
-//         }
-        
-//         $_SESSION['submit']= true;
-//         foreach ($_POST as $key => $value)
-//         {
-//             $_SESSION[$key] = $value;
-//         }
-//     }
-
-    private function RedirectBack()
+    //     private function SaveIntoSessions()
+    //     {
+    // //         Удаление переменных из сессии. Если у вас register_globals=off, то достаточно написать
+    // //         unset($_SESSION['var']);
+    // //         Если же нет, то тогда рядом с ней надо написать:
+    // //         session_unregister('var');
+    //         unset($_SESSION['submit']);
+    //         foreach ($_POST as $key => $value) {
+    //             if ($key!='authorization' && $$key!='key')
+    //             {
+    //                 unset($_SESSION[$key]);
+    //             }
+    //         }
+    
+    //         $_SESSION['submit']= true;
+    //         foreach ($_POST as $key => $value)
+    //         {
+    //             $_SESSION[$key] = $value;
+    //         }
+    //     }
+    
+    //описать валидацию и неверные данные ввести в сесию
+    function ValidataLoginPass() 
     {
-        // заглушка
-        // $redicet = $_SERVER['HTTP_REFERER'];
-        // // @header ("Location: $redicet");
-        // //попробую
-        // header('Location: index.html'); exit();
+        $_POST['zm_alr_login_user_name'];
+        $_POST['zm_alr_login_password'];
+        //$_SESSION['error'] = array('error_Validata' => 'Не верно введенные данные.');
+        if (!$isLogin)
+        {
+            $_SESSION['error'] = array('error_authorisation_login' => 'Такого пользователя не существует.');
+        }
+        else
+        {
+            $_SESSION['error'] = array('error_authorisation_password' => 'Не верный пароль.');
+        }
+        return true;
     }
-
-    private function RedirectMain()
+    
+    public function SaveData()
     {
-        header('Location: index.html');
-        exit();
-    }
-
-    public function Action()
-    {
-        $submit = isset($_POST['submit']);
-        
-        if ($submit) {
             if (! $this->IsFillField()) {
                 $this->SaveIntoSessions();
                 $this->RedirectBack();
-                return false;
             }
             
             if (! $this->IsValidFild()) {
                 $this->SaveIntoSessions();
                 $this->RedirectBack();
-                return false;
             }
             
             // после проверки данных сохранить в БД
-            $this->SaveDB();            
-            // после сохранения удалить данные из сессии
+            $isSave = $this->SaveDB();
+            if ($isSave == -1) {
+                return false;
+            }
             return true;
-        } else { // проверить перенаправление
-            $this->RedirectMain();
-            return false;
+    }
+    
+    function RedirectBack()
+    {
+        if (!empty($_SERVER['HTTP_REFERER']))
+        {
+            header("Location: ".$_SERVER['HTTP_REFERER']);
+        }
+        else
+        {
+            echo "No referrer.";
         }
     }
     
-    // private function FillField($post)
-    // {
-    // # code...
-    // }
+    function RedirectMain()
+    {
+        header('Location: index.html'); exit();
+    }
 }
 
+$auth = new AuthClass();
 $handlingData = new HandlingData();
-$handlingData->Action();
+
+$isAuthorisated = false;
+$isAuthorisated = $auth->IsAuth($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']);
+if(!$isAuthorisated && $_POST['zm_alr_login_submit_button'] == 'Авторизация')//если он авторизирован, я его допущу
+{    
+     if (!$handlingData->ValidataLoginPass())
+     {
+         $auth->Authorize($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']);
+         //$_SESSION['error'] = array('error_Validata' => 'Не верно введенные данные.');
+         $handlingData->RedirectBack();
+     }
+}
+else 
+{
+    $handlingData->RedirectBack();
+}
+
+//проверка введеных данных
+if($_POST['submit'] == 'Сохранить')
+{
+    $handlingData->SaveData();
+}
+else
+{   //вернуть назад
+    $handlingData->RedirectBack();
+}
+
 // require('test.php');
 // header('Location: index.html'); exit();
 
-$submit = isset($_POST['submit']);
-echo $submit . ' - submit<br>';
 
-// Тип учереждения
-$typeCompany = isset($_POST['typeCompany']);
-echo $typeCompany . ' - typeCompany<br>';
+//для тестирования введенных данных
+// $submit = isset($_POST['submit']);
+// echo $submit . ' - submit<br>';
 
-// Направленияуслуги
-$services = isset($_POST['orthodontics']);
-echo $services . ' - services Не выбран <br>';
+// // Тип учереждения
+// $typeCompany = isset($_POST['typeCompany']);
+// echo $typeCompany . ' - typeCompany<br>';
 
-$services = isset($_POST['stomatologi_imlantologi']);
-echo $services . ' - services<br>';
+// // Направленияуслуги
+// $services = isset($_POST['orthodontics']);
+// echo $services . ' - services Не выбран <br>';
 
-// Страховые компании
-$insuranceCompany = isset($_POST['usk']);
-echo $insuranceCompany . ' - insuranceCompany<br>';
+// $services = isset($_POST['stomatologi_imlantologi']);
+// echo $services . ' - services<br>';
 
-$insuranceCompany = isset($_POST['aska']);
-echo $insuranceCompany . ' - insuranceCompany Не выбран <br>';
+// // Страховые компании
+// $insuranceCompany = isset($_POST['usk']);
+// echo $insuranceCompany . ' - insuranceCompany<br>';
 
-$nameCompany = isset($_POST['nameCompany']);
-if (! empty($nameCompany)) {
-    echo $nameCompany . ' - nameCompany<br>';
-} else {
-    echo 'пустая строка - nameCompany<br>';
-}
+// $insuranceCompany = isset($_POST['aska']);
+// echo $insuranceCompany . ' - insuranceCompany Не выбран <br>';
 
-$region = isset($_POST['region']);
-if (! empty($region)) {
-    echo $region . ' - region<br>';
-} else {
-    echo 'пустая строка - region<br>';
-}
+// $nameCompany = isset($_POST['nameCompany']);
+// if (! empty($nameCompany)) {
+//     echo $nameCompany . ' - nameCompany<br>';
+// } else {
+//     echo 'пустая строка - nameCompany<br>';
+// }
 
-$town = isset($_POST['town']);
-if (! empty($town)) {
-    echo $town . ' - town<br>';
-} else {
-    echo 'пустая строка - town<br>';
-}
+// $region = isset($_POST['region']);
+// if (! empty($region)) {
+//     echo $region . ' - region<br>';
+// } else {
+//     echo 'пустая строка - region<br>';
+// }
 
-$district = isset($_POST['district']);
-if (! empty($district)) {
-    echo $district . ' - district<br>';
-} else {
-    echo 'пустая строка - district<br>';
-}
+// $town = isset($_POST['town']);
+// if (! empty($town)) {
+//     echo $town . ' - town<br>';
+// } else {
+//     echo 'пустая строка - town<br>';
+// }
 
-$street = isset($_POST['street']);
-if (! empty($street)) {
-    echo $street . ' - street<br>';
-} else {
-    echo 'пустая строка - street<br>';
-}
+// $district = isset($_POST['district']);
+// if (! empty($district)) {
+//     echo $district . ' - district<br>';
+// } else {
+//     echo 'пустая строка - district<br>';
+// }
 
-$home = isset($_POST['home']);
-if (! empty($home)) {
-    echo $home . ' - home<br>';
-} else {
-    echo 'пустая строка - home<br>';
-}
+// $street = isset($_POST['street']);
+// if (! empty($street)) {
+//     echo $street . ' - street<br>';
+// } else {
+//     echo 'пустая строка - street<br>';
+// }
 
-$phone = isset($_POST['phone']);
-if (! empty($phone)) {
-    echo $phone . ' - phone<br>';
-} else {
-    echo 'пустая строка - phone<br>';
-}
+// $home = isset($_POST['home']);
+// if (! empty($home)) {
+//     echo $home . ' - home<br>';
+// } else {
+//     echo 'пустая строка - home<br>';
+// }
 
-$phone2 = isset($_POST['phone2']);
-if (! empty($phone2)) {
-    echo $phone2 . ' - phone2<br>';
-} else {
-    echo 'пустая строка - phone2<br>';
-}
+// $phone = isset($_POST['phone']);
+// if (! empty($phone)) {
+//     echo $phone . ' - phone<br>';
+// } else {
+//     echo 'пустая строка - phone<br>';
+// }
 
-$phone3 = isset($_POST['phone3']);
-if (! empty($phone3)) {
-    echo $phone3 . ' - phone3<br>';
-} else {
-    echo 'пустая строка - phone3<br>';
-}
+// $phone2 = isset($_POST['phone2']);
+// if (! empty($phone2)) {
+//     echo $phone2 . ' - phone2<br>';
+// } else {
+//     echo 'пустая строка - phone2<br>';
+// }
 
-$sundayStart = isset($_POST['sundayStart']);
-echo $sundayStart . ' - sundayStart<br>';
+// $phone3 = isset($_POST['phone3']);
+// if (! empty($phone3)) {
+//     echo $phone3 . ' - phone3<br>';
+// } else {
+//     echo 'пустая строка - phone3<br>';
+// }
 
-$sundayEnd = isset($_POST['sundayEnd']);
-echo $sundayEnd . ' - sundayEnd<br>';
+// $sundayStart = isset($_POST['sundayStart']);
+// echo $sundayStart . ' - sundayStart<br>';
 
-$days = isset($_POST['sunday']);
-echo $days . ' - sunday<br>';
+// $sundayEnd = isset($_POST['sundayEnd']);
+// echo $sundayEnd . ' - sundayEnd<br>';
 
-foreach ($_POST as $key => $value) {
-    echo 'ключ: ' . $key . ' => значение: ' . $value . '<br>';
-}
+// $days = isset($_POST['sunday']);
+// echo $days . ' - sunday<br>';
+
+// foreach ($_POST as $key => $value) {
+//     echo 'ключ: ' . $key . ' => значение: ' . $value . '<br>';
+
+/*
+нужно закончить:
+- валидацию логина и пароля
+- авторизацию
+- проверку авторизированных пользователей
+- написать клас авторизации с методом создания ключа
+- написать в БД нужную таблицу
+- связать сохранения в БД
+- протестировать
+
+http://php.net/manual/ru/tutorial.forms.php
+http://developer.alexanderklimov.ru/php/forms.php
+http://www.php.su/articles/?cat=examples&page=069
+http://addphp.ru/materials/base/1_13.php
+https://ru.stackoverflow.com/questions/605555/%D0%92%D0%B0%D0%BB%D0%B8%D0%B4%D0%B0%D1%86%D0%B8%D1%8F-%D1%84%D0%BE%D1%80%D0%BC%D1%8B-php
+http://php.net/manual/ru/language.variables.external.php
+http://php.net/manual/ru/reserved.variables.cookies.php
+http://php.net/manual/ru/reserved.variables.session.php
+http://php.net/manual/ru/ref.session.php
+http://www.php.su/articles/?cat=examples&page=070
+https://www.tutorialrepublic.com/php-tutorial/php-mysql-insert-query.php
+
+авторизация
+https://habrahabr.ru/post/13726/
+http://programmer-weekdays.ru/archives/125
+http://blog.ox2.ru/php/avtorizaciya-i-rabota-sessii/
+
+*/
 ?>
