@@ -355,13 +355,13 @@ class HandlingData
             if (! $this->IsFillField()) {
                 $_SESSION['new_session'] = false;
 //                 $this->SaveIntoSessions();
-                $this->RedirectBack();
+                $this->controller->RedirectBack();
             }
             
             if (! $this->IsValidFild()) {
                 $_SESSION['new_session'] = false;
 //                 $this->SaveIntoSessions();
-                $this->RedirectBack();
+                $this->controller->RedirectBack();
             }
             
             // после проверки данных сохранить в БД
@@ -372,27 +372,53 @@ class HandlingData
             return true;
     }
     
-    function RedirectBack()
-    {
-        if (!empty($_SERVER['HTTP_REFERER']))
-        {
-            header("Location: ".$_SERVER['HTTP_REFERER']);
-        }
-        else
-        {
-            header("http://medservice24.pirise.com");
-        }
-    }
-    
-    function RedirectMain()
-    {
-        header('Location: index.html'); exit();
+    public function Redirect(){
+        $this->controller->RedirectBack();
     }
 }
 
-$auth = new AuthClass();
 $handlingData = new HandlingData();
 
+$isAuthorized = false;
+if (isset($_SESSION['id']) && isset($_SESSION['hash'])) {
+    $isAuthorized = $handlingData->IsAuthorized($_SESSION['id'], $_SESSION['hash']);
+}
+elseif (isset($_COOKIE['id']) && isset($_COOKIE['hash'])){
+    $isAuthorized = $handlingData->IsAuthorized($_COOKIE['id'], $_COOKIE['hash']);
+    if ($isAuthorized) {
+        setcookie('id', $_COOKIE['id'], time()+3600*24*3);
+        setcookie('hash', $_COOKIE['hash'], time()+3600*24*3);
+        $_SESSION['id'] = $_COOKIE['id'];
+        $_SESSION['hash'] = $_COOKIE['hash'];
+    }
+}
+elseif (isset($_POST['zm_alr_login_submit_button']) && $_POST['zm_alr_login_submit_button'] == 'Авторизация'){
+//вызвать валидацию
+//     if(isset($_POST['zm_alr_login_user_name']) && isset($_POST['zm_alr_login_password']))){
+        
+//     }
+}
+else {
+    $handlingData->Redirect();
+}
+
+if ($isAuthorized) {
+    //выполнять методы нужные
+}
+else {
+    $handlingData->Redirect();
+}
+
+// elseif ($_POST['zm_alr_login_submit_button'] == 'Авторизация') {
+//     $handlingData->
+// }
+
+//проверить кукисы
+//если пусты 
+    //- проверить запрос на авторизацию, есть ли такой
+    //если нет - вернуть на главную
+//если полные - проверить на верность
+//если совпали - продолжить выпонение submita
 $isAuthorisated = false;
 $isAuthorisated = $auth->IsAuth($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']);
 if(!$isAuthorisated && $_POST['zm_alr_login_submit_button'] == 'Авторизация')//если он авторизирован, я его допущу
@@ -409,7 +435,7 @@ else
     $handlingData->RedirectBack();
 }
 
-//проверка введеных данных
+//проверка введеных данных.
 if($_POST['submit'] == 'Сохранить')
 {
     if ($_POST['form'] == 'kabinet_main') {

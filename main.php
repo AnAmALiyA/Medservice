@@ -203,7 +203,7 @@
                             <form action="action.php" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
                                 <div class="form-wrapper">
                                     <div class="ajax-login-register-status-container">
-                                        <div class="ajax-login-register-msg-target"></div>
+                                        <div class="ajax-login-register-msg-target">тут получаем не верный ответ</div>
                                     </div>
                                     <div class="zm_alr_form_field_container zm_alr_text_container zm_alr_login_text_container">
                                         <label for="zm_alr_login_user_name" class="zm_alr_label">Имя пользователя</label>
@@ -248,7 +248,7 @@
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медецинский центр</h2>
+                    <h2>Медицинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">

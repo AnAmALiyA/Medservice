@@ -619,5 +619,23 @@ function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
         $idSummaryTable = $this->medDB->GetIdInsertSummaryTable();
         return  $idSummaryTable;
     }
+    
+    function RedirectBack()
+    {
+        if (!empty($_SERVER['HTTP_REFERER']))
+        {
+            header("Location: ".$_SERVER['HTTP_REFERER']);
+        }
+        else
+        {
+            $this->RedirectMain();
+        }
+    }
+    
+    function RedirectMain()
+    {
+        //header("http://medservice24.pirise.com");
+        header('Location: index.html'); exit();
+    }
 }
 ?>
