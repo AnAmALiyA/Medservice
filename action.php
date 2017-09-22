@@ -413,9 +413,12 @@ else
 if($_POST['submit'] == 'Сохранить')
 {
     if ($_POST['form'] == 'kabinet_main') {
-        ;
+        $handlingData->SaveData();
     }
-    $handlingData->SaveData();
+    else
+    {   //вернуть назад
+        $handlingData->RedirectBack();
+    }
 }
 else
 {   //вернуть назад
