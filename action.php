@@ -19,36 +19,27 @@ class HandlingData
         $this->validateData = new ValidateData();
     }
     
-    // private function SetEmpty($key)
-    // {
-    // $_POST[$key.'_error']='empty';
-    // }
-    //
-    // private function SetNotChosen($key)
-    // {
-    // $_POST[$key.'_error']='notChosen';
-    // }
     private function SetError($value, $case)
     {
         switch ($case) {
             case 'em':
-                $_POST[$value . '_error'] = 'empty';
+                $_SESSION[$value . '_error'] = 'empty';
                 break;
                 
             case 'notCh':
-                $_POST[$value . '_error'] = 'notChosen';
+                $_SESSION[$value . '_error'] = 'not_Chosen';
                 break;
                 
             case 'notVStr':
-                $_POST[$value . '_error'] = 'notValidateString';
+                $_SESSION[$value . '_error'] = 'not_Validate_String';
                 break;
                 
             case 'notP':
-                $_POST[$value . '_error'] = 'notPhone';
+                $_SESSION[$value . '_error'] = 'not_Phone';
                 break;
                 
             case 'notV':
-                $_POST[$value . '_error'] = 'notValide';
+                $_SESSION[$value . '_error'] = 'not_Valide';
                 break;
                 
                 // default:
@@ -169,7 +160,7 @@ class HandlingData
         
         // Тип учереждения
         if (($_POST['typeCompany']) == 0) {
-            $this->SetErrorValid('typeCompany', 'notCh');
+            $this->SetError('typeCompany', 'notCh');
             // $_POST['typeCompany_error']='notChosen';
             $flag = false;
         }
@@ -180,7 +171,7 @@ class HandlingData
             if ($this->validateData->IsExist($_POST[$itemServiceInput . '-service'])) {
                 $_POST[$itemServiceInput . '-service'] = $this->validateData->FilterStringOnHtmlSql($_POST[$itemServiceInput . '-service']);
                 if (!$this->validateData->ValidInteger($_POST[$itemServiceInput.'-service'])) {
-                    $this->SetErrorValid($itemServiceInput.'-service', 'notV');
+                    $this->SetError($itemServiceInput.'-service', 'notV');
                     $flag = false;
                 }
             }
@@ -192,7 +183,7 @@ class HandlingData
             if ($this->validateData->IsExist($_POST[$itemInsuranceInput . '-insurance'])) {
                 $_POST[$itemInsuranceInput . '-insurance'] = $this->validateData->FilterStringOnHtmlSql($_POST[$itemInsuranceInput . '-insurance']);
                 if (!$this->validateData->ValidInteger($_POST[$itemInsuranceInput.'-insurance'])) {
-                    $this->SetErrorValid($itemInsuranceInput.'-insurance', 'notV');
+                    $this->SetError($itemInsuranceInput.'-insurance', 'notV');
                     $flag = false;
                 }
             }
@@ -246,7 +237,7 @@ class HandlingData
             foreach ($this->arrHoliday as $number => $day) { //
                 $_POST[$day . $period] = $this->validateData->FilterStringOnHtmlSql($_POST[$day . $period]);
                 if (! $this->validateData->ValidIntegerString($_POST[$day . $period])) {
-                    $this->SetErrorValid($day . $period, 'notV');
+                    $this->SetError($day . $period, 'notV');
                     $flag = false;
                 }
             }
@@ -257,7 +248,7 @@ class HandlingData
             if ($this->validateData->IsExist($_POST[$value])) {
                 $_POST[$value] = $this->validateData->FilterStringOnHtmlSql($_POST[$value]);
                 if (!$this->validateData->ValidInteger($_POST[$value])) {
-                    $this->SetErrorValid($value, 'notV');
+                    $this->SetError($value, 'notV');
                     $flag = false;
                 }
             }
@@ -268,6 +259,7 @@ class HandlingData
     //выпонить валидацию данных
     //запустить сохранение
     //получить id таблицы
+   /*
     private function SaveDB()//предварительная проверка на существование в БД, а потом только сохранение данных
     {
         $conclusion = true;
@@ -318,28 +310,28 @@ class HandlingData
         $summaryTable = $this->controller->GetSummaryTableAll();
         return $conclusion;
     }
-    
+    */
     //Нужно будет в том случае, если человек не использует JavaScript
-    //     private function SaveIntoSessions()
-    //     {
-    // //         Удаление переменных из сессии. Если у вас register_globals=off, то достаточно написать
-    // //         unset($_SESSION['var']);
-    // //         Если же нет, то тогда рядом с ней надо написать:
-    // //         session_unregister('var');
-    //         unset($_SESSION['submit']);
-    //         foreach ($_POST as $key => $value) {
-    //             if ($key!='authorization' && $$key!='key')
-    //             {
-    //                 unset($_SESSION[$key]);
-    //             }
-    //         }
+//         private function SaveIntoSessions()
+//         {
+//     //         Удаление переменных из сессии. Если у вас register_globals=off, то достаточно написать
+//     //         unset($_SESSION['var']);
+//     //         Если же нет, то тогда рядом с ней надо написать:
+//     //         session_unregister('var');
+//             unset($_SESSION['submit']);
+//             foreach ($_POST as $key => $value) {
+//                 if ($key!='authorization' && $key!='key')
+//                 {
+//                     unset($_SESSION[$key]);
+//                 }
+//             }
     
-    //         $_SESSION['submit']= true;
-    //         foreach ($_POST as $key => $value)
-    //         {
-    //             $_SESSION[$key] = $value;
-    //         }
-    //     }
+//             $_SESSION['submit']= true;
+//             foreach ($_POST as $key => $value)
+//             {
+//                 $_SESSION[$key] = $value;
+//             }
+//         }
     
     //описать валидацию и неверные данные ввести в сесию
     function ValidataLoginPass() 
@@ -361,17 +353,19 @@ class HandlingData
     public function SaveData()
     {
             if (! $this->IsFillField()) {
-                $this->SaveIntoSessions();
+                $_SESSION['new_session'] = false;
+//                 $this->SaveIntoSessions();
                 $this->RedirectBack();
             }
             
             if (! $this->IsValidFild()) {
-                $this->SaveIntoSessions();
+                $_SESSION['new_session'] = false;
+//                 $this->SaveIntoSessions();
                 $this->RedirectBack();
             }
             
             // после проверки данных сохранить в БД
-            $isSave = $this->SaveDB();
+            $isSave = $this->controller->Save($_POST);
             if ($isSave == -1) {
                 return false;
             }
@@ -386,7 +380,7 @@ class HandlingData
         }
         else
         {
-            echo "No referrer.";
+            header("http://medservice24.pirise.com");
         }
     }
     
@@ -418,6 +412,9 @@ else
 //проверка введеных данных
 if($_POST['submit'] == 'Сохранить')
 {
+    if ($_POST['form'] == 'kabinet_main') {
+        ;
+    }
     $handlingData->SaveData();
 }
 else
@@ -531,7 +528,7 @@ else
 - валидацию логина и пароля
 - авторизацию
 - проверку авторизированных пользователей
-- написать клас авторизации с методом создания ключа
+- написать класс авторизации с методом создания ключа
 - написать в БД нужную таблицу
 - связать сохранения в БД
 - протестировать

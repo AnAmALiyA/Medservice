@@ -568,23 +568,23 @@ function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
     }
     
 //начать сохранение --- для рефакторинга разбить метод на 2 действия - GetIdInsert
-    function Save() {
+    function Save($post) {
         //проверить существование организации(Название)
-        $idOrganization = $this->medDB->GetIdInsertOrganization($_POST['nameCompany']);
+        $idOrganization = $this->medDB->GetIdInsertOrganization($post['nameCompany']);
         //область
-        $idRegion = $this->medDB->GetIdInsertGetRegion($_POST['region']);
+        $idRegion = $this->medDB->GetIdInsertGetRegion($post['region']);
         //город
-        $idTown = $this->medDB->GetIdInsertGetDistrictCity($_POST['town'], $idRegion);
+        $idTown = $this->medDB->GetIdInsertGetDistrictCity($post['town'], $idRegion);
         //район области
-        $idDistrictRegion = $this->medDB->GetIdInsertGetDistrictRegion($_POST['districtCity'], $idTown);
+        $idDistrictRegion = $this->medDB->GetIdInsertGetDistrictRegion($post['districtCity'], $idTown);
         //улица
-        $idStreet = $this->medDB->GetIdInsertActualLocation($_POST['street'], $idTown);
+        $idStreet = $this->medDB->GetIdInsertActualLocation($post['street'], $idTown);
         
         $idHome = null;
-        if(!isset($_POST['home']) || !empty($_POST['home']))
+        if(!isset($post['home']) || !empty($post['home']))
         {
             //дом
-            $idHome = $this->medDB->GetIdInsertHome($_POST['home'], $idStreet);
+            $idHome = $this->medDB->GetIdInsertHome($post['home'], $idStreet);
         }
         
         $idPhone = null;
@@ -594,7 +594,7 @@ function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
             $idPhone = $this->medDB->GetIdInsertPhone($this->GetStrPhones());
         }
         //типу учереждение
-        $idTypeCompany = $this->medDB->GetIdInsertTypeInstitution($_POST['typeCompany']);
+        $idTypeCompany = $this->medDB->GetIdInsertTypeInstitution($post['typeCompany']);
         //страховаые компании - тут непонятки т.к. тут чекбоксы из 1 таблицы
         $idInsuranceCompany = $this->medDB->GetIdInsertInsuranceCompany($this->GetArrayInsuranceCompany());
        
