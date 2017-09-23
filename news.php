@@ -251,7 +251,7 @@
                 <div class="right-col">
                 <form name="formMulti" action="action.php" method="POST" class="dwnld">
                 
-                    <div class="download-holder clearfix">
+                    <div id = "field 1" class="download-holder clearfix">
                         
                             <div class="left-form">
                                 <img src="img/empty-img.jpg" alt="empty">
@@ -277,13 +277,11 @@
                             </div>
                         
                     </div>
-                   
+                                                   
                   
                   
                   
-                  
-                  
-                <div class="download-holder clearfix">
+                <div id = "field 2" class="download-holder clearfix">
                         
                             <div class="left-form">
                                 <img src="img/empty-img.jpg" alt="empty">
@@ -308,8 +306,38 @@
                         
                     </div>
                     
-                       
-                <div style=" display:none" class="download-holder clearfix">
+                      <?php 
+                      for($i = 2; $i < 5; $i++)
+						{
+echo " <div id = \"field $i\"  class=\"download-holder clearfix\">
+                        
+                            <div class=\"left-form\">
+                                <img src=\"img/empty-img.jpg\" alt=\"empty\">
+                                <div class=\"icon-holder\">
+                                    <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i>
+                                    <i class=\"fa fa-times\" aria-hidden=\"true\"></i>
+                                </div>
+                                 <!-- Download -->
+                                       
+               <p> <input type=\"file\" name=\"file2\" /> </p>
+                            </div>
+                            <div class=\"right-form\">
+                                <input type=\"text\" required=\"required\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"Заголовок\"/>
+                                <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i>
+                                <i class=\"fa fa-times\" aria-hidden=\"true\"></i>
+                                <textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment\" name=\"comment\" placeholder=\"Описание\"></textarea>
+                                <span>
+                                    <input id=\"check$i\" type=\"checkbox\" name=\"check\" value=\"check$i\">
+                                    <label for=\"check$i\">Вывести дату</label>
+                                </span>
+                            </div>
+                        
+                    </div> " ;
+						 }
+
+						?> 
+						
+                <div id = "field 3" style=" display:none" class="download-holder clearfix">
                         
                             <div class="left-form">
                                 <img src="img/empty-img.jpg" alt="empty">
@@ -335,7 +363,7 @@
                     </div>
                     
                        
-                <div  style=" display:none" class="download-holder clearfix">
+                <div  id = "field 4" style=" display:none" class="download-holder clearfix">
                         
                             <div class="left-form">
                                 <img src="img/empty-img.jpg" alt="empty">
@@ -361,7 +389,7 @@
                     </div>
                     
                        
-                <div style=" display:none" class="download-holder clearfix">
+                <div id = "field 5" style=" display:none" class="download-holder clearfix">
                         
                             <div class="left-form">
                                 <img src="img/empty-img.jpg" alt="empty">

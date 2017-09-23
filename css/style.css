@@ -404,3 +404,7 @@ span.overal {
         margin-right: 4px;
     }
 }
+
+div.download-holder clearfix {
+	display : none;
+	}
