@@ -405,6 +405,9 @@ span.overal {
     }
 }
 
-div.download-holder clearfix {
+div.download-holder.clearfix {
+	background: #000000;
+	}
+	.hide{
 	display : none;
 	}

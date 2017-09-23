@@ -47,7 +47,7 @@
     </style>
     <link rel="stylesheet" id="wp-postratings-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.84" type="text/css" media="all">
     <link rel="stylesheet" id="jquery-ui-custom-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/jquery-ui.css?ver=4.7.5" type="text/css" media="all">
-    <link rel="stylesheet" id="ajax-login-register-style-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/style.css?ver=4.7.5" type="text/css" media="all">
+    <link rel="stylesheet" id="ajax-login-register-style-css" href="localhost/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" id="wp-pagenavi-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all">
     <link rel="stylesheet" id="base-style-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/style.css?ver=4.7.5" type="text/css" media="all">
     <link rel="stylesheet" id="base-theme-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/css/styles.css?ver=4.7.5" type="text/css" media="all">
@@ -251,67 +251,18 @@
                 <div class="right-col">
                 <form name="formMulti" action="action.php" method="POST" class="dwnld">
                 
-                    <div id = "field 1" class="download-holder clearfix">
-                        
-                            <div class="left-form">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                      <!-- Download -->
-                                       
-               <p> <input type="file" name="file" /> </p>
-					
-                            </div>
-                            <div class="right-form">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
-                                <span>
-                                    <input id="check1" type="checkbox" name="check" value="check1">
-                                    <label for="check1">Вывести дату</label>
-       					
-                                </span>
-                            </div>
-                        
-                    </div>
-                                                   
-                  
-                  
-                  
-                <div id = "field 2" class="download-holder clearfix">
-                        
-                            <div class="left-form">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                                 <!-- Download -->
-                                       
-               <p> <input type="file" name="file1" /> </p>
-                            </div>
-                            <div class="right-form">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
-                                <span>
-                                    <input id="check2" type="checkbox" name="check" value="check2">
-                                    <label for="check2">Вывести дату</label>
-                                </span>
-                            </div>
-                        
-                    </div>
-                    
+                
                       <?php 
-                      for($i = 2; $i < 5; $i++)
+                      $r = 2;
+                      for($i =0; $i < 6; $i++)
 						{
-echo " <div id = \"field $i\"  class=\"download-holder clearfix\">
-                        
-                            <div class=\"left-form\">
+						    if ($r>0) {
+						        echo " <div id = \"field $i\"  class=\"download-holder clearfix\">";
+						    }
+						    else {
+						        echo " <div id = \"field $i\"  class=\"hide download-holder clearfix\">";
+						    }
+                                echo "<div class=\"left-form\">
                                 <img src=\"img/empty-img.jpg\" alt=\"empty\">
                                 <div class=\"icon-holder\">
                                     <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i>
@@ -319,13 +270,13 @@ echo " <div id = \"field $i\"  class=\"download-holder clearfix\">
                                 </div>
                                  <!-- Download -->
                                        
-               <p> <input type=\"file\" name=\"file2\" /> </p>
+               <p> <input type=\"file\" name=\"file$i\" /> </p>
                             </div>
                             <div class=\"right-form\">
-                                <input type=\"text\" required=\"required\" class=\"form-control\" id=\"name\" name=\"name\" placeholder=\"Заголовок\"/>
+                                <input type=\"text\" required=\"required\" class=\"form-control\" id=\"name$i\" name=\"name$i\" placeholder=\"Заголовок\"/>
                                 <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i>
                                 <i class=\"fa fa-times\" aria-hidden=\"true\"></i>
-                                <textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment\" name=\"comment\" placeholder=\"Описание\"></textarea>
+                                <textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment$i\" name=\"comment$i\" placeholder=\"Описание\"></textarea>
                                 <span>
                                     <input id=\"check$i\" type=\"checkbox\" name=\"check\" value=\"check$i\">
                                     <label for=\"check$i\">Вывести дату</label>
@@ -333,92 +284,12 @@ echo " <div id = \"field $i\"  class=\"download-holder clearfix\">
                             </div>
                         
                     </div> " ;
+                                $r--;
 						 }
 
 						?> 
 						
-                <div id = "field 3" style=" display:none" class="download-holder clearfix">
-                        
-                            <div class="left-form">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                                 <!-- Download -->
-                                       
-               <p> <input type="file" name="file2" /> </p>
-                            </div>
-                            <div class="right-form">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
-                                <span>
-                                    <input id="check3" type="checkbox" name="check" value="check3">
-                                    <label for="check3">Вывести дату</label>
-                                </span>
-                            </div>
-                        
-                    </div>
-                    
-                       
-                <div  id = "field 4" style=" display:none" class="download-holder clearfix">
-                        
-                            <div class="left-form">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                                 <!-- Download -->
-                                       
-               <p> <input type="file" name="file3" /> </p>
-                            </div>
-                            <div class="right-form">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
-                                <span>
-                                    <input id="check4" type="checkbox" name="check" value="check4">
-                                    <label for="check4">Вывести дату</label>
-                                </span>
-                            </div>
-                        
-                    </div>
-                    
-                       
-                <div id = "field 5" style=" display:none" class="download-holder clearfix">
-                        
-                            <div class="left-form">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                                 <!-- Download -->
-                                       
-               <p> <input type="file" name="file4" /> </p>
-                            </div>
-                            <div class="right-form">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
-                                <span>
-                                    <input id="check5" type="checkbox" name="check" value="check5">
-                                    <label for="check5">Вывести дату</label>
-                                </span>
-                            </div>
-                        
-                    </div>
-                 
-                  
-                    <div  class="add">
-                       <input type="text" value="Добавить"> 
-                        <i class="fa fa-plus" aria-hidden="true"></i>
-                    </div>
+              
                     
                     
                      
