@@ -20,10 +20,7 @@
     </script>
     <script src="http://medservice24.pirise.com/wp-includes/js/wp-emoji-release.min.js?ver=4.7.5" type="text/javascript" defer=""></script>
            
-      <script
-  src="https://code.jquery.com/jquery-3.2.1.js"
-  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-  crossorigin="anonymous"></script>
+    
 
     <style type="text/css">
         img.wp-smiley,
@@ -53,7 +50,7 @@
     </style>
     <link rel="stylesheet" id="wp-postratings-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.84" type="text/css" media="all">
     <link rel="stylesheet" id="jquery-ui-custom-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/jquery-ui.css?ver=4.7.5" type="text/css" media="all">
-    <link rel="stylesheet" id="ajax-login-register-style-css" href="localhost/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" id="ajax-login-register-style-css" href="localmedservice/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" id="wp-pagenavi-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all">
     <link rel="stylesheet" id="base-style-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/style.css?ver=4.7.5" type="text/css" media="all">
     <link rel="stylesheet" id="base-theme-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/css/styles.css?ver=4.7.5" type="text/css" media="all">
@@ -266,11 +263,11 @@
                       for($i =1; $i < 3; $i++)
 						{
 						    if ($r>0) {
-						        echo " <div id = \"field $i\"  class=\"download-holder clearfix\">";
+						        echo " <div id = \"field$i\"  class=\"download-holder clearfix\">";
 						    }
 						    else {
 						        //nothing is computed here
-						        echo " <div id = \"field $i\"  class=\"hide download-holder clearfix\">";
+						        echo " <div id = \"field$i\"  class=\"hide download-holder clearfix\">";
 						    }
                               //using to create a form
                                 echo "<div class=\"left-form\">
@@ -301,27 +298,32 @@
 						?> 
 						
 					       <script type="text/javascript">
-$(function(){
+					       jQuery(document).ready(function(){
     $('span').bind('click', function(){
-                        	   
-                        		   var formNum = parseInt($("form.dwnld").find("div.download-holder clearfix:last").attr("field").slice(5)) + 1 ; 
-                        		                
-                                   $("form.dwnld").append("<div id="field" formNum "" class="download-holder clearfix">" +
-             "<div class="left-form"><img src="img/empty-img.jpg\" alt=\"empty\"><div class="icon-holder\">"
-             + "<i class="fa fa-pencil-square-o" aria-hidden="true"></i><i class="fa fa-times" aria-hidden="true">"
-             + "</i></div><p> <input type="file" name="file"formNum/> </p></div><div class="right-form">" 
-             + "<input type="text" required="required" class="form-control" id="name$i" name="name$i" placeholder="Заголовок"/>"
-             + "<i class="fa fa-pencil-square-o" aria-hidden="true"  ></i>"
-             + "<i class="fa fa-times" aria-hidden="true" onclick="deleteField"></i>"
-			 + "<textarea class="form-control" required="required\" rows="5" id="comment$i" name="comment$i" placeholder="Описание"></textarea>"
-                                       +"    <span>"
-                                           +"    <input id="check$i" type="checkbox" name="check" value="check$i">"
-                                           +"    <label for="check$i">Вывести дату</label>"
-                                          +" </span>"
-                                      + " </div>"
+                        	   console.log($("form.dwnld"));
+                        	   console.log($("div.download-holder.clearfix"));
+                        	   console.log($("div.download-holder.clearfix:last"));
+                        	   console.log($("form.dwnld").find("div.download-holder.clearfix:last").attr("id"));
+                        		   var formNum = parseInt($("form.dwnld").find("div.download-holder.clearfix:last").attr("id").slice(5)) + 1 ; 
+                       		                
+                                   $("form.dwnld").append("<div id=\"field" + formNum +"\" class=\"download-holder clearfix\">" 
+          + "<div class=\"left-form\"><img src=\"img/empty-img.jpg\" alt=\"empty\"><div class=\"icon-holder\">"
+            + "<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><i class=\"fa fa-times\" aria-hidden=\"true\">"
+            + "</i></div><p> <input type=\"file\" name=\"file\"formNum/> </p></div><div class=\"right-form\">" 
+           + "<input type=\"text\" required=\"required\" class=\"form-control\" id=\"name$i\" name=\"name$i\" placeholder=\"Заголовок\"/>"
+            + "<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"  ></i>"
+            + "<i class=\"fa fa-times\" aria-hidden=\"true\" onclick=\"deleteField\"></i>"
+		 + "<textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment$i\" name=\"comment$i\" placeholder=\"Описание\"></textarea>"
+                                    +"    <span>"
+                                          +"    <input id=\"check$i\" type=\"checkbox\" name=\"check\" value=\"check$i\">"
+                                        +"    <label for=\"check$i\">Вывести дату</label>"
+                                         +" </span>"
+                                     + " </div>"
                                     +  "</div> " );        
-                        	   }
-	   );
+
+                                   $('body').append('<ul><li>Java</li><li>JavaScript</li></ul>');
+                                               	   
+});
   //  $('#delete').bind('click', function(){
  //                       	  $("div#field" id).remove();
   //                      	});
