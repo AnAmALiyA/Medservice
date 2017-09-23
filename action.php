@@ -42,6 +42,10 @@ class HandlingData
                 $_SESSION[$value . '_error'] = 'not_Valide';
                 break;
                 
+            case 'notUL':
+                $_SESSION[$value . '_error'] = 'not_Unique_Login';
+                break;
+                
                 // default:
                 // # code...
                 // break;
@@ -254,87 +258,9 @@ class HandlingData
             }
         }
     }
-    
-    //выполнить проверку на пустые значения
-    //выпонить валидацию данных
-    //запустить сохранение
-    //получить id таблицы
-   /*
-    private function SaveDB()//предварительная проверка на существование в БД, а потом только сохранение данных
-    {
-        $conclusion = true;
-        //загрузить компания(наименование) - сравнить, если нет - добавить, если есть использовать id(если такая есть - выкинуть ошибку)
-        $organization = $this->controller->GetOrganizationAll();
-        foreach ($organizationPost as $key => $value) {
-            if ($value == $_POST['nameCompany']) {
-                return false;
-            }
-        }
-        
-        $this->controller->InsertOrganization($_POST['nameCompany']);
-        
-        //загрузить области - сравнить, если нет - добавить, если есть использовать id
-        $region = $this->controller->GetRegionAll();
-        
-        //загрузить районы - сравнить, если нет - добавить, если есть использовать id
-        $districtRegion = $this->controller->GetDistrictRegionAll();
-        
-        //загрузить города - сравнить, если нет - добавить, если есть использовать id
-        $locality = $this->controller->GetLocalityAll();
-        
-        //загрузить улицы - сравнить, если нет - добавить, если есть использовать id
-        $actualLocation = $this->controller->GetActualLocationAll();
-        
-        //загрузить дом - сравнить, если нет - добавить, если есть использовать id
-        $home = $this->controller->GetHomeAll();
-        
-        //загрузить телефоны - сравнить, если нет - добавить, если есть использовать id
-        $phone = $this->controller->GetPhoneAll();
-        
-        //загрузить время работы - сравнить, если нет - добавить, если есть использовать id
-        $timeWork = $this->controller->GetTimeWorkAll();
-        
-        //загрузить дни работы - сравнить, если нет - добавить, если есть использовать id
-        $dayWork = $this->controller->GetDayWorkAll();
-        
-        //загрузить сервисы - сравнить, если нет - добавить, если есть использовать id
-        $services = $this->controller->GetServiceAll();
-        
-        //загрузить тип учереждения - сравнить и использовать id
-        $typeInstitution = $this->controller->GetTypeInstitutionAll();
-        
-        //загрузить страховые компании - сравнить и использовать id
-        $insuranceCompanies = $this->controller->GetInsuranceCompaniesAll();
-        
-        //добавить суммарную таблицу
-        $summaryTable = $this->controller->GetSummaryTableAll();
-        return $conclusion;
-    }
-    */
-    //Нужно будет в том случае, если человек не использует JavaScript
-//         private function SaveIntoSessions()
-//         {
-//     //         Удаление переменных из сессии. Если у вас register_globals=off, то достаточно написать
-//     //         unset($_SESSION['var']);
-//     //         Если же нет, то тогда рядом с ней надо написать:
-//     //         session_unregister('var');
-//             unset($_SESSION['submit']);
-//             foreach ($_POST as $key => $value) {
-//                 if ($key!='authorization' && $key!='key')
-//                 {
-//                     unset($_SESSION[$key]);
-//                 }
-//             }
-    
-//             $_SESSION['submit']= true;
-//             foreach ($_POST as $key => $value)
-//             {
-//                 $_SESSION[$key] = $value;
-//             }
-//         }
-    
+
     //описать валидацию и неверные данные ввести в сесию
-    function ValidataLoginPass() 
+    public function ValidataLoginPass() 
     {
         $_POST['zm_alr_login_user_name'];
         $_POST['zm_alr_login_password'];
@@ -375,15 +301,73 @@ class HandlingData
     public function Redirect(){
         $this->controller->RedirectBack();
     }
+    
+    public function RedirectKabinet(){
+        $this->controller->RedirectKabinet();
+    }
+    
+    public function RedirectError(){
+        $this->controller->RedirectError();
+    }
+    
+    public function IsExistTwoData($param1, $param2) {
+        $notEmpty = true;
+        if(!$this->validateData->IsExist($param1)){
+            $this->SetError($param1, 'em');
+            $notEmpty = false;
+        }
+        
+        if (!$this->validateData->IsExist($param1))           
+        {
+            $this->SetError($param2, 'em');
+            $notEmpty = false;
+        }
+        return $notEmpty;
+    }
+    
+    public function ValidLogPas($login, $password){
+        $valid = true;
+        if(!$this->validateData->ValidIntegerString($login)){
+            $valid = false;
+            $this->SetError($login, 'notVStr');
+        }
+        
+        if(!$this->validateData->ValidIntegerString($password)){        
+            $valid = false;
+            $this->SetError($password, 'notVStr');
+        }
+        return $valid;
+    }
+    
+    private function SaveLoginGetId($login){
+        $this->controller->SaveLogin($login);
+        return $this->controller->GetIdLogin($login);
+    }
+    
+    private function SavePasswordGetHash($password){
+        $this->controller->SavePassword($password);
+        return $this->controller->GetPasswordHash($password);
+    }
+    
+    public function Authorize($login, $password, $check){
+        $id = $this->SaveLoginGetId($login);
+        $hash = $this->SavePasswordGetHash($password);
+        $_SESSION['id'] = $id;
+        $_SESSION['hash'] = $hash;
+        if (isset($check) && !empty($check) && $check){
+            setcookie('id', $id, time()+3600*24*3);
+            setcookie('hash', $hash, time()+3600*24*3);
+        }
+    }
 }
 
 $handlingData = new HandlingData();
 
 $isAuthorized = false;
-if (isset($_SESSION['id']) && isset($_SESSION['hash'])) {
+if ($handlingData->IsExistTwoData($_SESSION['id'], $_SESSION['hash']){
     $isAuthorized = $handlingData->IsAuthorized($_SESSION['id'], $_SESSION['hash']);
 }
-elseif (isset($_COOKIE['id']) && isset($_COOKIE['hash'])){
+elseif ($handlingData->IsExistTwoData($_COOKIE['id'], $_COOKIE['hash']){
     $isAuthorized = $handlingData->IsAuthorized($_COOKIE['id'], $_COOKIE['hash']);
     if ($isAuthorized) {
         setcookie('id', $_COOKIE['id'], time()+3600*24*3);
@@ -393,10 +377,27 @@ elseif (isset($_COOKIE['id']) && isset($_COOKIE['hash'])){
     }
 }
 elseif (isset($_POST['zm_alr_login_submit_button']) && $_POST['zm_alr_login_submit_button'] == 'Авторизация'){
-//вызвать валидацию
-//     if(isset($_POST['zm_alr_login_user_name']) && isset($_POST['zm_alr_login_password']))){
-        
-//     }
+    //вызвать валидацию    
+    if($handlingData->IsExistTwoData($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']){
+        if ($handlingData->ValidLogPas($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'])) {
+            if (!$handlingData->IsLogin($_POST['zm_alr_login_user_name'])){
+                $handlingData->Authorize($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'],);
+                $handlingData->RedirectKabinet();
+            }
+            else {
+                $handlingData->SetError($_POST['zm_alr_login_user_name'], 'notUL');
+                $_SESSION['zm_alr_login_user_name'] = $_POST['zm_alr_login_user_name'];
+                $_SESSION['zm_alr_login_password'] = $_POST['zm_alr_login_password'];
+                $handlingData->RedirectBack();
+            }            
+        }
+        else {
+            $handlingData->RedirectBack();
+        }        
+    }
+    else {
+        $handlingData->RedirectBack();
+    }
 }
 else {
     $handlingData->Redirect();
@@ -405,9 +406,9 @@ else {
 if ($isAuthorized) {
     //выполнять методы нужные
 }
-else {
-    $handlingData->Redirect();
-}
+// else {
+//     $handlingData->Redirect();
+// }
 
 // elseif ($_POST['zm_alr_login_submit_button'] == 'Авторизация') {
 //     $handlingData->
@@ -451,8 +452,28 @@ else
     $handlingData->RedirectBack();
 }
 
-// require('test.php');
-// header('Location: index.html'); exit();
+
+//Нужно будет в том случае, если человек не использует JavaScript
+//         private function SaveIntoSessions()
+//         {
+//     //         Удаление переменных из сессии. Если у вас register_globals=off, то достаточно написать
+//     //         unset($_SESSION['var']);
+//     //         Если же нет, то тогда рядом с ней надо написать:
+//     //         session_unregister('var');
+//             unset($_SESSION['submit']);
+//             foreach ($_POST as $key => $value) {
+//                 if ($key!='authorization' && $key!='key')
+    //                 {
+    //                     unset($_SESSION[$key]);
+    //                 }
+//             }
+
+//             $_SESSION['submit']= true;
+//             foreach ($_POST as $key => $value)
+    //             {
+    //                 $_SESSION[$key] = $value;
+    //             }
+//         }
 
 
 //для тестирования введенных данных

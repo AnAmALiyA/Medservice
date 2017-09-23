@@ -63,7 +63,7 @@
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.4"></script>
     <script type="text/javascript">
         /* <![CDATA[ */
-        var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
+//         var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
         /* ]]> */
     </script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/scripts.js?ver=4.7.5"></script>
@@ -95,29 +95,28 @@
             <div class="select-position">
                 <div class="select-holder">
                     <script type="text/javascript">
-                        jQuery( document ).ready(function() {
-                            taxonomyOfLocation();
-                        });
-                        function taxonomyOfLocation(){
-                            var page = jQuery('#taxonomy_location').val();
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php",
-                                data: {tax_id: page},
-                                success: function(data) {
-                                    jQuery('#ajax-select-filter-geo').html(data);   
-                                }
-                            });
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                data: {tax_id: page},
-                                success: function (data) {
-                                    jQuery('#health-facility-doctor').html(data);
-
-                                }
-                            });
-                        };
+                         jQuery( document ).ready(function() {
+                             taxonomyOfLocation();
+                         });
+                         function taxonomyOfLocation(){
+                             var page = jQuery('#taxonomy_location').val();
+                             jQuery.ajax({
+                                 type: "POST",
+                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php",
+                                 data: {tax_id: page},
+                                 success: function(data) {
+                                     jQuery('#ajax-select-filter-geo').html(data);   
+                                 }
+                             });
+                             jQuery.ajax({
+                                 type: "POST",
+                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
+                                 data: {tax_id: page},
+                                 success: function (data) {
+                                     jQuery('#health-facility-doctor').html(data);
+                                 }
+                             });
+                         };
                     </script>
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                     <select name="taxonomy_location" id="taxonomy_location" onchange="taxonomyOfLocation();">
@@ -133,29 +132,28 @@
                             <option selected="selected" value="8">Киев</option>
                         </select>
                         <script type="text/javascript">
-                            jQuery( document ).ready(function() {
-                                taxonomyOfLocationChild();
-                            });
-                            function taxonomyOfLocationChild(){
-                                var page = jQuery('#taxonomy_location_child').val();
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax_child.php",
-                                    data: {tax_id: page},
-                                    success: function(data) {
-                                        jQuery('#ajax-taxonomy-child').html(data);
-                                    }
-                                });
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                    data: {tax_id: page},
-                                    success: function (data) {
-                                        jQuery('#health-facility-doctor').html(data);
-
-                                    }
-                                });
-                            };
+                             jQuery( document ).ready(function() {
+                                 taxonomyOfLocationChild();
+                             });
+                             function taxonomyOfLocationChild(){
+                                 var page = jQuery('#taxonomy_location_child').val();
+                                 jQuery.ajax({
+                                     type: "POST",
+                                     url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax_child.php",
+                                     data: {tax_id: page},
+                                     success: function(data) {
+                                         jQuery('#ajax-taxonomy-child').html(data);
+                                     }
+                                 });
+                                 jQuery.ajax({
+                                     type: "POST",
+                                     url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
+                                     data: {tax_id: page},
+                                     success: function (data) {
+                                         jQuery('#health-facility-doctor').html(data);
+                                     }
+                                 });
+                             };
                         </script>
                     </div>
                 </div>
@@ -164,18 +162,18 @@
                         <option value="8">Район</option>
                     </select>
                     <script type="text/javascript">
-                        function areaId() {
-                            var page = jQuery('#area-id').val();
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                data: {tax_id: page},
-                                success: function (data) {
-                                    jQuery('#health-facility-doctor').html(data);
-                                }
-                            });
-                        }
-                    </script>
+                         function areaId() {
+                             var page = jQuery('#area-id').val();
+                             jQuery.ajax({
+                                 type: "POST",
+                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
+                                 data: {tax_id: page},
+                                 success: function (data) {
+                                     jQuery('#health-facility-doctor').html(data);
+                                 }
+                             });
+                         }
+                     </script>
                 </div>
             </div>
             <div class="reg">
@@ -184,7 +182,7 @@
                     <li><a class="lightbox" href="#login-form">Войти</a></li>
                     <div id="login-form">
                         <div class="zm_alr_form_container zm_alr_login_form_container ajax-login-register-login-container zm_alr_design_default">
-                            <form action="javascript://" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
+                            <form action="action.php" method="post" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
                                 <div class="form-wrapper">
                                     <div class="ajax-login-register-status-container">
                                         <div class="ajax-login-register-msg-target"></div>
@@ -320,20 +318,20 @@
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/contact-form-7/includes/js/jquery.form.min.js?ver=3.51.0-2014.06.20"></script>
     <script type="text/javascript">
         /* <![CDATA[ */
-        var _wpcf7 = {"recaptcha":{"messages":{"empty":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435, \u0447\u0442\u043e \u0412\u044b - \u043d\u0435 \u0440\u043e\u0431\u043e\u0442."}}};
+         var _wpcf7 = {"recaptcha":{"messages":{"empty":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u0442\u0435, \u0447\u0442\u043e \u0412\u044b - \u043d\u0435 \u0440\u043e\u0431\u043e\u0442."}}};
         /* ]]> */
     </script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.6"></script>
     <script type="text/javascript">
         /* <![CDATA[ */
-        var pollsL10n = {"ajax_url":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","text_wait":"\u0412\u0430\u0448 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0437\u0430\u043f\u0440\u043e\u0441 \u0435\u0449\u0435 \u043e\u0431\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u0435\u0442\u0441\u044f. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043f\u043e\u0434\u043e\u0436\u0434\u0438\u0442\u0435 ...","text_valid":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043e\u0442\u0432\u0435\u0442.","text_multiple":"\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u043e \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0447\u0438\u0441\u043b\u043e \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432:","show_loading":"1","show_fading":"1"};
+         var pollsL10n = {"ajax_url":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","text_wait":"\u0412\u0430\u0448 \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0437\u0430\u043f\u0440\u043e\u0441 \u0435\u0449\u0435 \u043e\u0431\u0440\u0430\u0431\u0430\u0442\u044b\u0432\u0430\u0435\u0442\u0441\u044f. \u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043f\u043e\u0434\u043e\u0436\u0434\u0438\u0442\u0435 ...","text_valid":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e \u0432\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u043e\u0442\u0432\u0435\u0442.","text_multiple":"\u041c\u0430\u043a\u0441\u0438\u043c\u0430\u043b\u044c\u043d\u043e \u0434\u043e\u043f\u0443\u0441\u0442\u0438\u043c\u043e\u0435 \u0447\u0438\u0441\u043b\u043e \u0432\u0430\u0440\u0438\u0430\u043d\u0442\u043e\u0432:","show_loading":"1","show_fading":"1"};
         /* ]]> */
     </script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/wp-polls/polls-js.js?ver=2.73.2"></script>
     <script type="text/javascript">
         /* <![CDATA[ */
-        var ratingsL10n = {"plugin_url":"http:\/\/medservice24.pirise.com\/wp-content\/plugins\/wp-postratings","ajax_url":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","text_wait":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043d\u0435 \u0433\u043e\u043b\u043e\u0441\u0443\u0439\u0442\u0435 \u0437\u0430 \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0437\u0430\u043f\u0438\u0441\u0435\u0439 \u043e\u0434\u043d\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e.","image":"stars","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
-        var ratings_mouseover_image=new Image();ratings_mouseover_image.src="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/images/stars/rating_over.gif";;
+         var ratingsL10n = {"plugin_url":"http:\/\/medservice24.pirise.com\/wp-content\/plugins\/wp-postratings","ajax_url":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","text_wait":"\u041f\u043e\u0436\u0430\u043b\u0443\u0439\u0441\u0442\u0430, \u043d\u0435 \u0433\u043e\u043b\u043e\u0441\u0443\u0439\u0442\u0435 \u0437\u0430 \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0437\u0430\u043f\u0438\u0441\u0435\u0439 \u043e\u0434\u043d\u043e\u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e.","image":"stars","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+         var ratings_mouseover_image=new Image();ratings_mouseover_image.src="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/images/stars/rating_over.gif";;
         /* ]]> */
     </script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.84"></script>
@@ -343,46 +341,42 @@
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/wp-embed.min.js?ver=4.7.5"></script>
     <script src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/library/jquery.validate.min.js"></script>
     <script type="text/javascript">
-        jQuery(document).ready(function($){
-
-            $(".popup-form").validate({
-
-                rules: {
-                    email: { required: true,
-                        email: true
-                    },
-
-                    name: { required: true,
-                        minlength: [3]
-                    },
-                    messages: { required: true,
-                        minlength: [5]
-                    },
-                    tel: { required: true,
-                        minlength: [7]
-                    }
-                },
-
-                messages: {
-                    email: {
-                        required: "Введите email",
-                        email: "Введите символ @ "
-                    },
-                    name: {
-                        required: "Введите имя",
-                        minlength: "Введите не менее 3 символов"
-                    },
-                    messages: {
-                        required: "Введите сообщение",
-                        minlength: "Введите не менее 5 символов"
-                    },
-                    tel: {
-                        required: "Введите телефон",
-                        minlength: "Введите не менее 7 цифр"
-                    }
-                },
-            })
-        });
+         jQuery(document).ready(function($){
+             $(".popup-form").validate({
+                 rules: {
+                     email: { required: true,
+                         email: true
+                     },
+                     name: { required: true,
+                         minlength: [3]
+                     },
+                     messages: { required: true,
+                         minlength: [5]
+                     },
+                     tel: { required: true,
+                         minlength: [7]
+                     }
+                 },
+                 messages: {
+                     email: {
+                         required: "Введите email",
+                         email: "Введите символ @ "
+                     },
+                     name: {
+                         required: "Введите имя",
+                         minlength: "Введите не менее 3 символов"
+                     },
+                     messages: {
+                         required: "Введите сообщение",
+                         minlength: "Введите не менее 5 символов"
+                     },
+                     tel: {
+                         required: "Введите телефон",
+                         minlength: "Введите не менее 7 цифр"
+                     }
+                 },
+             })
+         });
     </script>
     <div class="popup-holder">
         <div id="login" class="lightbox coop-form">

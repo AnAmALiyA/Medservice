@@ -64,7 +64,7 @@
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.4"></script>
     <script type="text/javascript">
         /* <![CDATA[ */
-        var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
+//        var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
         /* ]]> */
     </script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/scripts.js?ver=4.7.5"></script>
@@ -200,7 +200,7 @@
                     <li><a class="lightbox" href="#login-form">Войти</a></li>
                     <div id="login-form">
                         <div class="zm_alr_form_container zm_alr_login_form_container ajax-login-register-login-container zm_alr_design_default">
-                            <form action="action.php" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
+                            <form action="action.php" method="post" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
                                 <div class="form-wrapper">
                                     <div class="ajax-login-register-status-container">
                                         <div class="ajax-login-register-msg-target">тут получаем не верный ответ</div>
@@ -445,14 +445,12 @@
                             <div class="col2">
                                 <span>пн</span>
                                 <select name="mondayStart" class="time" id="mondayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="mondayEnd" class="time" id="mondayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -461,14 +459,12 @@
                             <div class="col2">
                                 <span>вт</span>
                                 <select name="tuesdayStart" class="time" id="tuesdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="tuesdayEnd" class="time" id="tuesdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -477,14 +473,12 @@
                             <div class="col2">
                                 <span>ср</span>
                                 <select name="wednesdayStart" class="time" id="wednesdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="wednesdayEnd" class="time" id="wednesdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -493,14 +487,12 @@
                             <div class="col2">
                                 <span>чт</span>
                                 <select name="thursdayStart" class="time" id="thursdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="thursdayEnd" class="time" id="thursdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -509,14 +501,12 @@
                             <div class="col2">
                                 <span>пт</span>
                                 <select name="fridayStart" class="time" id="fridayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="fridayEnd" class="time" id="fridayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -525,14 +515,12 @@
                             <div class="col2">
                                 <span>сб</span>
                                 <select name="saturdayStart" class="time" id="saturdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="saturdayEnd" class="time" id="saturdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -541,14 +529,12 @@
                             <div class="col2">
                                 <span>вс</span>
                                 <select name="sundayStart" class="time" id="sundayStart">
-                                    <option value="7" selected>07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="sundayEnd" class="time" id="sundayEnd">
-                                    <option value="19" name="" selected>19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
