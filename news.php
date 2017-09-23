@@ -19,6 +19,12 @@
         !function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
     </script>
     <script src="http://medservice24.pirise.com/wp-includes/js/wp-emoji-release.min.js?ver=4.7.5" type="text/javascript" defer=""></script>
+           
+      <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+
     <style type="text/css">
         img.wp-smiley,
         img.emoji {
@@ -249,19 +255,24 @@
                     </div>
                 </div>
                 <div class="right-col">
+                
                 <form name="formMulti" action="action.php" method="POST" class="dwnld">
                 
                 
-                      <?php 
-                      $r = 2;
-                      for($i =0; $i < 6; $i++)
+                
+                  <?php 
+                  //2 form by default
+                      $r = 2;//only to hide rest exept top 2
+                      for($i =1; $i < 3; $i++)
 						{
 						    if ($r>0) {
 						        echo " <div id = \"field $i\"  class=\"download-holder clearfix\">";
 						    }
 						    else {
+						        //nothing is computed here
 						        echo " <div id = \"field $i\"  class=\"hide download-holder clearfix\">";
 						    }
+                              //using to create a form
                                 echo "<div class=\"left-form\">
                                 <img src=\"img/empty-img.jpg\" alt=\"empty\">
                                 <div class=\"icon-holder\">
@@ -274,8 +285,8 @@
                             </div>
                             <div class=\"right-form\">
                                 <input type=\"text\" required=\"required\" class=\"form-control\" id=\"name$i\" name=\"name$i\" placeholder=\"Заголовок\"/>
-                                <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i>
-                                <i class=\"fa fa-times\" aria-hidden=\"true\"></i>
+                                <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"  ></i>
+                                <i class=\"fa fa-times\" aria-hidden=\"true\" onclick=\"deleteField();\"></i>
                                 <textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment$i\" name=\"comment$i\" placeholder=\"Описание\"></textarea>
                                 <span>
                                     <input id=\"check$i\" type=\"checkbox\" name=\"check\" value=\"check$i\">
@@ -289,11 +300,40 @@
 
 						?> 
 						
-              
-                    
-                    
+					       <script type="text/javascript">
+$(function(){
+    $('span').bind('click', function(){
+                        	   
+                        		   var formNum = parseInt($("form.dwnld").find("div.download-holder clearfix:last").attr("field").slice(5)) + 1 ; 
+                        		                
+                                   $("form.dwnld").append("<div id="field" formNum "" class="download-holder clearfix">" +
+             "<div class="left-form"><img src="img/empty-img.jpg\" alt=\"empty\"><div class="icon-holder\">"
+             + "<i class="fa fa-pencil-square-o" aria-hidden="true"></i><i class="fa fa-times" aria-hidden="true">"
+             + "</i></div><p> <input type="file" name="file"formNum/> </p></div><div class="right-form">" 
+             + "<input type="text" required="required" class="form-control" id="name$i" name="name$i" placeholder="Заголовок"/>"
+             + "<i class="fa fa-pencil-square-o" aria-hidden="true"  ></i>"
+             + "<i class="fa fa-times" aria-hidden="true" onclick="deleteField"></i>"
+			 + "<textarea class="form-control" required="required\" rows="5" id="comment$i" name="comment$i" placeholder="Описание"></textarea>"
+                                       +"    <span>"
+                                           +"    <input id="check$i" type="checkbox" name="check" value="check$i">"
+                                           +"    <label for="check$i">Вывести дату</label>"
+                                          +" </span>"
+                                      + " </div>"
+                                    +  "</div> " );        
+                        	   }
+	   );
+  //  $('#delete').bind('click', function(){
+ //                       	  $("div#field" id).remove();
+  //                      	});
+});
+            </script>        
                      
-                        
+                          <div class="add"  >
+                          
+                        <span id ="add">Добавить
+                        <i class="fa fa-plus" aria-hidden="true" ></i>
+                  		 </span>
+                  		  </div> 
                         
                     <div class="button-save">
                         <input type="submit" value="Сохранить">
@@ -460,5 +500,11 @@
     <span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
     <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-4" tabindex="0" style="display: none;"></ul>
     <span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
+
+
+
+
+
+
 </body>
 </html>
