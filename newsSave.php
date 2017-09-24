@@ -1,6 +1,9 @@
 <?php
-// require_once 'med-DAL.php';
-//   this ->medDB = new MedDB;
+// помещаем настраницу в вп
+// шордкод [exec][/exec] внем пишем пхп (беz <?php  ?>)
+
+
+
 
 // Создаем массив данных новой записи
 $post_data = array(
@@ -27,3 +30,16 @@ wp_insert_post( $post_data );
 // Вставляем запись в базу данных
   wp_insert_post( $my_post );
 ?>
+//помещаем в function.php для шорткода
+/*
+function exec_php($matches){
+	eval('ob_start();'.$matches[1].'$inline_execute_output = ob_get_contents();ob_end_clean();');
+	return $inline_execute_output;
+}
+function inline_php($content){
+	$content = preg_replace_callback('/\[exec\]((.|\n)*?)\[\/exec\]/', 'exec_php', $content);
+	$content = preg_replace('/\[exec off\]((.|\n)*?)\[\/exec\]/', '$1', $content);
+	return $content;
+}
+add_filter('the_content', 'inline_php', 0);
+*/
