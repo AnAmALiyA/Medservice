@@ -64,7 +64,7 @@
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.4"></script>
     <script type="text/javascript">
         /* <![CDATA[ */
-        var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
+//        var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
         /* ]]> */
     </script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/scripts.js?ver=4.7.5"></script>
@@ -88,16 +88,12 @@
 <body class="page-template page-template-pages page-template-template-home page-template-pagestemplate-home-php page page-id-5">
 
   <?php  
-    require 'med-BAL.php';
+    require_once 'med-BAL.php';
+    //require_once 'action.php';
     $controller = new Controller();
-    
-    if (isset($_SESSION['submit']) && $_SESSION['submit'] == true)
-    {
-        $sessionFlag = $_SESSION['submit'];
-        // если есть данные в сесии то вытягиваю и заполняю форму
-        // так же указываю пользователю где ошибка
-        //$_SESSION['medService24']='';
-    }
+    //$handling = new HandlingData();
+        
+//     $handling->AuthorizationCheck($_SESSION, $_COOKIE, $_SERVER);    
   ?>
 
     <header id="header">
@@ -200,10 +196,10 @@
                     <li><a class="lightbox" href="#login-form">Войти</a></li>
                     <div id="login-form">
                         <div class="zm_alr_form_container zm_alr_login_form_container ajax-login-register-login-container zm_alr_design_default">
-                            <form action="action.php" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
+                            <form action="action.php" method="post" class="zm_alr_form ajax-login-default-form-container login_form" data-zm_alr_login_security="6d8c94e2ef" data-zm_alr_login_ajax_params="null">
                                 <div class="form-wrapper">
                                     <div class="ajax-login-register-status-container">
-                                        <div class="ajax-login-register-msg-target"></div>
+                                        <div class="ajax-login-register-msg-target">тут получаем не верный ответ</div>
                                     </div>
                                     <div class="zm_alr_form_field_container zm_alr_text_container zm_alr_login_text_container">
                                         <label for="zm_alr_login_user_name" class="zm_alr_label">Имя пользователя</label>
@@ -248,7 +244,7 @@
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медецинский центр</h2>
+                    <h2>Медицинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">
@@ -271,7 +267,7 @@
                                 <label for="type">Тип учереждения</label>
                             </div>
                             <div class="col2">
-                                <select name="typeCompany" class="type" id="typeCompany">
+                                <select name="typeCompany" class="type <?php $_SESSION['typeCompany_error']?>" id="typeCompany">
 <!--                                 //Нужно будет в том случае, если человек не использует JavaScript 
                                     ($sessionFlag)?'':'selected' -->
                                   <option value="0" selected></option>	
@@ -292,7 +288,7 @@
                                 <label for="services">Направления/услуги</label>
                             </div>
                             <div class="col2">
-                                <select name="services" class="services" id="services">
+                                <select name="services" class="services <?php $_SESSION['service_error']?>" id="services">
                                   <option value="0" selected></option>
                                   <?php
                                   $itemServiceOption = 1;
@@ -326,7 +322,7 @@
                                 <label for="company">Страховые компании</label>
                             </div>
                             <div class="col2">
-                                <select name="insuranceCompany" class="insuranceCompany" id="insuranceCompany">
+                                <select name="insuranceCompany" class="insuranceCompany <?php $_SESSION['insurance_error']?>" id="insuranceCompany">
                                     <option value="0" selected></option>
                                     <?php
                                       $itemInsuranceOption = 1;
@@ -343,7 +339,7 @@
                             <div class="">
                               <p>Для инпутов</p>
                               <?php
-                              $itemInsuranceInput = 1;
+                              $itemInsuranceInput = 1;                              
                               foreach ($controller->GetInsuranceCompanyAll() as $key => $value)
                              {
                                  echo "<input type=\"checkbox\" name=\"$key\" value=\"\">$value</input>";
@@ -362,7 +358,7 @@
                             <div class="col1">
                                 <label for="name">Название</label>
                             </div>
-                            <div class="col2">
+                            <div class="col2 <?php $_SESSION['nameCompany_error']?>">
                                 <input type="text" placeholder="" id="name" name="nameCompany" value="Якась компания О_о">
                             </div>
                         </div>
@@ -372,7 +368,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['region_error']?>">
                                 <label for="region">Область</label>
                             </div>
                             <div class="col2">
@@ -380,7 +376,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['town_error']?>">
                                 <label for="town">Город</label>
                             </div>
                             <div class="col2">
@@ -388,7 +384,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['district_error']?>">
                                 <label for="district">Район</label>
                             </div>
                             <div class="col2">
@@ -396,7 +392,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['street_error']?>">
                                 <label for="street">Улица</label>
                             </div>
                             <div class="col2">
@@ -404,7 +400,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['home_error']?>">
                                 <label for="home">Дом</label>
                             </div>
                             <div class="col2">
@@ -415,19 +411,13 @@
                             <div class="col1">
                                 <label for="phone">Телефон</label>
                             </div>
-                            <div class="col2 phone">
+                            <div class="col2 phone <?php $_SESSION['1-phone_error']?>">
                                 <input id="phone1" type="tel" name="1-phone" placeholder="(___) 000 00 00" value="34636365645">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
-                            <div class="col2 phone">
+                            <div class="col2 phone <?php $_SESSION['2-phone_error']?>">
                                 <input id="phone2" type="tel" name="2-phone" placeholder="(___) 000 00 00" value="45657687вапва">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </div>
-<!--                             тут генерировать телефоны средствами JS на id phones-->
-                            <div class="col2 phone">
-                                <input id="phone3" type="tel" name="3-phone" placeholder="(___) 000 00 00" value="">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
@@ -445,14 +435,12 @@
                             <div class="col2">
                                 <span>пн</span>
                                 <select name="mondayStart" class="time" id="mondayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="mondayEnd" class="time" id="mondayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -461,14 +449,12 @@
                             <div class="col2">
                                 <span>вт</span>
                                 <select name="tuesdayStart" class="time" id="tuesdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="tuesdayEnd" class="time" id="tuesdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -477,14 +463,12 @@
                             <div class="col2">
                                 <span>ср</span>
                                 <select name="wednesdayStart" class="time" id="wednesdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                     $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="wednesdayEnd" class="time" id="wednesdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -493,14 +477,12 @@
                             <div class="col2">
                                 <span>чт</span>
                                 <select name="thursdayStart" class="time" id="thursdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="thursdayEnd" class="time" id="thursdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -509,14 +491,12 @@
                             <div class="col2">
                                 <span>пт</span>
                                 <select name="fridayStart" class="time" id="fridayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="fridayEnd" class="time" id="fridayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -525,14 +505,12 @@
                             <div class="col2">
                                 <span>сб</span>
                                 <select name="saturdayStart" class="time" id="saturdayStart">
-                                    <option value="7" selected="selected">07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="saturdayEnd" class="time" id="saturdayEnd">
-                                    <option value="19" selected="selected">19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>
@@ -541,14 +519,12 @@
                             <div class="col2">
                                 <span>вс</span>
                                 <select name="sundayStart" class="time" id="sundayStart">
-                                    <option value="7" selected>07.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="sundayEnd" class="time" id="sundayEnd">
-                                    <option value="19" name="" selected>19.00</option>
                                     <?php
                                       $controller->GetGenerationTimeFor19();
                                     ?>

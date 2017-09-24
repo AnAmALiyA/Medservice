@@ -31,13 +31,36 @@ class MedDB
   
   private function QuerySelectId($table, $selectId)
   {
-      $query = "SELECT * FROM $table WHERE id=$selectId";
+      $query = "SELECT * FROM $table WHERE id = $selectId";
       $link = $this->ConnectDB();
       
       $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
       
       $this->CloseConnectDB($link);
       return $result;
+  }
+    
+  private function FindId($table, $nameRow, $select){
+      $query = "SELECT 'id' FROM $table WHERE $nameRow = $select";
+      $link = $this->ConnectDB();
+      
+      $queryResult = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+      
+      $this->CloseConnectDB($link);
+      
+      //вернуть 1 результат массива
+      $result = mysqli_fetch_assoc($query);
+      if(count($result) == 1){         
+         return $result['id'];
+      }
+      
+      ///список результатов
+//       while ($result = mysqli_fetch_assoc($query)) {
+//           if ($select == $result[$nameRow]) {
+//               return $result['id'];
+//           }
+//       }
+      return -1;
   }
 
 /* Функции для генерации стоки из имен столбцов и значений
@@ -149,71 +172,71 @@ class MedDB
   }
   
   //Название(Компания) 2 колонка
-  function GetOrganizationOneCol(){
+  public function GetOrganizationOneCol(){
       $table = 'med_organization';
       $nameFilldArray = 'name';
       return $this->GetArrayOneCol($table, $nameFilldArray);
   }
   
   //Область 2 колонка
-  function GetRegionOneCol(){
+  public function GetRegionOneCol(){
       $table = 'med_region';
       $nameFilldArray = 'region';
       return $this->GetArrayOneCol($table, $nameFilldArray);
   }
   
   //Районы 3 колонки
-  function GetDistrictRegionAllCol(){
+  public function GetDistrictRegionAllCol(){
       $table = 'med_district_region';
       return $this->GetArrayAllCol($table);
   }
   
   //Город 4 колонки
-  function GetLocalityAllCol(){
+  public function GetLocalityAllCol(){
       $table = 'med_locality';
       return $this->GetArrayAllCol($table);
   }
   
   //улица 3 колонки
-  function GetActualLocationAllCol(){
+  public function GetActualLocationAllCol(){
       $table = 'med_actual_location';
       return $this->GetArrayAllCol($table);
   }
   
   //дом 3 колонки
-  function GetHomeAllCol(){
+  public function GetHomeAllCol(){
       $table = 'med_home';
       return $this->GetArrayAllCol($table);
   }
   
   //телефон 2 колонки
-  function GetPhoneOneCol(){
+  public function GetPhoneOneCol(){
       $table = 'med_phone';
       $nameFilldArray = 'phone';
       return $this->GetArrayOneCol($table, $nameFilldArray);
   }
   
   //время работы 3 колонки
-  function GetTimeWorkAllCol(){
+  public function GetTimeWorkAllCol(){
       $table = 'med_time_work';
       return $this->GetArrayAllCol($table);
   }
   
   //дни работы 3 колонки
-  function GetDayWorkOneCol(){
+  public function GetDayWorkOneCol(){
       $table = 'med_day_work';
       $nameFilldArray = 'day_work';
       return $this->GetArrayOneCol($table, $nameFilldArray);
   }
   
   //сервисы 34 колонки
-  function GetServiceAllCol(){
+  public function GetServiceAllCol(){
       $table = 'med_services';
       return $this->GetArrayAllCol($table);
   }
     
   //Тип учереждения
-  function GetTypeInstitutionOneCol()
+  public function GetTypeInstitutionOneCol()
   {     
       $table = 'med_type_institution';
       $nameFilldArray = 'type_description';
@@ -221,7 +244,7 @@ class MedDB
   }
   
   //страховая компания
-  function GetInsuranceCompanyOneCol()
+  public function GetInsuranceCompanyOneCol()
   {
       $arrayInsuranceCompanyes = array(
           'usk' => 'УСК', 
@@ -234,7 +257,7 @@ class MedDB
   }
   
   //суммарную таблицу 10 колонки
-  function GetSummaryTableAllCol(){
+  public function GetSummaryTableAllCol(){
       $table = 'med_summary_table';
       return $this->GetArrayAllCol($table);
   }
@@ -321,7 +344,7 @@ class MedDB
   //вставить данные
   
   //вставка Название(Компания) 
-  function GetIdInsertOrganization($company){
+  public function GetIdInsertOrganization($company){
       $table = 'med_organization';
       $nameTable = 'name';
       $arrayNamesTabelRows = array('id', 'short_name', 'type_ownership_fk', $nameTable, 'edrpou_code');
@@ -347,7 +370,7 @@ class MedDB
       }
   }
   
-  function GetIdInsertInsuranceCompany($arrayInsuranceCompany) {
+  public function GetIdInsertInsuranceCompany($arrayInsuranceCompany) {
       $table = 'med_insurance_companies';
       $nameTables = array('usk', 'aska');
       $arrayNamesTabelRows = array('id', $nameTable);
@@ -375,7 +398,7 @@ class MedDB
   }
   
   //вставка области - тут либо делаю вставку или нахожу существующую и возвращаю id области
-  function GetIdInsertGetRegion($region){
+  public function GetIdInsertGetRegion($region){
       $table = 'med_region';
       $nameTable = 'region';
       $arrayNamesTabelRows = array('id',$nameTable);
@@ -402,7 +425,7 @@ class MedDB
   }
   
   //вставка город
-  function GetIdInsertLocality($town, $DistrictRegionId){
+  public function GetIdInsertLocality($town, $DistrictRegionId){
       $table = 'med_locality';
       $nameTable = 'locality';
       $typeLocalityFk = 'type_locality_fk';
@@ -439,7 +462,7 @@ class MedDB
   }
   
   //вставка региона город
-  function GetIdInsertGetDistrictCity ($districtCity, $localityId) {
+  public function GetIdInsertGetDistrictCity ($districtCity, $localityId) {
       $localityId = 'med_district_region';
       $nameTable = 'district';
       $localityFk = 'region_fk';
@@ -474,7 +497,7 @@ class MedDB
   }
   
   //улица
-  function GetIdInsertActualLocation($actualLocation, $townId) {
+  public function GetIdInsertActualLocation($actualLocation, $townId) {
       $table = 'med_actual_location';
       $nameTable = 'actual_location';
       $localityFk = 'locality_fk';
@@ -509,7 +532,7 @@ class MedDB
   }
   
   //дом
-  function GetIdInsertHome($home, $actualLocationId) {
+  public function GetIdInsertHome($home, $actualLocationId) {
       $table = 'med_home';
       $nameTable = 'number_home';
       $actualLocationFk = 'actual_location_fk';
@@ -544,7 +567,7 @@ class MedDB
   }
   
   //телефон
-  function GetIdInsertPhone($phone) {
+  public function GetIdInsertPhone($phone) {
       $table = 'med_phone';
       $nameTable = 'phone';
       $arrayNamesTabelRows = array('id', $nameTable);
@@ -570,7 +593,7 @@ class MedDB
   }
   
   //тип учереждение
-  function GetIdInsertTypeInstitution($typeCompany) {
+  public function GetIdInsertTypeInstitution($typeCompany) {
       $table = 'med_type_institution';
       $nameTable = 'type_description';
       $arrayNamesTabelRows = array('id', $nameTable);
@@ -598,7 +621,7 @@ class MedDB
   }
   
   //сервисы
-  function GetIdInsertServices ($arrayServices) {
+  public function GetIdInsertServices ($arrayServices) {
       $table = 'med_services';
       $nameTables = array(
           'dentistry', 'childrens_dentistry', 'therapeutic_dentistry',
@@ -636,7 +659,7 @@ class MedDB
   }
   
   //дени работы
-  function GetIdInsertDayWork($dayWork) {
+  public function GetIdInsertDayWork($dayWork) {
       $table = 'med_day_work';
       $nameTable = 'day_work';
       $arrayNamesTabelRows = array('id', $nameTable);
@@ -664,7 +687,7 @@ class MedDB
   }
   
   //время работы
-  function GetIdInsertTimeWork($arraDatas) {
+  public function GetIdInsertTimeWork($arraDatas) {
       $table = 'med_time_work';
       $nameTables = array('time_work', 'time_work_weekend');
 //       $arraDatas = array($timeWork, $timeWorkWeekend);
@@ -692,7 +715,7 @@ class MedDB
       }
   }
   
-  function GetIdInsertSummaryTable($arraDatas) {//med_summary_table
+  public function GetIdInsertSummaryTable($arraDatas) {//med_summary_table
       $table = 'med_services';
       $nameTables = array(
           'id', 'actual_location_fk', 'organization_fk', 'type_works_fk',
@@ -721,6 +744,39 @@ class MedDB
               return -1;
           }
       }
+  }
+  
+  public function FindIdLogin($login){
+      return $this->FindId('med_users', 'login', $login);
+      //function GetIdByData($query, $data, $nameTable)
+  }
+  
+  public function GetLastLoginId(){
+      $query = $this->QuerySelectAll('med_users', 'id');
+      return $this->GetLastId($query);
+  }
+  
+  public function SaveLogin($id, $login, $password, $hash){
+      $arrayNamesTabelRows = array('id', 'login', 'password', 'hash');
+      $arrayValuesTabelRows = array($id, $login, $password, $hash);
+      $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      if ($getResult) {
+          return $lastId;
+      }else {
+          return -1;
+      }
+  }
+  
+  public function IsAuthorize($id, $hash){
+      $query = $this->QuerySelectId('med_users', $id);
+      if ($query == null) {
+          return false;
+      }
+      $result = mysqli_fetch_assoc($query);
+      if ($result['hash'] == $hash) {
+          return true;
+      }
+      return false;
   }
 }
  ?>

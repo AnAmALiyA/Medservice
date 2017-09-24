@@ -45,7 +45,7 @@ class Controller
     
     public function __construct()
     {
-        $this->medDB = new MedDB;
+        $this->medDB = new MedDB();
         $this->arrayNamesServices = $arrayNamesServicesBAL;
         $this->arrayFilds = $arrayFilds;
     }
@@ -93,9 +93,12 @@ class Controller
     //   return $arr;
     // }
     
-    function GetGenerationTimeFor7($startTime = 7)
+    public function GetGenerationTimeFor7($startTime = 7)
     {
         $a=$startTime;
+        if ($a == 7) {
+            echo "<option value=\"7\" selected=\"selected\">07.00</option>";
+        }        
         $a++;
         while ($a!=$startTime)
         {
@@ -112,77 +115,78 @@ class Controller
         }
     }
     
-    function GetGenerationTimeFor19()
+    public function GetGenerationTimeFor19()
     {
-        $startTime = 19;
+        $startTime = 19;        
+        echo "<option value=\"19\" selected=\"selected\">19.00</option>";        
         $this->GetGenerationTimeFor7($startTime);
     }
     
     //Название(Компания) 2 колонка
-    function GetOrganizationAll(){
+    public function GetOrganizationAll(){
         return $this->medDB->GetOrganizationOneCol();
     }
     
     //Область 2 колонка
-    function GetRegionAll(){
+    public function GetRegionAll(){
         return $this->medDB->GetRegionOneCol();    
     }
     
     //Районы 3 колонки
-    function GetDistrictRegionAll(){
+    public function GetDistrictRegionAll(){
         return $this->medDB->GetDistrictRegionAllCol();
     }
     
     //Город 4 колонки
-    function GetLocalityAll(){
+    public function GetLocalityAll(){
         return $this->medDB->GetLocalityAllCol();
     }
     
     //улица 3 колонки
-    function GetActualLocationAll(){
+    public function GetActualLocationAll(){
         return $this->medDB->GetActualLocationAllCol();
     }
     
     //дом 3 колонки
-    function GetHomeAll(){
+    public function GetHomeAll(){
         return $this->medDB->GetHomeAllCol();
     }
     
     //телефон 2 колонки
-    function GetPhoneAll(){
+    public function GetPhoneAll(){
         return $this->medDB->GetPhoneOneCol();
     }
     
     //время работы 3 колонки
-    function GetTimeWorkAll(){
+    public function GetTimeWorkAll(){
         return $this->medDB->GetTimeWorkAllCol();
     }
     
     //дни работы 3 колонки
-    function GetDayWorkOneCol(){
+    public function GetDayWorkOneCol(){
         return $this->medDB->GetDayWorkOneCol();
     }
     
     //сервисы 34 колонки
-    function GetServiceAll(){
+    public function GetServiceAll(){
         return $this->medDB->GetServiceAllCol();
     }
     
     //Тип учереждения
-    function GetTypeInstitutionAll(){
+    public function GetTypeInstitutionAll(){
         return $this->medDB->GetTypeInstitutionOneCol();
     }
     
     //страховая компания
-    function GetInsuranceCompanyAll(){
+    public function GetInsuranceCompanyAll(){
         return $this->medDB->GetInsuranceCompanyOneCol();
     }
     
     //суммарную таблицу 10 колонки
-    function GetSummaryTableAll(){
+    public function GetSummaryTableAll(){
         return $this->medDB->GetSummaryTableAllCol();
     }
-    
+//------------разобраться
     private function GetStrPhones(){
         $stringPhones = null;
         for ($i = 1; $i <= 10; $i++) {
@@ -307,7 +311,7 @@ class Controller
 //             }
 //         }
 //     }
-function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
+    public function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
     {
         $stringWorkDay = null;
         for ($i = 1; $i <= count($arrWeekEndDay); $i++) {
@@ -568,7 +572,7 @@ function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
     }
     
 //начать сохранение --- для рефакторинга разбить метод на 2 действия - GetIdInsert
-    function Save($post) {
+    public function Save($post) {
         //проверить существование организации(Название)
         $idOrganization = $this->medDB->GetIdInsertOrganization($post['nameCompany']);
         //область
@@ -619,5 +623,64 @@ function GetStringWorkDay($arrWeekEndDay, $arrayNameDays)
         $idSummaryTable = $this->medDB->GetIdInsertSummaryTable();
         return  $idSummaryTable;
     }
+    
+    public function RedirectBack($server)
+    {
+        if (!empty($server['HTTP_REFERER']))
+        {
+            header("Location: ".$server['HTTP_REFERER']);
+        }
+        else
+        {
+            $this->RedirectMain();
+        }
+    }
+    
+    public function RedirectMain()
+    {
+        //header("http://medservice24.pirise.com");
+        header('Location: index.html'); exit();
+    }
+    
+    public function RedirectKabinet(){
+        header('Location: main.php'); exit();
+    }
+    
+//     public function RedirectError() {
+//         header('Location: index.html'); exit();
+//     }
+
+    public function IsLogin($login){
+        return $this->medDB->FindIdLogin($login);
+    }
+    
+    private function GenerateCode($length=6) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
+        $code = "";
+        $clen = strlen($chars) - 1;
+        while (strlen($code) < $length) {
+            $code .= $chars[mt_rand(0,$clen)];
+        }
+        return $code;
+    }
+    
+    public function SaveLoginPassword($login, $password){
+        $id = $this->IsLogin($login);
+        if ($id < 0) {
+            $id = $this->medDB->GetLastLoginId();
+            
+            $passwordMd5= md5(md5(trim($password)));
+            $hash = md5($this->GenerateCode(10));
+            
+            $this->medDB->SaveLogin($id, $login, $passwordmd5, $hash);
+            $arrSave = array($id, $hash);
+            return $arrSave;
+        }
+        return array(-1);
+    }
+    
+    public function IsAuthorized($id, $hash){
+        return $this->medDB->IsAuthorize($id, $hash);
+    }    
 }
 ?>
