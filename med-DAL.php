@@ -39,7 +39,7 @@ class MedDB
       $this->CloseConnectDB($link);
       return $result;
   }
-  
+    
   private function FindId($table, $nameRow, $select){
       $query = "SELECT 'id' FROM $table WHERE $nameRow = $select";
       $link = $this->ConnectDB();
@@ -47,14 +47,19 @@ class MedDB
       $queryResult = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
       
       $this->CloseConnectDB($link);
-     
-//       $result = mysqli_fetch_assoc($query);
-//       return $result['id'];
-      while ($result = mysqli_fetch_assoc($query)) {
-          if ($select == $result[$nameRow]) {
-              return $result['id'];
-          }
+      
+      //вернуть 1 результат массива
+      $result = mysqli_fetch_assoc($query);
+      if(count($result) == 1){         
+         return $result['id'];
       }
+      
+      ///список результатов
+//       while ($result = mysqli_fetch_assoc($query)) {
+//           if ($select == $result[$nameRow]) {
+//               return $result['id'];
+//           }
+//       }
       return -1;
   }
 
@@ -760,6 +765,18 @@ class MedDB
       }else {
           return -1;
       }
+  }
+  
+  public function IsAuthorize($id, $hash){
+      $query = $this->QuerySelectId('med_users', $id);
+      if ($query == null) {
+          return false;
+      }
+      $result = mysqli_fetch_assoc($query);
+      if ($result['hash'] == $hash) {
+          return true;
+      }
+      return false;
   }
 }
  ?>

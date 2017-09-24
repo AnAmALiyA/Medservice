@@ -45,7 +45,7 @@ class Controller
     
     public function __construct()
     {
-        $this->medDB = new MedDB;
+        $this->medDB = new MedDB();
         $this->arrayNamesServices = $arrayNamesServicesBAL;
         $this->arrayFilds = $arrayFilds;
     }
@@ -186,7 +186,7 @@ class Controller
     public function GetSummaryTableAll(){
         return $this->medDB->GetSummaryTableAllCol();
     }
-    
+//------------разобраться
     private function GetStrPhones(){
         $stringPhones = null;
         for ($i = 1; $i <= 10; $i++) {
@@ -624,11 +624,11 @@ class Controller
         return  $idSummaryTable;
     }
     
-    public function RedirectBack()
+    public function RedirectBack($server)
     {
-        if (!empty($_SERVER['HTTP_REFERER']))
+        if (!empty($server['HTTP_REFERER']))
         {
-            header("Location: ".$_SERVER['HTTP_REFERER']);
+            header("Location: ".$server['HTTP_REFERER']);
         }
         else
         {
@@ -650,7 +650,11 @@ class Controller
 //         header('Location: index.html'); exit();
 //     }
 
-    function generateCode($length=6) {
+    public function IsLogin($login){
+        return $this->medDB->FindIdLogin($login);
+    }
+    
+    private function GenerateCode($length=6) {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
         $code = "";
         $clen = strlen($chars) - 1;
@@ -661,34 +665,22 @@ class Controller
     }
     
     public function SaveLoginPassword($login, $password){
-        $id = $this->medDB->FindIdLogin($login);
+        $id = $this->IsLogin($login);
         if ($id < 0) {
             $id = $this->medDB->GetLastLoginId();
             
-            $passwordEnd = md5(md5(trim($password)));
-            $hash = md5(generateCode(10));
+            $passwordMd5= md5(md5(trim($password)));
+            $hash = md5($this->GenerateCode(10));
             
-            $this->medDB->SaveLogin($id, $login, $passwordEnd, $hash);
+            $this->medDB->SaveLogin($id, $login, $passwordmd5, $hash);
             $arrSave = array($id, $hash);
             return $arrSave;
         }
-        return -1;
+        return array(-1);
     }
     
-    public function GetIdLogin($login){
-        
-    }
-    
-    public function SavePassword($password){
-        
-    }
-    
-    public function GetPasswordMd5($password){
-        
-    }
-    
-    public function GetPasswordHash($password){
-        
-    }
+    public function IsAuthorized($id, $hash){
+        return $this->medDB->IsAuthorize($id, $hash);
+    }    
 }
 ?>

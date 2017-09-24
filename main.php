@@ -88,16 +88,12 @@
 <body class="page-template page-template-pages page-template-template-home page-template-pagestemplate-home-php page page-id-5">
 
   <?php  
-    require 'med-BAL.php';
+    require_once 'med-BAL.php';
+    //require_once 'action.php';
     $controller = new Controller();
-    
-    if (isset($_SESSION['submit']) && $_SESSION['submit'] == true)
-    {
-        $sessionFlag = $_SESSION['submit'];
-        // если есть данные в сесии то вытягиваю и заполняю форму
-        // так же указываю пользователю где ошибка
-        //$_SESSION['medService24']='';
-    }
+    //$handling = new HandlingData();
+        
+//     $handling->AuthorizationCheck($_SESSION, $_COOKIE, $_SERVER);    
   ?>
 
     <header id="header">
@@ -271,7 +267,7 @@
                                 <label for="type">Тип учереждения</label>
                             </div>
                             <div class="col2">
-                                <select name="typeCompany" class="type" id="typeCompany">
+                                <select name="typeCompany" class="type <?php $_SESSION['typeCompany_error']?>" id="typeCompany">
 <!--                                 //Нужно будет в том случае, если человек не использует JavaScript 
                                     ($sessionFlag)?'':'selected' -->
                                   <option value="0" selected></option>	
@@ -292,7 +288,7 @@
                                 <label for="services">Направления/услуги</label>
                             </div>
                             <div class="col2">
-                                <select name="services" class="services" id="services">
+                                <select name="services" class="services <?php $_SESSION['service_error']?>" id="services">
                                   <option value="0" selected></option>
                                   <?php
                                   $itemServiceOption = 1;
@@ -326,7 +322,7 @@
                                 <label for="company">Страховые компании</label>
                             </div>
                             <div class="col2">
-                                <select name="insuranceCompany" class="insuranceCompany" id="insuranceCompany">
+                                <select name="insuranceCompany" class="insuranceCompany <?php $_SESSION['insurance_error']?>" id="insuranceCompany">
                                     <option value="0" selected></option>
                                     <?php
                                       $itemInsuranceOption = 1;
@@ -343,7 +339,7 @@
                             <div class="">
                               <p>Для инпутов</p>
                               <?php
-                              $itemInsuranceInput = 1;
+                              $itemInsuranceInput = 1;                              
                               foreach ($controller->GetInsuranceCompanyAll() as $key => $value)
                              {
                                  echo "<input type=\"checkbox\" name=\"$key\" value=\"\">$value</input>";
@@ -362,7 +358,7 @@
                             <div class="col1">
                                 <label for="name">Название</label>
                             </div>
-                            <div class="col2">
+                            <div class="col2 <?php $_SESSION['nameCompany_error']?>">
                                 <input type="text" placeholder="" id="name" name="nameCompany" value="Якась компания О_о">
                             </div>
                         </div>
@@ -372,7 +368,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['region_error']?>">
                                 <label for="region">Область</label>
                             </div>
                             <div class="col2">
@@ -380,7 +376,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['town_error']?>">
                                 <label for="town">Город</label>
                             </div>
                             <div class="col2">
@@ -388,7 +384,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['district_error']?>">
                                 <label for="district">Район</label>
                             </div>
                             <div class="col2">
@@ -396,7 +392,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['street_error']?>">
                                 <label for="street">Улица</label>
                             </div>
                             <div class="col2">
@@ -404,7 +400,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col1">
+                            <div class="col1 <?php $_SESSION['home_error']?>">
                                 <label for="home">Дом</label>
                             </div>
                             <div class="col2">
@@ -415,19 +411,13 @@
                             <div class="col1">
                                 <label for="phone">Телефон</label>
                             </div>
-                            <div class="col2 phone">
+                            <div class="col2 phone <?php $_SESSION['1-phone_error']?>">
                                 <input id="phone1" type="tel" name="1-phone" placeholder="(___) 000 00 00" value="34636365645">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
-                            <div class="col2 phone">
+                            <div class="col2 phone <?php $_SESSION['2-phone_error']?>">
                                 <input id="phone2" type="tel" name="2-phone" placeholder="(___) 000 00 00" value="45657687вапва">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </div>
-<!--                             тут генерировать телефоны средствами JS на id phones-->
-                            <div class="col2 phone">
-                                <input id="phone3" type="tel" name="3-phone" placeholder="(___) 000 00 00" value="">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <i class="fa fa-times" aria-hidden="true"></i>
                             </div>
