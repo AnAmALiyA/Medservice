@@ -306,7 +306,7 @@
                         	   console.log($("form.dwnld").find("div.download-holder.clearfix:last").attr("id"));
                         		   var formNum = parseInt($("form.dwnld").find("div.download-holder.clearfix:last").attr("id").slice(5)) + 1 ; 
                        		                
-                                   $("form.dwnld").append("<div id=\"field" + formNum +"\" class=\"download-holder clearfix\">" 
+                                   $("div.download-holder.clearfix:last").after("<div id=\"field" + formNum +"\" class=\"download-holder clearfix\">" 
           + "<div class=\"left-form\"><img src=\"img/empty-img.jpg\" alt=\"empty\"><div class=\"icon-holder\">"
             + "<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><i class=\"fa fa-times\" aria-hidden=\"true\">"
             + "</i></div><p> <input type=\"file\" name=\"file\"formNum/> </p></div><div class=\"right-form\">" 
@@ -321,7 +321,7 @@
                                      + " </div>"
                                     +  "</div> " );        
 
-                                   $('body').append('<ul><li>Java</li><li>JavaScript</li></ul>');
+                                  
                                                	   
 });
   //  $('#delete').bind('click', function(){
