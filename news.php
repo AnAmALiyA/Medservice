@@ -286,7 +286,7 @@
                                 <i class=\"fa fa-times\" aria-hidden=\"true\" onclick=\"deleteField();\"></i>
                                 <textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment$i\" name=\"comment$i\" placeholder=\"Описание\"></textarea>
                                 <span>
-                                    <input id=\"check$i\" type=\"checkbox\" name=\"check\" value=\"check$i\">
+                                    <input id=\"check$i\" type=\"checkbox\" name=\"check$i\" value=\"check$i\">
                                     <label for=\"check$i\">Вывести дату</label>
                                 </span>
                             </div>
@@ -299,24 +299,21 @@
 						
 					       <script type="text/javascript">
 					       jQuery(document).ready(function(){
-    $('span').bind('click', function(){
-                        	   console.log($("form.dwnld"));
-                        	   console.log($("div.download-holder.clearfix"));
-                        	   console.log($("div.download-holder.clearfix:last"));
-                        	   console.log($("form.dwnld").find("div.download-holder.clearfix:last").attr("id"));
+    $('span#add').bind('click', function(){
+                        	   
                         		   var formNum = parseInt($("form.dwnld").find("div.download-holder.clearfix:last").attr("id").slice(5)) + 1 ; 
                        		                
                                    $("div.download-holder.clearfix:last").after("<div id=\"field" + formNum +"\" class=\"download-holder clearfix\">" 
           + "<div class=\"left-form\"><img src=\"img/empty-img.jpg\" alt=\"empty\"><div class=\"icon-holder\">"
             + "<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i><i class=\"fa fa-times\" aria-hidden=\"true\">"
-            + "</i></div><p> <input type=\"file\" name=\"file\"formNum/> </p></div><div class=\"right-form\">" 
-           + "<input type=\"text\" required=\"required\" class=\"form-control\" id=\"name$i\" name=\"name$i\" placeholder=\"Заголовок\"/>"
+            + "</i></div><p> <input type=\"file\" name=\"file" + formNum +"\"/> </p></div><div class=\"right-form\">" 
+           + "<input type=\"text\" required=\"required\" class=\"form-control\" id=\"name" + formNum +"\" name=\"name" + formNum +"\" placeholder=\"Заголовок\"/>"
             + "<i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"  ></i>"
-            + "<i class=\"fa fa-times\" aria-hidden=\"true\" onclick=\"deleteField\"></i>"
-		 + "<textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment$i\" name=\"comment$i\" placeholder=\"Описание\"></textarea>"
+            + "<i class=\"fa fa-times\" aria-hidden=\"true\" id=\"delete" + formNum +"\" ></i>"
+		 + "<textarea class=\"form-control\" required=\"required\" rows=\"5\" id=\"comment" + formNum +"\" name=\"comment" + formNum +"\" placeholder=\"Описание\"></textarea>"
                                     +"    <span>"
-                                          +"    <input id=\"check$i\" type=\"checkbox\" name=\"check\" value=\"check$i\">"
-                                        +"    <label for=\"check$i\">Вывести дату</label>"
+                                          +"    <input id=\"check" + formNum +"\" type=\"checkbox\" name=\"check" + formNum +"\" value=\"check" + formNum +"\">"
+                                        +"    <label for=\"check" + formNum +"\">Вывести дату</label>"
                                          +" </span>"
                                      + " </div>"
                                     +  "</div> " );        
@@ -324,11 +321,25 @@
                                   
                                                	   
 });
-  //  $('#delete').bind('click', function(){
- //                       	  $("div#field" id).remove();
-  //                      	});
+    
 });
-            </script>        
+             // onclick=\"deleteField();\"                  
+ //   jQuery(document).ready(function(){               
+ //                              
+ //                              $('#delete').bind('click', function(){
+ //                       	  $("div#field" id).remove();
+ //                       	});
+ //       });    
+                    </script> 
+                    <script type="text/javascript">
+                        
+            $('i.fa.fa-times').bind('click', function(id){
+               
+                        	  $("div#field3").remove();// Удалем полностью элементы
+            });
+                        
+                              
+                    </script>
                      
                           <div class="add"  >
                           
