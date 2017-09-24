@@ -28,7 +28,7 @@ function addFormMarkup (marker) {
 						'<div class="right-form">' +
 							'<input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>' +
 							'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-							'<i class="fa fa-times" aria-hidden="true"></i>' +
+							'<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
 							'<textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>' +
 							'<span>' +
 								'<input id="check2" type="checkbox" name="check" value="check1">' +
@@ -54,7 +54,7 @@ function addFormMarkup (marker) {
 // 						'<div class="right-form">' +
 // 							'<input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>' +
 // 							'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-// 							'<i class="fa fa-times" aria-hidden="true"></i>' +
+// 							'<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
 // 							'<textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>' +
 // 							'<span>' +
 // 								'<input id="check2" type="checkbox" name="check" value="check1">' +
@@ -72,7 +72,7 @@ function addFormMarkup (marker) {
 // 							'<img src="img/empty-img.jpg" alt="empty">' +
 // 							'<div class="icon-holder">' +
 // 								'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-// 								'<i class="fa fa-times" aria-hidden="true"></i>' +
+// 								'<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
 // 							'</div>' +
 // 							'<label class="file-label" for="add-news-img">Загрузить файл</label>' +
 // 							'<input type="file" id="add-news-img" name="promo_img">' +
