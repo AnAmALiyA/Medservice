@@ -414,3 +414,13 @@ span.overal {
     border-radius: 6px;
 	
 	}
+
+
+[type="file"] {
+    display: none;
+}
+
+.button-add,
+.file-label {
+    cursor: pointer;
+}
