@@ -251,7 +251,7 @@
                         <ul>
                             <li><a href="/main.php">Основное</a></li>
                             <li><a href="/promo.html">Акции</a></li>
-                            <li><a href="/news.html">Новости</a></li>
+                            <li><a href="/news.php">Новости</a></li>
                             <li><a href="/special.html">Специальные предложения</a></li>
                             <li><a href="/medturism.html">Медтуризм</a></li>
                             <li><a href="/zayavki.html">Заявки пациентов</a></li>

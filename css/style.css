@@ -404,3 +404,23 @@ span.overal {
         margin-right: 4px;
     }
 }
+
+
+	.hide{
+	display : none;
+	  margin: 15px 0;
+    padding: 15px;
+    border: 2px solid #E1E8EE;
+    border-radius: 6px;
+	
+	}
+
+
+[type="file"] {
+    display: none;
+}
+
+.button-add,
+.file-label {
+    cursor: pointer;
+}
