@@ -252,7 +252,7 @@
                     </div>
                 </div>
                 <div class="right-col">
-                
+
                 <form name="formMulti" action="action.php" method="POST" class="dwnld form-news-list">
 
 						<div class="news-list">
