@@ -249,7 +249,7 @@
 					</div>
 				</div>
                <div class="right-col">
-               <form action="#" class="dwnld form-promo-list" name="form_promo_list">
+               <form action="#" class="dwnld form-special-list" name="form_special_list">
                 <div class="special-list">
                 
                 <?php for($i = 0; $i < 2; $i++) { ?>

@@ -14,6 +14,9 @@ jQuery(document).ready(function($){
 	$('body').on('click', '.add_medturism_js', function() {
 		addFormMedturMarkup('medturism');
 	});
+	$('body').on('click', '.add_foto_js', function() {
+		addFormFotoMarkup('foto');
+	});
 	$('body').on('click', '.remove_item_js', function() {
 		$(this).closest('.download-holder').remove();
 	});
@@ -74,6 +77,57 @@ function addFormMedturMarkup (marker) {
 				        	'</div>'+
 			        	'</div>'+
 	        		'</div>';
+
+	$('.' + marker + '-list').append(formMarkup);
+}
+
+function addFormFotoMarkup (marker) {
+	var formMarkup = '<div class="download-holder clearfix">' +
+        '<span class="top-txt">Загрузить файлы</span>'+
+        
+        '<div class="photo-holder">'+
+            '<img src="img/empty-img.jpg" alt="empty">'+
+            '<div class="icon-holder">'+
+                '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+            '</div>'+
+        '</div>'+
+        '<div class="photo-holder">'+
+            '<img src="img/empty-img.jpg" alt="empty">'+
+            '<div class="icon-holder">'+
+                '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+            '</div>'+
+        '</div>'+
+        '<div class="photo-holder">'+
+            '<img src="img/empty-img.jpg" alt="empty">'+
+            '<div class="icon-holder">'+
+                '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+            '</div>'+
+        '</div>'+
+        '<div class="photo-holder">'+
+            '<img src="img/empty-img.jpg" alt="empty">'+
+            '<div class="icon-holder">'+
+                '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+            '</div>'+
+        '</div>'+
+        '<div class="photo-holder">'+
+            '<img src="img/empty-img.jpg" alt="empty">'+
+            '<div class="icon-holder">'+
+                '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+            '</div>'+
+        '</div>'+
+        '<div class="photo-holder">'+
+            '<img src="img/empty-img.jpg" alt="empty">'+
+            '<div class="icon-holder">'+
+                '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+            '</div>'+
+        '</div>'+
+    '</div>';
 
 	$('.' + marker + '-list').append(formMarkup);
 }
