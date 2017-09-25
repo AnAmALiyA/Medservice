@@ -79,8 +79,8 @@
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJRj7AGnKyouR_PLTZbwgxXAIxqhzq1V8&amp;callback=initMap"></script>
-	<style type="text/css">.fancybox-margin{margin-right:17px;}</style><style type="text/css">.fancybox-margin{margin-right:17px;}</style><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/common.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/util.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/stats.js"></script>
+<!-- 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJRj7AGnKyouR_PLTZbwgxXAIxqhzq1V8&amp;callback=initMap"></script> -->
+<!--	<style type="text/css">.fancybox-margin{margin-right:17px;}</style><style type="text/css">.fancybox-margin{margin-right:17px;}</style><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/common.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/util.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/stats.js"></script>-->
 	<link rel="stylesheet" href="css/font-awesome.css"/> <!--Added-->
 	<link rel="stylesheet" href="css/style.css"/> <!--Added-->
 </head>
@@ -257,10 +257,10 @@
 							<!-- <div class="download-holder clearfix" data-id="<?php echo $promo['id'] ?>"> -->
 							<div class="download-holder clearfix">
 								<div class="left-form">
-									<img src="img/empty-img.jpg" alt="empty">
+									<img class="imeg_js" src="img/empty-img.jpg" alt="empty">
 									<div class="icon-holder">
 										<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-										<i class="fa fa-times" aria-hidden="true"></i>
+										<i class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
 									</div>
 									<label class="file-label" for="add-promo-img-<?php echo $i ?>">Загрузить файл</label>
 									<input type="file" id="add-promo-img-<?php echo $i ?>" name="promo_img_<?php echo $i ?>">
@@ -348,7 +348,7 @@
 	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.84"></script>
 	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/jquery.main.js?ver=4.7.5"></script>
 	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/library/slick.min.js?ver=4.7.5"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/common.js?ver=4.7.5"></script>
+<!-- 	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/common.js?ver=4.7.5"></script> -->
 	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/wp-embed.min.js?ver=4.7.5"></script>
 	<script src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/library/jquery.validate.min.js"></script>
 	<script src="js/main.js"></script>
