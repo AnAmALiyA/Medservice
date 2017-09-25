@@ -238,98 +238,43 @@
                     <div class="navigation">
                         <ul>
                             <li><a href="/main.php">Основное</a></li>
-                            <li><a href="/promo.html">Акции</a></li>
-                            <li><a href="/news.html">Новости</a></li>
-                            <li><a href="/special.html">Специальные предложения</a></li>
-                            <li><a href="/medturism.html">Медтуризм</a></li>
-                            <li><a href="/zayavki.html">Заявки пациентов</a></li>
-                            <li><a href="/foto.html">Фото</a></li>
+                            <li><a href="/promo.php">Акции</a></li>
+                            <li><a href="/news.php">Новости</a></li>
+                            <li><a href="/special.php">Специальные предложения</a></li>
+                            <li><a href="/medturism.php">Медтуризм</a></li>
+                            <li><a href="/zayavki.php">Заявки пациентов</a></li>
+                            <li><a href="/foto.php">Фото</a></li>
                         </ul>
                         <span class="allert-block">Закрыто на ремонт</span>
                     </div>
                 </div>
                 <div class="right-col">
                     <div class="download-holder clearfix">
-                        <div class="zayavka">
-                            <div class="name">Заявка 1</div>
-                            <div class="descr-z">
-                                <span>Время приема: 16: 00</span>
-                                <span>ФИО : Иванов Иван</span>
-                                <span>Телефон: 8095 ХХХХХХХ</span>
-                                <span>Сообщение:  покраснения на коже</span>
-                                <span>Направление: дерматолог</span>
+                        <form action="#" class="dwnld">
+                            <div class="form-holder">
+                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
                             </div>
-                            <div class="status-z">
-                                <span>Статус заявки:</span>
-                                <span class="green">В работе</span>
+                        </form>
+                    </div>
+                    <div class="download-holder clearfix">
+                        <form action="#" class="dwnld">
+                            <div class="form-holder">
+                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
                             </div>
-                            <div class="time-z">
-                                <span>Время в работе</span>
-                                <span class="time">
-                                    03: 45
-                                </span>
-                            </div>
-                        </div>
-                        <div class="zayavka">
-                            <div class="name">Заявка 1</div>
-                            <div class="descr-z">
-                                <span>Время приема: 16: 00</span>
-                                <span>ФИО : Иванов Иван</span>
-                                <span>Телефон: 8095 ХХХХХХХ</span>
-                                <span>Сообщение:  покраснения на коже</span>
-                                <span>Направление: дерматолог</span>
-                            </div>
-                            <div class="status-z">
-                                <span>Статус заявки:</span>
-                                <span class="green">В работе</span>
-                            </div>
-                            <div class="time-z">
-                                <span>Время в работе</span>
-                                <span class="time">
-                                    03: 45
-                                </span>
-                            </div>
-                        </div>
-                        <div class="zayavka">
-                            <div class="name">Заявка 1</div>
-                            <div class="descr-z">
-                                <span>Время приема: 16: 00</span>
-                                <span>ФИО : Иванов Иван</span>
-                                <span>Телефон: 8095 ХХХХХХХ</span>
-                                <span>Сообщение:  покраснения на коже</span>
-                                <span>Направление: дерматолог</span>
-                            </div>
-                            <div class="status-z">
-                                <span>Статус заявки:</span>
-                                <span class="green">В работе</span>
-                            </div>
-                            <div class="time-z">
-                                <span>Время в работе</span>
-                                <span class="time">
-                                    03: 45
-                                </span>
-                            </div>
-                        </div>
-                        <div class="zayavka">
-                            <div class="name">Заявка 1</div>
-                            <div class="descr-z">
-                                <span>Время приема: 16: 00</span>
-                                <span>ФИО : Иванов Иван</span>
-                                <span>Телефон: 8095 ХХХХХХХ</span>
-                                <span>Сообщение:  покраснения на коже</span>
-                                <span>Направление: дерматолог</span>
-                            </div>
-                            <div class="status-z">
-                                <span>Статус заявки:</span>
-                                <span class="green">В работе</span>
-                            </div>
-                            <div class="time-z">
-                                <span>Время в работе</span>
-                                <span class="time">
-                                    03: 45
-                                </span>
-                            </div>
-                        </div>
+                        </form>
+                    </div>
+                    <div class="add">
+                        <span>Добавить</span>
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </div>
+                    <div class="button-save">
+                        <button>Сохранить</button>
                     </div>
                 </div>
             </div>
