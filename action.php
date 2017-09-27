@@ -313,20 +313,6 @@ class HandlingData
         $this->controller->RedirectError();
     }
 
-    // public function IsExistTwoData($param1, $param2) {
-    // $notEmpty = true;
-    // if(!$this->validateData->IsExist($param1)){
-    // $this->SetError($param1, 'em');
-    // $notEmpty = false;
-    // }
-    
-    // if (!$this->validateData->IsExist($param1))
-    // {
-    // $this->SetError($param2, 'em');
-    // $notEmpty = false;
-    // }
-    // return $notEmpty;
-    // }
     public function IsLogin($login)
     {
         return $this->controller->IsLogin($login);
