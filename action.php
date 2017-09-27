@@ -54,6 +54,14 @@ class HandlingData
             case 'notUL':
                 $_SESSION[$value . '_error'] = 'not_Unique_Login';
                 break;
+                
+            case 'notSafe':
+                $_SESSION[$value . '_error'] = 'not_Safe';
+                break;
+                
+            case 'unset':
+                unset($_SESSION[$value . '_error']);
+                break;
             
             // default:
             // # code...
@@ -357,97 +365,32 @@ class HandlingData
     {
         return $this->controller->IsAuthorized($id, $hash);
     }
-    
-    // public function AuthorizationCheck($server, $submit_authoriz = $_POST['zm_alr_login_submit_button'], $post_login = $_POST['zm_alr_login_user_name'], $post_pass = $_POST['zm_alr_login_password']){
-    // $isAuthorized = false;
-    // if ($handlingData->IsExistTwoData($_SESSION['id'], $_SESSION['hash']){
-    // $isAuthorized = $handlingData->IsAuthorized($_SESSION['id'], $_SESSION['hash']);
-    // }
-    // elseif ($handlingData->IsExistTwoData($_COOKIE['id'], $_COOKIE['hash']){
-    // $isAuthorized = $handlingData->IsAuthorized($_COOKIE['id'], $_COOKIE['hash']);
-    // if ($isAuthorized) {
-    // setcookie('id', $_COOKIE['id'], time()+3600*24*3);
-    // setcookie('hash', $_COOKIE['hash'], time()+3600*24*3);
-    // $_SESSION['id'] = $_COOKIE['id'];
-    // $_SESSION['hash'] = $_COOKIE['hash'];
-    // }
-    // }
-    // elseif (isset($_POST['zm_alr_login_submit_button']) && $_POST['zm_alr_login_submit_button'] == 'Авторизация'){
-    // //вызвать валидацию
-    // if($handlingData->IsExistTwoData($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']){
-    // if ($handlingData->ValidataLoginPass($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'])) {
-    // if (!$handlingData->IsLogin($_POST['zm_alr_login_user_name'])){
-    // $chek = (isset($_POST['zm_alr_login_keep_me_logged_in']) && empty($_POST['zm_alr_login_keep_me_logged_in'])) ? true : false;
-    // $handlingData->Authorize($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'], $chek);
-    // $handlingData->RedirectKabinet();
-    // }
-    // else { //эта часть возвращает в ответ неверные данные(логин и пароль)
-    // $handlingData->SetError($_POST['zm_alr_login_user_name'], 'notUL');
-    // $_SESSION['zm_alr_login_user_name'] = $_POST['zm_alr_login_user_name'];
-    // $_SESSION['zm_alr_login_password'] = $_POST['zm_alr_login_password'];
-    // $handlingData->RedirectBack($server);
-    // }
-    // }
-    // else {
-    // $handlingData->RedirectBack($server);
-    // }
-    // }
-    // else {
-    // $handlingData->RedirectBack($server);
-    // }
-    // }
-    // else {
-    // $handlingData->Redirect();
-    // }
-    // return $isAuthorized;
-    // }
 }
 
-// проверить запрос на авторизацию
-
-// $handlingData = new HandlingData();
-// $isAuthorized = $handlingData->AuthorizationCheck();
-
-// if ($isAuthorized) {
-
-// if($_POST['submit'] == 'Сохранить')
-// {
-// if ($_POST['form'] == 'kabinet_main') {
-// $handlingData->SaveData();
-// }
-// else
-// { //вернуть назад
-// $handlingData->RedirectBack($_SERVER);
-// }
-// }
-// else
-// { //вернуть назад
-// $handlingData->RedirectBack($_SERVER);
-// }
-// }
 $auth = new Authorization();
 $bal = new Controller();
 
 if ($auth->IsAuthorized('organization')) {
     echo "методы для организации";
-    //если проходит проверку, то не происходит редиректа
+    //если проходит проверку, то проверяются запросы
 }
 elseif ($auth->IsAuthorized('client')) {
     echo "методы для клиентов";
-    //если проходит проверку, то не происходит редиректа
+    //если проходит проверку, то проверяются запросы
 }
 elseif($_POST['submit'] == 'Авторизация') {
-    if ($auth->IsLogin_ajax($_POST['login'])) {
-        $handling = new HandlingData();
+    $handling = new HandlingData();
+    if ($auth->IsLogin($_POST['login'])) {        
         $handling->SetError('login', 'notUL');
         $bal->RedirectBack();
     }//тут понадобиться отслеживать организацию
+    $handling->SetError('login', 'unset');
     $success = $auth->SaveUser($login, $password, $user_category);
-    if ($success < 0) {
-        $handling = new HandlingData();
-        $handling->SetError('login', 'notUL');
+    if ($success < 0) {       
+        $handling->SetError('notSafe', 'notUL');
         $bal->RedirectBack();
     }
+    $handling->SetError('notSafe', 'unset');
 }
 else {
     $bal->RedirectBack();

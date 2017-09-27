@@ -6,7 +6,7 @@ setcookie('user_id', 1, time() + 3600 * 24 * 3);
 setcookie('user_hash', 123123, time() + 3600 * 24 * 3);
 
 require_once 'authorize.php';
-require_once 'action_ajax.php';
+require_once 'action.php';
 require_once 'med-BAL.php';
 
 $auth = new Authorization();

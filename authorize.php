@@ -73,7 +73,7 @@ class Authorization
 
     private function GenerateCode($length = 6)
     {
-        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRQSTUVWXYZ0123456789";
         $code = "";
         $clen = strlen($chars) - 1;
         while (strlen($code) < $length) {
@@ -82,7 +82,7 @@ class Authorization
         return $code;
     }
 
-    private function IsLogin($login)
+    private function GetIsLogin($login)
     {
         $login = $this->validate->FilterStringOnHtmlSql($login);
         if ($this->validate->ValidIntegerString($login)) {
@@ -90,8 +90,8 @@ class Authorization
         }
     }
     
-    public function IsLogin_ajax($login){
-        if ($this->IsLogin($login) < 0) {
+    public function IsLogin($login){
+        if ($this->GetIsLogin($login) > 0) {
             return true;
         }
         return false;
@@ -99,7 +99,7 @@ class Authorization
 
     public function SaveUser($login, $password, $user_category)
     {
-        $id = $this->IsLogin($login);
+        $id = $this->GetIsLogin($login);
         if ($id < 0) {
             $id = $this->dal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
             

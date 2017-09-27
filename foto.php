@@ -1,6 +1,6 @@
 <?php session_start();
 require_once 'authorize.php';
-require_once 'action_ajax.php';
+require_once 'action.php';
 require_once 'med-BAL.php';
 
 $auth = new Authorization();
