@@ -1,3 +1,15 @@
+<?php session_start();
+require_once 'authorize.php';
+require_once 'action_ajax.php';
+require_once 'med-BAL.php';
+
+$auth = new Authorization();
+$bal = new Controller();
+
+if (!$auth->IsAuthorized('organization')) {
+    $bal->RedirectBack();
+}
+?>
 <html>
 <head>
 	<meta charset="UTF-8">  
@@ -232,7 +244,7 @@
 			</div>
 			<div class="personal-cab box clearfix">
 				<div class="title">
-					<h2>Медецинский центр</h2>
+					<h2>Медицинский центр</h2>
 				</div>
 				<div class="left-col">
 					<div class="navigation">
@@ -249,9 +261,8 @@
 					</div>
 				</div>
 				<div class="right-col">
-					<form action="#" class="dwnld form-promo-list" name="form_promo_list">
+					<form action="getData.php" method="post" class="dwnld form-promo-list" name="form_promo_list">
 						<div class="promo-list">
-
 							<?php for($i = 0; $i < 2; $i++) { ?>
 
 							<!-- <div class="download-holder clearfix" data-id="<?php echo $promo['id'] ?>"> -->
@@ -263,7 +274,7 @@
 										<i class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
 									</div>
 									<label class="file-label" for="add-promo-img-<?php echo $i ?>">Загрузить файл</label>
-									<input type="file" id="add-promo-img-<?php echo $i ?>" name="promo_img_<?php echo $i ?>">
+									<input  class="input_img_js" type="file" id="add-promo-img-<?php echo $i ?>" name="promo_img_<?php echo $i ?>">
 								</div>
 								<div class="right-form">
 									<input type="text" required="required" class="form-control" id="name_promo<?php echo $i ?>" name="name_promo<?php echo $i ?>" placeholder="Заголовок"/>
@@ -278,7 +289,6 @@
 							</div>
 
 							<?php } ?>
-
 						</div>
 
 						<div class="add">

@@ -1,7 +1,6 @@
-<?php 
+<?php
 class ValidateData
 {
-
     public function IsExist($value)
     {
         if (! isset($value)) {

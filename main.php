@@ -1,4 +1,26 @@
-<?php session_start();?>
+<?php session_start();
+$_SESSION['user_id'] = 1;
+$_SESSION['user_hash'] = 123123;
+
+setcookie('user_id', 1, time() + 3600 * 24 * 3);
+setcookie('user_hash', 123123, time() + 3600 * 24 * 3);
+
+require_once 'authorize.php';
+require_once 'action_ajax.php';
+require_once 'med-BAL.php';
+
+$auth = new Authorization();
+$bal = new Controller();
+
+if (!$auth->IsAuthorized('organization')) {
+    $bal->RedirectBack();
+}
+//  для регистрации
+    $_SESSION['user_id'] = 1;
+    $_SESSION['user_hash'] = 123123;
+
+    $auth->SetCookie($_SESSION['user_id'], $_SESSION['user_hash']);
+?>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -86,16 +108,6 @@
     <link rel="stylesheet" href="css/style.css"/> <!--Added-->
 </head>
 <body class="page-template page-template-pages page-template-template-home page-template-pagestemplate-home-php page page-id-5">
-
-  <?php  
-    require_once 'med-BAL.php';
-    //require_once 'action.php';
-    $controller = new Controller();
-    //$handling = new HandlingData();
-        
-//     $handling->AuthorizationCheck($_SESSION, $_COOKIE, $_SERVER);    
-  ?>
-
     <header id="header">
         <div class="row">
             <div class="logo">
@@ -260,7 +272,7 @@
                         <span class="allert-block">Закрыто на ремонт</span>
                     </div>
                 </div>
-                <form action="action.php" method=post enctype=multipart/form-data class="right-col">
+                <form action="action_ajax.php" method=post enctype=multipart/form-data class="right-col">
                     <div class="info-holder">
                         <div class="row">
                             <div class="col1">
@@ -272,7 +284,7 @@
                                     ($sessionFlag)?'':'selected' -->
                                   <option value="0" selected></option>	
                                   <?php
-                                  foreach ($controller->GetTypeInstitutionAll() as $key => $value)
+                                  foreach ($bal->GetTypeInstitutionAll() as $key => $value)
                                     {
                                         echo "<option value=\"$key\">$value</option>";
 //                                         //Нужно будет в том случае, если человек не использует JavaScript
@@ -326,7 +338,7 @@
                                     <option value="0" selected></option>
                                     <?php
                                       $itemInsuranceOption = 1;
-                                      foreach ($controller->GetInsuranceCompanyAll() as $key => $value)
+                                      foreach ($bal->GetInsuranceCompanyAll() as $key => $value)
                                       {
                                           echo "<option value=\"$key\">$value</option>";
                                         $itemInsuranceOption++;
@@ -340,7 +352,7 @@
                               <p>Для инпутов</p>
                               <?php
                               $itemInsuranceInput = 1;                              
-                              foreach ($controller->GetInsuranceCompanyAll() as $key => $value)
+                              foreach ($bal->GetInsuranceCompanyAll() as $key => $value)
                              {
                                  echo "<input type=\"checkbox\" name=\"$key\" value=\"\">$value</input>";
 //                                  //Нужно будет в том случае, если человек не использует JavaScript
@@ -359,7 +371,7 @@
                                 <label for="name">Название</label>
                             </div>
                             <div class="col2 <?php $_SESSION['nameCompany_error']?>">
-                                <input type="text" placeholder="" id="name" name="nameCompany" value="Якась компания О_о">
+                                <input type="text" placeholder="" id="name" name="nameCompany" value="Тест поле компания">
                             </div>
                         </div>
                         <div class="row">
@@ -372,7 +384,7 @@
                                 <label for="region">Область</label>
                             </div>
                             <div class="col2">
-                                <input type="text" placeholder="" id="region" name="region" value="Харьковская область">
+                                <input type="text" placeholder="" id="region" name="region" value="Тест поле область">
                             </div>
                         </div>
                         <div class="row">
@@ -380,7 +392,7 @@
                                 <label for="town">Город</label>
                             </div>
                             <div class="col2">
-                                <input type="text" placeholder="" id="town" name="town" value="">
+                                <input type="text" placeholder="" id="town" name="town" value="Тест поле город">
                             </div>
                         </div>
                         <div class="row">
@@ -388,7 +400,7 @@
                                 <label for="district">Район</label>
                             </div>
                             <div class="col2">
-                                <input type="text" placeholder="" id="district" name="districtCity" value="Обилиск">
+                                <input type="text" placeholder="" id="district" name="districtCity" value="Тест поле район">
                             </div>
                         </div>
                         <div class="row">
@@ -396,7 +408,7 @@
                                 <label for="street">Улица</label>
                             </div>
                             <div class="col2">
-                                <input type="text" placeholder="" id="street" name="street" value="Героев Украины">
+                                <input type="text" placeholder="" id="street" name="street" value="Тест поле улица">
                             </div>
                         </div>
                         <div class="row">
@@ -404,7 +416,7 @@
                                 <label for="home">Дом</label>
                             </div>
                             <div class="col2">
-                                <input type="text" placeholder="" id="home" name="home" value="Потеряных+++">
+                                <input type="text" placeholder="" id="home" name="home" value="Тест поле home">
                             </div>
                         </div>
                         <div id="phones" class="row">
@@ -436,13 +448,13 @@
                                 <span>пн</span>
                                 <select name="mondayStart" class="time" id="mondayStart">
                                     <?php
-                                    $controller->GetGenerationTimeFor7();
+                                    $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="mondayEnd" class="time" id="mondayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>
@@ -450,13 +462,13 @@
                                 <span>вт</span>
                                 <select name="tuesdayStart" class="time" id="tuesdayStart">
                                     <?php
-                                    $controller->GetGenerationTimeFor7();
+                                    $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="tuesdayEnd" class="time" id="tuesdayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>
@@ -464,13 +476,13 @@
                                 <span>ср</span>
                                 <select name="wednesdayStart" class="time" id="wednesdayStart">
                                     <?php
-                                    $controller->GetGenerationTimeFor7();
+                                    $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="wednesdayEnd" class="time" id="wednesdayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>
@@ -478,13 +490,13 @@
                                 <span>чт</span>
                                 <select name="thursdayStart" class="time" id="thursdayStart">
                                     <?php
-                                      $controller->GetGenerationTimeFor7();
+                                      $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="thursdayEnd" class="time" id="thursdayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>
@@ -492,13 +504,13 @@
                                 <span>пт</span>
                                 <select name="fridayStart" class="time" id="fridayStart">
                                     <?php
-                                      $controller->GetGenerationTimeFor7();
+                                      $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="fridayEnd" class="time" id="fridayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>
@@ -506,13 +518,13 @@
                                 <span>сб</span>
                                 <select name="saturdayStart" class="time" id="saturdayStart">
                                     <?php
-                                      $controller->GetGenerationTimeFor7();
+                                      $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="saturdayEnd" class="time" id="saturdayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>
@@ -520,13 +532,13 @@
                                 <span>вс</span>
                                 <select name="sundayStart" class="time" id="sundayStart">
                                     <?php
-                                      $controller->GetGenerationTimeFor7();
+                                      $bal->GetGenerationTimeFor7();
                                     ?>
                                 </select>
                                 <span>до</span>
                                 <select name="sundayEnd" class="time" id="sundayEnd">
                                     <?php
-                                      $controller->GetGenerationTimeFor19();
+                                      $bal->GetGenerationTimeFor19();
                                     ?>
                                 </select>
                             </div>

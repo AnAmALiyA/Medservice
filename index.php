@@ -1,3 +1,21 @@
+<?php session_start();
+$_SESSION['user_id'] = 1;
+$_SESSION['user_hash'] = 123123;
+
+setcookie('user_id', 1, time() + 3600 * 24 * 3);
+setcookie('user_hash', 123123, time() + 3600 * 24 * 3);
+
+require_once 'authorize.php';
+require_once 'action_ajax.php';
+require_once 'med-BAL.php';
+
+$auth = new Authorization();
+$bal = new Controller();
+
+if (!$auth->IsAuthorized('organization')) {
+    $bal->RedirectBack();
+}
+?>
 <html>
 <head>
     <meta charset="UTF-8">  
@@ -230,7 +248,7 @@
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медецинский центр</h2>
+                    <h2>Медицинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">

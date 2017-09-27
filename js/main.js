@@ -1,9 +1,15 @@
 jQuery(document).ready(function($){
+	itemPromoNews = 0;
+	    
+//	addFormMarkup('promo');
+//	addFormMarkup('promo');
 
 	$('body').on('click', '.add_promo_js', function() {
 		addFormMarkup('promo');
 	});
 
+//	addFormMarkup('news');
+//	addFormMarkup('news');
 	$('body').on('click', '.add_news_js', function() {
 		addFormMarkup('news');
 	});
@@ -21,11 +27,35 @@ jQuery(document).ready(function($){
 	$('body').on('click', '.remove_item_js', function() {
 		$(this).closest('.download-holder').remove();
 	});
-
+//	неработает
 //	$('body').on('click', '#add-promo-img-0', function() {
 //		readURL(this);
 //	})
 	$("#add-promo-img-0").change(function() {
+		console.log(itemPromoNews);
+		  readURL(this);
+	});
+	
+	$("#add-promo-img-1").change(function() {
+		console.log(itemPromoNews);
+		  readURL(this);
+	});
+	$("#add-promo-img-2").change(function() {
+		console.log(itemPromoNews);
+		  readURL(this);
+	});
+	
+	$("#add-promo-img-3").change(function() {
+		console.log(itemPromoNews);
+		  readURL(this);
+	});
+	$("#add-promo-img-4").change(function() {
+		console.log(itemPromoNews);
+		  readURL(this);
+	});
+	
+	$("#add-promo-img-5").change(function() {
+		console.log(itemPromoNews);
 		  readURL(this);
 	});
 	
@@ -43,7 +73,7 @@ function addFormMarkup (marker) {
 								'<i class="fa fa-times" aria-hidden="true"></i>' +
 							'</div>' +
 							'<label class="file-label" for="add-' + marker + '-img">Загрузить файл</label>' +
-							'<input type="file" id="add-' + marker + '-img" name="' + marker + '_img">' +
+							'<input type="file" id="add-' + marker + '-img-' + itemPromoNews +'" name="' + marker + '_img">' +
 						'</div>' +
 						'<div class="right-form">' +
 							'<input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>' +
@@ -65,12 +95,7 @@ function readURL(input) {
 	    var reader = new FileReader();
 
 	    reader.onload = function(e) {
-	    	var ii = $('#add-promo-img-0').closest('.download-holder');
-	    	var ff = ii.find('img.imeg_js');
-	    	console.log(this);
-	    	console.log(ii);
-	    	console.log(ff);
-	    	ff.attr('src', e.target.result);	      
+	    	$(input).siblings('.imeg_js').attr('src', e.target.result);
 	    };
 	    reader.readAsDataURL(input.files[0]);
 	  }

@@ -2,51 +2,65 @@
 session_start();
 require_once 'med-BAL.php';
 require_once 'validate.php';
+require_once 'authorize.php';
 
 class HandlingData
 {
-    private $arrHoliday = array('none', 'monday', 'tuesday', 'wednesday', 'thursday',
-        'friday', 'saturday', 'sunday');
-    private $timeWork = array('Start', 'End');
-    
+
+    private $arrHoliday = array(
+        'none',
+        'monday',
+        'tuesday',
+        'wednesday',
+        'thursday',
+        'friday',
+        'saturday',
+        'sunday'
+    );
+
+    private $timeWork = array(
+        'Start',
+        'End'
+    );
+
     private $controller;
     private $validateData;
-    
+
     function __construct()
-    {
+    {        
         $this->controller = new Controller();
         $this->validateData = new ValidateData();
     }
-    
-    private function SetError($value, $case)
+
+    public function SetError($value, $case)
     {
         switch ($case) {
             case 'em':
                 $_SESSION[$value . '_error'] = 'empty';
                 break;
-                
+            
             case 'notCh':
                 $_SESSION[$value . '_error'] = 'not_Chosen';
                 break;
-                
+            
             case 'notVStr':
                 $_SESSION[$value . '_error'] = 'not_Validate_String';
                 break;
-                
+            
             case 'notV':
                 $_SESSION[$value . '_error'] = 'not_Valide';
                 break;
-                
+            
             case 'notUL':
                 $_SESSION[$value . '_error'] = 'not_Unique_Login';
                 break;
-                
-                // default:
-                // # code...
-                // break;
+            
+            // default:
+            // # code...
+            // break;
         }
     }
-    
+
     private function IsFillField()
     {
         $flag = true;
@@ -123,24 +137,23 @@ class HandlingData
             // $flag = false;
         }
         
-//         // Телефон
-//         $tempPhone = false;
-//         for ($i = 1; $i <= 10; $i ++) {
-//             if ($validateData->IsExist($_POST[$i . '-phone'])) {
-//                 $tempPhone = true;
-//             }
-//         }
+        // // Телефон
+        // $tempPhone = false;
+        // for ($i = 1; $i <= 10; $i ++) {
+        // if ($validateData->IsExist($_POST[$i . '-phone'])) {
+        // $tempPhone = true;
+        // }
+        // }
         
-//         if (! $tempPhone) {
-//             $this->SetError('phone'.$i, 'em');
-//             // $flag = false;
-//         }
+        // if (! $tempPhone) {
+        // $this->SetError('phone'.$i, 'em');
+        // // $flag = false;
+        // }
         
         // Время работы - заранее установленно
         foreach ($this->timeWork as $item => $period) {
             foreach ($this->arrHoliday as $number => $day) {
-                if (!$this->validateData->IsExist($_POST[$day . $period]))
-                {
+                if (! $this->validateData->IsExist($_POST[$day . $period])) {
                     $this->SetError('$day . $period', 'em');
                     $flag = false;
                 }
@@ -152,7 +165,7 @@ class HandlingData
             $this->SetError('holiday', 'em');
         }
     }
-    
+
     private function IsValidFild()
     {
         $flag = true;
@@ -164,25 +177,25 @@ class HandlingData
             $flag = false;
         }
         
-        //Направления/услуги - чекбоксы
+        // Направления/услуги - чекбоксы
         $itemServiceInput = 1;
         foreach ($arrayNamesServices as $key => $value) {
             if ($this->validateData->IsExist($_POST[$itemServiceInput . '-service'])) {
                 $_POST[$itemServiceInput . '-service'] = $this->validateData->FilterStringOnHtmlSql($_POST[$itemServiceInput . '-service']);
-                if (!$this->validateData->ValidInteger($_POST[$itemServiceInput.'-service'])) {
-                    $this->SetError($itemServiceInput.'-service', 'notV');
+                if (! $this->validateData->ValidInteger($_POST[$itemServiceInput . '-service'])) {
+                    $this->SetError($itemServiceInput . '-service', 'notV');
                     $flag = false;
                 }
             }
         }
         
-        //Страховые компании  - чекбоксы
+        // Страховые компании - чекбоксы
         $itemInsuranceInput = 1;
         foreach ($arrayNamesServices as $key => $value) {
             if ($this->validateData->IsExist($_POST[$itemInsuranceInput . '-insurance'])) {
                 $_POST[$itemInsuranceInput . '-insurance'] = $this->validateData->FilterStringOnHtmlSql($_POST[$itemInsuranceInput . '-insurance']);
-                if (!$this->validateData->ValidInteger($_POST[$itemInsuranceInput.'-insurance'])) {
-                    $this->SetError($itemInsuranceInput.'-insurance', 'notV');
+                if (! $this->validateData->ValidInteger($_POST[$itemInsuranceInput . '-insurance'])) {
+                    $this->SetError($itemInsuranceInput . '-insurance', 'notV');
                     $flag = false;
                 }
             }
@@ -231,7 +244,7 @@ class HandlingData
             }
         }
         
-        //время работы
+        // время работы
         foreach ($this->timeWork as $item => $period) {
             foreach ($this->arrHoliday as $number => $day) { //
                 $_POST[$day . $period] = $this->validateData->FilterStringOnHtmlSql($_POST[$day . $period]);
@@ -242,182 +255,203 @@ class HandlingData
             }
         }
         
-        //выходной
+        // выходной
         foreach ($this->arrHoliday as $key => $value) {
             if ($this->validateData->IsExist($_POST[$value])) {
                 $_POST[$value] = $this->validateData->FilterStringOnHtmlSql($_POST[$value]);
-                if (!$this->validateData->ValidInteger($_POST[$value])) {
+                if (! $this->validateData->ValidInteger($_POST[$value])) {
                     $this->SetError($value, 'notV');
                     $flag = false;
                 }
             }
         }
     }
-    
+
     public function SaveData()
     {
-            if (! $this->IsFillField()) {
-//                 $_SESSION['session_errors'] = true;
-//                 $this->SaveIntoSessions();
-                $this->controller->RedirectBack($_SERVER);
-            }
-            
-            if (! $this->IsValidFild()) {
-//                 $_SESSION['session_errors'] = true;
-//                 $this->SaveIntoSessions();
-                $this->controller->RedirectBack($_SERVER);
-            }
-            
-            // после проверки данных сохранить в БД
-            $isSave = $this->controller->Save($_POST);
-            if ($isSave == -1) {
-                return false;
-            }
-//             $_SESSION['session_errors'] = false;
-            return true;
-    }
-    
-    public function Redirect(){
-        $this->controller->RedirectBack($_SERVER);
-    }
-    
-    public function RedirectKabinet(){
-        $this->controller->RedirectKabinet();
-    }
-    
-    public function RedirectError(){
-        $this->controller->RedirectError();
-    }
-    
-    public function IsExistTwoData($param1, $param2) {
-        $notEmpty = true;
-        if(!$this->validateData->IsExist($param1)){
-            $this->SetError($param1, 'em');
-            $notEmpty = false;
+        if (! $this->IsFillField()) {
+            // $_SESSION['session_errors'] = true;
+            // $this->SaveIntoSessions();
+            $this->controller->RedirectBack($_SERVER);
         }
         
-        if (!$this->validateData->IsExist($param1))           
-        {
-            $this->SetError($param2, 'em');
-            $notEmpty = false;
+        if (! $this->IsValidFild()) {
+            // $_SESSION['session_errors'] = true;
+            // $this->SaveIntoSessions();
+            $this->controller->RedirectBack($_SERVER);
         }
-        return $notEmpty;
+        
+        // после проверки данных сохранить в БД
+        $isSave = $this->controller->Save($_POST);
+        if ($isSave == - 1) {
+            return false;
+        }
+        // $_SESSION['session_errors'] = false;
+        return true;
     }
+
+    public function Redirect()
+    {
+        $this->controller->RedirectBack($_SERVER);
+    }
+
+    public function RedirectKabinet()
+    {
+        $this->controller->RedirectKabinet();
+    }
+
+    public function RedirectError()
+    {
+        $this->controller->RedirectError();
+    }
+
+    // public function IsExistTwoData($param1, $param2) {
+    // $notEmpty = true;
+    // if(!$this->validateData->IsExist($param1)){
+    // $this->SetError($param1, 'em');
+    // $notEmpty = false;
+    // }
     
-    public function IsLogin($login){
+    // if (!$this->validateData->IsExist($param1))
+    // {
+    // $this->SetError($param2, 'em');
+    // $notEmpty = false;
+    // }
+    // return $notEmpty;
+    // }
+    public function IsLogin($login)
+    {
         return $this->controller->IsLogin($login);
     }
-    
-    public function ValidataLoginPass($login, $password){
+
+    public function ValidataLoginPass($login, $password)
+    {
         $valid = true;
-        if(!$this->validateData->ValidIntegerString($login)){
+        if (! $this->validateData->ValidIntegerString($login)) {
             $valid = false;
             $this->SetError($login, 'notVStr');
         }
         
-        if(!$this->validateData->ValidIntegerString($password)){        
+        if (! $this->validateData->ValidIntegerString($password)) {
             $valid = false;
             $this->SetError($password, 'notVStr');
         }
         return $valid;
     }
-    
-    public function Authorize($login, $password, $check = false){
+
+    public function Authorize($login, $password, $check = false)
+    {
         $arrLogPass = $this->controller->SaveLoginPassword($login, $password);
         if (count($arrLogPass) != 1) {
             $_SESSION['id'] = $arrLogPass[1];
             $_SESSION['hash'] = $arrLogPass[2];
             
-            if ($check){
-                setcookie('id', $id, time()+3600*24*3);
-                setcookie('hash', $hash, time()+3600*24*3);
+            if ($check) {
+                setcookie('id', $id, time() + 3600 * 24 * 3);
+                setcookie('hash', $hash, time() + 3600 * 24 * 3);
             }
         }
     }
-    function function_name($param) {
-        if (condition) {
-            ;
-        }elseif (condition) {
-            if (condition) {
-                ;
-            }
-        }elseif (condition) {
-            if (condition) {
-                ;
-            }
-        }else {
-            ;
-        }
+
+    public function IsAuthorized($id, $hash)
+    {
+        return $this->controller->IsAuthorized($id, $hash);
     }
     
-    public function IsAuthorized($id, $hash) {
-        return $this->controller->IsAuthorized($id, $hash);
-   }
-   
-//    public function AuthorizationCheck($server, $submit_authoriz = $_POST['zm_alr_login_submit_button'], $post_login = $_POST['zm_alr_login_user_name'], $post_pass = $_POST['zm_alr_login_password']){
-//        $isAuthorized = false;
-//        if ($handlingData->IsExistTwoData($_SESSION['id'], $_SESSION['hash']){
-//            $isAuthorized = $handlingData->IsAuthorized($_SESSION['id'], $_SESSION['hash']);
-//        }
-//        elseif ($handlingData->IsExistTwoData($_COOKIE['id'], $_COOKIE['hash']){
-//            $isAuthorized = $handlingData->IsAuthorized($_COOKIE['id'], $_COOKIE['hash']);
-//            if ($isAuthorized) {
-//                setcookie('id', $_COOKIE['id'], time()+3600*24*3);
-//                setcookie('hash', $_COOKIE['hash'], time()+3600*24*3);
-//                $_SESSION['id'] = $_COOKIE['id'];
-//                $_SESSION['hash'] = $_COOKIE['hash'];
-//            }
-//        }
-//        elseif (isset($_POST['zm_alr_login_submit_button']) && $_POST['zm_alr_login_submit_button'] == 'Авторизация'){
-//            //вызвать валидацию
-//            if($handlingData->IsExistTwoData($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']){
-//                if ($handlingData->ValidataLoginPass($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'])) {
-//                    if (!$handlingData->IsLogin($_POST['zm_alr_login_user_name'])){
-//                        $chek = (isset($_POST['zm_alr_login_keep_me_logged_in']) && empty($_POST['zm_alr_login_keep_me_logged_in'])) ? true : false;
-//                        $handlingData->Authorize($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'], $chek);
-//                        $handlingData->RedirectKabinet();
-//                    }
-//                    else {    //эта часть возвращает в ответ неверные данные(логин и пароль)
-//                        $handlingData->SetError($_POST['zm_alr_login_user_name'], 'notUL');
-//                        $_SESSION['zm_alr_login_user_name'] = $_POST['zm_alr_login_user_name'];
-//                        $_SESSION['zm_alr_login_password'] = $_POST['zm_alr_login_password'];
-//                        $handlingData->RedirectBack($server);
-//                    }
-//                }
-//                else {
-//                    $handlingData->RedirectBack($server);
-//                }
-//            }
-//            else {
-//                $handlingData->RedirectBack($server);
-//            }
-//        }
-//        else {
-//            $handlingData->Redirect();
-//        }
-//        return $isAuthorized;
-//    }
-
+    // public function AuthorizationCheck($server, $submit_authoriz = $_POST['zm_alr_login_submit_button'], $post_login = $_POST['zm_alr_login_user_name'], $post_pass = $_POST['zm_alr_login_password']){
+    // $isAuthorized = false;
+    // if ($handlingData->IsExistTwoData($_SESSION['id'], $_SESSION['hash']){
+    // $isAuthorized = $handlingData->IsAuthorized($_SESSION['id'], $_SESSION['hash']);
+    // }
+    // elseif ($handlingData->IsExistTwoData($_COOKIE['id'], $_COOKIE['hash']){
+    // $isAuthorized = $handlingData->IsAuthorized($_COOKIE['id'], $_COOKIE['hash']);
+    // if ($isAuthorized) {
+    // setcookie('id', $_COOKIE['id'], time()+3600*24*3);
+    // setcookie('hash', $_COOKIE['hash'], time()+3600*24*3);
+    // $_SESSION['id'] = $_COOKIE['id'];
+    // $_SESSION['hash'] = $_COOKIE['hash'];
+    // }
+    // }
+    // elseif (isset($_POST['zm_alr_login_submit_button']) && $_POST['zm_alr_login_submit_button'] == 'Авторизация'){
+    // //вызвать валидацию
+    // if($handlingData->IsExistTwoData($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password']){
+    // if ($handlingData->ValidataLoginPass($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'])) {
+    // if (!$handlingData->IsLogin($_POST['zm_alr_login_user_name'])){
+    // $chek = (isset($_POST['zm_alr_login_keep_me_logged_in']) && empty($_POST['zm_alr_login_keep_me_logged_in'])) ? true : false;
+    // $handlingData->Authorize($_POST['zm_alr_login_user_name'], $_POST['zm_alr_login_password'], $chek);
+    // $handlingData->RedirectKabinet();
+    // }
+    // else { //эта часть возвращает в ответ неверные данные(логин и пароль)
+    // $handlingData->SetError($_POST['zm_alr_login_user_name'], 'notUL');
+    // $_SESSION['zm_alr_login_user_name'] = $_POST['zm_alr_login_user_name'];
+    // $_SESSION['zm_alr_login_password'] = $_POST['zm_alr_login_password'];
+    // $handlingData->RedirectBack($server);
+    // }
+    // }
+    // else {
+    // $handlingData->RedirectBack($server);
+    // }
+    // }
+    // else {
+    // $handlingData->RedirectBack($server);
+    // }
+    // }
+    // else {
+    // $handlingData->Redirect();
+    // }
+    // return $isAuthorized;
+    // }
 }
+
+// проверить запрос на авторизацию
 
 // $handlingData = new HandlingData();
 // $isAuthorized = $handlingData->AuthorizationCheck();
 
 // if ($isAuthorized) {
-   
-//     if($_POST['submit'] == 'Сохранить')
-//     {
-//         if ($_POST['form'] == 'kabinet_main') {
-//             $handlingData->SaveData();
-//         }
-//         else
-//         {   //вернуть назад
-//             $handlingData->RedirectBack($_SERVER);
-//         }
-//     }
-//     else
-//     {   //вернуть назад
-//         $handlingData->RedirectBack($_SERVER);
-//     }
+
+// if($_POST['submit'] == 'Сохранить')
+// {
+// if ($_POST['form'] == 'kabinet_main') {
+// $handlingData->SaveData();
 // }
+// else
+// { //вернуть назад
+// $handlingData->RedirectBack($_SERVER);
+// }
+// }
+// else
+// { //вернуть назад
+// $handlingData->RedirectBack($_SERVER);
+// }
+// }
+$auth = new Authorization();
+$bal = new Controller();
+
+if ($auth->IsAuthorized('organization')) {
+    echo "методы для организации";
+    //если проходит проверку, то не происходит редиректа
+}
+elseif ($auth->IsAuthorized('client')) {
+    echo "методы для клиентов";
+    //если проходит проверку, то не происходит редиректа
+}
+elseif($_POST['submit'] == 'Авторизация') {
+    if ($auth->IsLogin_ajax($_POST['login'])) {
+        $handling = new HandlingData();
+        $handling->SetError('login', 'notUL');
+        $bal->RedirectBack();
+    }//тут понадобиться отслеживать организацию
+    $success = $auth->SaveUser($login, $password, $user_category);
+    if ($success < 0) {
+        $handling = new HandlingData();
+        $handling->SetError('login', 'notUL');
+        $bal->RedirectBack();
+    }
+}
+else {
+    $bal->RedirectBack();
+}
+
+//тут будут выполнять методы после того как пройдут проверку авторизации
 ?>

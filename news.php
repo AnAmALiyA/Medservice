@@ -1,3 +1,15 @@
+<?php session_start();
+require_once 'authorize.php';
+require_once 'action_ajax.php';
+require_once 'med-BAL.php';
+
+$auth = new Authorization();
+$bal = new Controller();
+
+if (!$auth->IsAuthorized('organization')) {
+    $bal->RedirectBack();
+}
+?>
 <html>
 <head>
     <meta charset="UTF-8">  
@@ -235,7 +247,7 @@
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медецинский центр</h2>
+                    <h2>Медицинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">
@@ -256,33 +268,32 @@
                 <form name="formMulti" action="action.php" method="POST" class="dwnld form-news-list">
 
 						<div class="news-list">
-
 							<?php for($i = 0; $i < 2; $i++) { ?>
-								
-								<div class="download-holder clearfix">
-									<div class="left-form">
-										<img src="img/empty-img.jpg" alt="empty">
-										<div class="icon-holder">
-											<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-											<i class="fa fa-times" aria-hidden="true"></i>
-										</div>
-										<label class="file-label" for="add-news-img-<?php echo $i ?>">Загрузить файл</label>
-										<input type="file" id="add-news-img-<?php echo $i ?>" name="news_img_<?php echo $i ?>">
-									</div>
-									<div class="right-form">
-										<input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
+
+							<!-- <div class="download-holder clearfix" data-id="<?php echo $promo['id'] ?>"> -->
+							<div class="download-holder clearfix">
+								<div class="left-form">
+									<img class="imeg_js" src="img/empty-img.jpg" alt="empty">
+									<div class="icon-holder">
 										<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-										<i class="fa fa-times remove_item_js" aria-hidden="true"></i>
-										<textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
-										<span>
-											<input id="check-<?php echo $i ?>" type="checkbox" name="check" value="check-<?php echo $i ?>">
-											<label for="check-<?php echo $i ?>">Вывести дату</label>
-										</span>
+										<i class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
 									</div>
+									<label class="file-label" for="add-promo-img-<?php echo $i ?>">Загрузить файл</label>
+									<input  class="input_img_js" type="file" id="add-promo-img-<?php echo $i ?>" name="promo_img_<?php echo $i ?>">
 								</div>
+								<div class="right-form">
+									<input type="text" required="required" class="form-control" id="name_promo<?php echo $i ?>" name="name_promo<?php echo $i ?>" placeholder="Заголовок"/>
+									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+									<i class="fa fa-times remove_item_js" aria-hidden="true"></i>
+									<textarea class="form-control" required="required" rows="5" id="comment_promo<?php echo $i ?>" name="comment_promo<?php echo $i ?>" placeholder="Описание"></textarea>
+									<span>
+										<input id="check_promo<?php echo $i ?>" type="checkbox" name="check_promo<?php echo $i ?>" value="check-<?php echo $i ?>">
+										<label for="check_promo<?php echo $i ?>">Вывести дату</label>
+									</span>
+								</div>
+							</div>
 
 							<?php } ?>
-							
 						</div>
 
 						<div class="add">

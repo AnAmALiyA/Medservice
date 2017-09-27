@@ -262,7 +262,6 @@ span.top-txt {
     padding: 0 30px 0 13px;
     display: inline-block;
     transition: .15s linear border;
-    -webkit-appearance: none;
     -moz-appearance: none;
     max-width: 100%;
     background: #FFF;

@@ -1,3 +1,15 @@
+<?php session_start();
+require_once 'authorize.php';
+require_once 'action_ajax.php';
+require_once 'med-BAL.php';
+
+$auth = new Authorization();
+$bal = new Controller();
+
+if (!$auth->IsAuthorized('organization')) {
+    $bal->RedirectBack();
+}
+?>
 <html>
 <head>
     <meta charset="UTF-8">  
@@ -19,6 +31,9 @@
         !function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
     </script>
     <script src="http://medservice24.pirise.com/wp-includes/js/wp-emoji-release.min.js?ver=4.7.5" type="text/javascript" defer=""></script>
+           
+    
+
     <style type="text/css">
         img.wp-smiley,
         img.emoji {
@@ -47,7 +62,7 @@
     </style>
     <link rel="stylesheet" id="wp-postratings-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.84" type="text/css" media="all">
     <link rel="stylesheet" id="jquery-ui-custom-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/jquery-ui.css?ver=4.7.5" type="text/css" media="all">
-    <link rel="stylesheet" id="ajax-login-register-style-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/style.css?ver=4.7.5" type="text/css" media="all">
+    <link rel="stylesheet" id="ajax-login-register-style-css" href="localmedservice/css/style.css" type="text/css" media="all">
     <link rel="stylesheet" id="wp-pagenavi-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all">
     <link rel="stylesheet" id="base-style-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/style.css?ver=4.7.5" type="text/css" media="all">
     <link rel="stylesheet" id="base-theme-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/css/styles.css?ver=4.7.5" type="text/css" media="all">
@@ -105,7 +120,7 @@
                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php",
                                 data: {tax_id: page},
                                 success: function(data) {
-                                    jQuery('#ajax-select-filter-geo').html(data);   
+                                    jQuery('#ajax-select-filter-geo').html(data);
                                 }
                             });
                             jQuery.ajax({
@@ -232,7 +247,7 @@
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медецинский центр</h2>
+                    <h2>Медицинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">
@@ -249,9 +264,14 @@
                     </div>
                 </div>
                 <div class="right-col">
+                
+                  <form name="formMultiFoto" action="action.php" method="POST" class="dwnld form-foto-list">
+                  
+                  <div class="foto-list">
+                  
                     <div class="download-holder clearfix">
                         <span class="top-txt">Загрузить файлы</span>
-                        <form action="#" class="dwnld">
+                        
                             <div class="photo-holder">
                                 <img src="img/empty-img.jpg" alt="empty">
                                 <div class="icon-holder">
@@ -294,19 +314,24 @@
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </div>
                             </div>
-                        </form>
+                        
+                    </div>
                     </div>
                     <div class="add">
+                    <div class="button-add add_foto_js">
                         <span>Добавить</span>
                         <i class="fa fa-plus" aria-hidden="true"></i>
+                    </div>
                     </div>
                     <div class="button-save">
                         <button>Сохранить</button>
                     </div>
+                    </form>
                 </div>
             </div>
         </section>
     </main>
+    
     <footer id="footer">
         <div class="container">
             <div class="row">
@@ -363,6 +388,9 @@
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/common.js?ver=4.7.5"></script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/wp-embed.min.js?ver=4.7.5"></script>
     <script src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/library/jquery.validate.min.js"></script>
+    
+    <script src="js/main.js"></script>
+
     <script type="text/javascript">
         jQuery(document).ready(function($){
 
@@ -462,5 +490,11 @@
     <span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
     <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-4" tabindex="0" style="display: none;"></ul>
     <span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
+
+
+
+
+
+
 </body>
 </html>
