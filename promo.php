@@ -12,89 +12,92 @@ if (!$auth->IsAuthorized('organization')) {
 ?>
 <html>
 <head>
-	<meta charset="UTF-8">  
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<script type="text/javascript" style="">
-		var pathInfo = {
-			base: 'http://medservice24.pirise.com/wp-content/themes/medservice24/',
-			css: 'css/',
-			js: 'js/',
-			swf: 'swf/',
-		}
-	</script>
-	<title>MedService24</title>
-	<link rel="dns-prefetch" href="//s.w.org">
-	<link rel="alternate" type="application/rss+xml" title="MedService24 » Лента" href="http://medservice24.pirise.com/feed/">
-	<link rel="alternate" type="application/rss+xml" title="MedService24 » Лента комментариев" href="http://medservice24.pirise.com/comments/feed/">
-	<script type="text/javascript">
-		window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/medservice24.pirise.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.5"}};
-		!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
-	</script>
-	<script src="http://medservice24.pirise.com/wp-includes/js/wp-emoji-release.min.js?ver=4.7.5" type="text/javascript" defer=""></script>
-	<style type="text/css">
-		img.wp-smiley,
-		img.emoji {
-			display: inline !important;
-			border: none !important;
-			box-shadow: none !important;
-			height: 1em !important;
-			width: 1em !important;
-			margin: 0 .07em !important;
-			vertical-align: -0.1em !important;
-			background: none !important;
-			padding: 0 !important;
-		}
-	</style>
-	<link rel="stylesheet" id="contact-form-7-css" href="http://medservice24.pirise.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.6" type="text/css" media="all">
-	<link rel="stylesheet" id="wp-polls-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-polls/polls-css.css?ver=2.73.2" type="text/css" media="all">
-	<style id="wp-polls-inline-css" type="text/css">
-		.wp-polls .pollbar {
-			margin: 1px;
-			font-size: 8px;
-			line-height: 10px;
-			height: 10px;
-			background-image: url('http://medservice24.pirise.com/wp-content/plugins/wp-polls/images/default_gradient/pollbg.gif');
-			border: 1px solid #c8c8c8;
-		}
-	</style>
-	<link rel="stylesheet" id="wp-postratings-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.84" type="text/css" media="all">
-	<link rel="stylesheet" id="jquery-ui-custom-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/jquery-ui.css?ver=4.7.5" type="text/css" media="all">
-	<link rel="stylesheet" id="ajax-login-register-style-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/style.css?ver=4.7.5" type="text/css" media="all">
-	<link rel="stylesheet" id="wp-pagenavi-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all">
-	<link rel="stylesheet" id="base-style-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/style.css?ver=4.7.5" type="text/css" media="all">
-	<link rel="stylesheet" id="base-theme-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/css/styles.css?ver=4.7.5" type="text/css" media="all">
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/jquery.js?ver=1.12.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/core.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/widget.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/mouse.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/resizable.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/draggable.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/button.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/position.min.js?ver=1.11.4"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.4"></script>
-	<script type="text/javascript">
-		/* <![CDATA[ */
-		var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
-		/* ]]> */
-	</script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/scripts.js?ver=4.7.5"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/login.js?ver=4.7.5"></script>
-	<script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/register.js?ver=4.7.5"></script>
-	<link rel="https://api.w.org/" href="http://medservice24.pirise.com/wp-json/">
-	<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://medservice24.pirise.com/xmlrpc.php?rsd">
-	<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://medservice24.pirise.com/wp-includes/wlwmanifest.xml"> 
-	<link rel="canonical" href="http://medservice24.pirise.com/">
-	<link rel="shortlink" href="http://medservice24.pirise.com/">
-	<link rel="alternate" type="application/json+oembed" href="http://medservice24.pirise.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmedservice24.pirise.com%2F">
-	<link rel="alternate" type="text/xml+oembed" href="http://medservice24.pirise.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmedservice24.pirise.com%2F&amp;format=xml">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<!-- 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJRj7AGnKyouR_PLTZbwgxXAIxqhzq1V8&amp;callback=initMap"></script> -->
-<!--	<style type="text/css">.fancybox-margin{margin-right:17px;}</style><style type="text/css">.fancybox-margin{margin-right:17px;}</style><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/common.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/util.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/stats.js"></script>-->
-	<link rel="stylesheet" href="css/font-awesome.css"/> <!--Added-->
-	<link rel="stylesheet" href="css/style.css"/> <!--Added-->
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script type="text/javascript" style="">
+        var pathInfo = {
+            base: 'http://medservice24.pirise.com/wp-content/themes/medservice24/',
+            css: 'css/',
+            js: 'js/',
+            swf: 'swf/',
+        }
+    </script>
+    <title>MedService24</title>
+    <link rel="dns-prefetch" href="//s.w.org">
+    <link rel="alternate" type="application/rss+xml" title="MedService24 » Лента" href="http://medservice24.pirise.com/feed/">
+    <link rel="alternate" type="application/rss+xml" title="MedService24 » Лента комментариев" href="http://medservice24.pirise.com/comments/feed/">
+    <script type="text/javascript">
+        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/medservice24.pirise.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.5"}};
+        !function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+    </script>
+    <script src="http://medservice24.pirise.com/wp-includes/js/wp-emoji-release.min.js?ver=4.7.5" type="text/javascript" defer=""></script>
+           
+    
+
+    <style type="text/css">
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+    </style>
+    <link rel="stylesheet" id="contact-form-7-css" href="http://medservice24.pirise.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.6" type="text/css" media="all">
+    <link rel="stylesheet" id="wp-polls-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-polls/polls-css.css?ver=2.73.2" type="text/css" media="all">
+    <style id="wp-polls-inline-css" type="text/css">
+        .wp-polls .pollbar {
+            margin: 1px;
+            font-size: 8px;
+            line-height: 10px;
+            height: 10px;
+            background-image: url('http://medservice24.pirise.com/wp-content/plugins/wp-polls/images/default_gradient/pollbg.gif');
+            border: 1px solid #c8c8c8;
+        }
+    </style>
+    <link rel="stylesheet" id="wp-postratings-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.84" type="text/css" media="all">
+    <link rel="stylesheet" id="jquery-ui-custom-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/jquery-ui.css?ver=4.7.5" type="text/css" media="all">
+    <link rel="stylesheet" id="ajax-login-register-style-css" href="localmedservice/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" id="wp-pagenavi-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all">
+    <link rel="stylesheet" id="base-style-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/style.css?ver=4.7.5" type="text/css" media="all">
+    <link rel="stylesheet" id="base-theme-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/css/styles.css?ver=4.7.5" type="text/css" media="all">
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/jquery.js?ver=1.12.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/core.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/widget.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/mouse.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/resizable.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/draggable.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/button.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/position.min.js?ver=1.11.4"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/jquery/ui/dialog.min.js?ver=1.11.4"></script>
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        var _zm_alr_settings = {"ajaxurl":"http:\/\/medservice24.pirise.com\/wp-admin\/admin-ajax.php","login_handle":"","register_handle":"","redirect":"5","wp_logout_url":"http:\/\/medservice24.pirise.com\/wp-login.php?action=logout&redirect_to=http%3A%2F%2Fmedservice24.pirise.com&_wpnonce=2ece200b94","logout_text":"\u0412\u044b\u0439\u0442\u0438","close_text":"Close","pre_load_forms":"zm_alr_misc_pre_load_no","logged_in_text":"\u0412\u044b \u0443\u0436\u0435 \u0430\u0432\u0442\u043e\u0440\u0438\u0437\u0430\u0432\u0430\u043d\u044b","registered_text":"\u0412\u044b \u0443\u0436\u0435 \u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u044b","dialog_width":"265","dialog_height":"auto","dialog_position":{"my":"center top","at":"center top+5%","of":"body"}};
+        /* ]]> */
+    </script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/scripts.js?ver=4.7.5"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/login.js?ver=4.7.5"></script>
+    <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/register.js?ver=4.7.5"></script>
+    <link rel="https://api.w.org/" href="http://medservice24.pirise.com/wp-json/">
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://medservice24.pirise.com/xmlrpc.php?rsd">
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://medservice24.pirise.com/wp-includes/wlwmanifest.xml"> 
+    <link rel="canonical" href="http://medservice24.pirise.com/">
+    <link rel="shortlink" href="http://medservice24.pirise.com/">
+    <link rel="alternate" type="application/json+oembed" href="http://medservice24.pirise.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmedservice24.pirise.com%2F">
+    <link rel="alternate" type="text/xml+oembed" href="http://medservice24.pirise.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fmedservice24.pirise.com%2F&amp;format=xml">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCJRj7AGnKyouR_PLTZbwgxXAIxqhzq1V8&amp;callback=initMap"></script>
+    <style type="text/css">.fancybox-margin{margin-right:17px;}</style><style type="text/css">.fancybox-margin{margin-right:17px;}</style><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/common.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/util.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/29/7/intl/ru_ALL/stats.js"></script>
+    <link rel="stylesheet" href="css/font-awesome.css"/> <!--Added-->
+    <link rel="stylesheet" href="css/style.css"/> <!--Added-->
 </head>
 <body class="page-template page-template-pages page-template-template-home page-template-pagestemplate-home-php page page-id-5">
 	<header id="header">
@@ -261,7 +264,8 @@ if (!$auth->IsAuthorized('organization')) {
 					</div>
 				</div>
 				<div class="right-col">
-					<form action="getData.php" method="post" class="dwnld form-promo-list" name="form_promo_list">
+				
+					<form action="" method="POST" class="dwnld form-promo-list" name="form_promo_list">
 						<div class="promo-list">
 							<?php for($i = 0; $i < 2; $i++) { ?>
 
@@ -302,6 +306,71 @@ if (!$auth->IsAuthorized('organization')) {
 						</div>
 					</form>
 				</div>
+				
+				<?php
+
+					if ( !function_exists('media_handle_upload') ) {
+							require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+							require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+							require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+						}
+
+					$my_post = array(
+						 'post_title' =>  wp_strip_all_tags( $_POST['name_promo1'] ), //'Название записи', //
+						 'post_content' => wp_strip_all_tags( $_POST['comment_promo1'] ),  //'А вот и текст. Ура, товарищи!', // 
+						 'post_status' => 'publish',
+						 'post_author' => 1,
+						 'post_category' => array(21)
+					  );
+
+					// Вставляем запись в базу данных
+					  wp_insert_post( $my_post );
+
+
+					// Для примера возьмём картинку с моего же блога, которая была залита вне структуры wordpress
+
+					 // Прикрепим к ранее сохранённому посту
+					//CONFIRMED Workabily id is found
+					 $ID_post = get_page_by_title( $_POST['name_promo1'], '', 'post' );
+					$post_id = $ID_post ->ID;
+
+					$description = "Картинка для обложки";
+					 
+
+
+					//FCK works
+					$url1 = get_attachment_link( $_FILES['promo_img_1'] );
+
+
+					$tmp1 = download_url($url);
+
+
+
+
+					$file_array1 = array();
+					// Name exist
+					$file_array1['name'] = $_FILES['promo_img_1']['name'];
+
+
+					$file_array1['tmp_name'] = $_FILES['promo_img_1']['tmp_name'] ; // $tmp1;
+
+					$media_id2 = media_handle_sideload( $file_array1, $post_id, $description);
+
+					// Проверяем на наличие ошибок
+						if( is_wp_error($media_id) ) 
+						{
+							@unlink($file_array['tmp_name']);
+							echo $media_id->get_error_messages();
+						}
+
+					// 
+					// Удаляем временный файл
+					@unlink( $file_array1['tmp_name'] );
+					 
+					// Файл сохранён и добавлен в медиатеку WP. Теперь назначаем его в качестве облож
+					 set_post_thumbnail($post_id, $attachment_id);
+					?>
+				
 			</div>
 		</section>
 	</main>
@@ -313,8 +382,8 @@ if (!$auth->IsAuthorized('organization')) {
 			<div class="row">
 				<div class="col">
 					<h3>Сервис</h3>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla </p>
-				</div>
+					<p><FAFAFAFFFFFFFFFFFFF/p>
+					</div>
 				<div class="col">
 					<h3>Пациенту</h3>
 					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla </p>

@@ -1,50 +1,49 @@
 <?php
 // require_once 'med-dataBAL.php';
 require_once 'med-DAL.php'; // записать переменные сюда
-$arrayNamesServices = array(
-    'dentistry' => 'Стоматологія',
-    'childrens_dentistry' => 'Дитяча стоматологія',
-    'therapeutic_dentistry' => 'Терапевтична стоматологія',
-    'aesthetic_dentistry' => 'Естетична стоматологія',
-    'orthodontics' => 'Ортодонтія',
-    'dental_othopedics' => 'Стоматологічна ортопедія (протезування)',
-    'dental_surgery' => 'Стоматологічна хірургія',
-    'dental_Implantology' => 'Стоматологічна імплантологія',
-    'periodontology' => 'Пародонтологія',
-    'dental_prophylaxis' => 'Стоматологічна профілактика',
-    'dentistry_pregnant_women' => 'Стоматологія для вагітних',
-    'tooth_whitening' => 'Відбілювання зубів',
-    'gnathology' => 'Гнатологія',
-    'dental_bone_plastics' => 'Стоматологічна кістяна пластика',
-    'dentistry_at_home' => 'Стоматологія на дому',
-    'allergy' => 'Алергіологія',
-    'alcoholism' => 'Алкоголізм',
-    'gastroenterology' => 'Гастроентерологія',
-    'childrens_consultation' => 'Дитяча консультація',
-    'ecg' => 'ЕКГ',
-    'ct' => 'КТ',
-    'mammography' => 'Мамографія',
-    'mri' => 'МРТ',
-    'oncology' => 'Онкологія',
-    'wounded' => 'Опікове',
-    'otorhinolaryngology' => 'Оториноларингологія (ЛОР)',
-    'radiology' => 'Рентгенологія',
-    'sports_medicine' => 'Спортивна медицина',
-    'surgery' => 'Сурдологія',
-    'ultrasound_diagnosis' => 'Ультразвукова діагностика',
-    'call_doctor_home' => 'Виклик лікаря додому',
-    'family_medicine' => 'Сімейна медицина',
-    'timpanometry' => 'Тімпанометрія'
-);
+// $arrayNamesServices = array(
+//     'dentistry' => 'Стоматологія',
+//     'childrens_dentistry' => 'Дитяча стоматологія',
+//     'therapeutic_dentistry' => 'Терапевтична стоматологія',
+//     'aesthetic_dentistry' => 'Естетична стоматологія',
+//     'orthodontics' => 'Ортодонтія',
+//     'dental_othopedics' => 'Стоматологічна ортопедія (протезування)',
+//     'dental_surgery' => 'Стоматологічна хірургія',
+//     'dental_Implantology' => 'Стоматологічна імплантологія',
+//     'periodontology' => 'Пародонтологія',
+//     'dental_prophylaxis' => 'Стоматологічна профілактика',
+//     'dentistry_pregnant_women' => 'Стоматологія для вагітних',
+//     'tooth_whitening' => 'Відбілювання зубів',
+//     'gnathology' => 'Гнатологія',
+//     'dental_bone_plastics' => 'Стоматологічна кістяна пластика',
+//     'dentistry_at_home' => 'Стоматологія на дому',
+//     'allergy' => 'Алергіологія',
+//     'alcoholism' => 'Алкоголізм',
+//     'gastroenterology' => 'Гастроентерологія',
+//     'childrens_consultation' => 'Дитяча консультація',
+//     'ecg' => 'ЕКГ',
+//     'ct' => 'КТ',
+//     'mammography' => 'Мамографія',
+//     'mri' => 'МРТ',
+//     'oncology' => 'Онкологія',
+//     'wounded' => 'Опікове',
+//     'otorhinolaryngology' => 'Оториноларингологія (ЛОР)',
+//     'radiology' => 'Рентгенологія',
+//     'sports_medicine' => 'Спортивна медицина',
+//     'surgery' => 'Сурдологія',
+//     'ultrasound_diagnosis' => 'Ультразвукова діагностика',
+//     'call_doctor_home' => 'Виклик лікаря додому',
+//     'family_medicine' => 'Сімейна медицина',
+//     'timpanometry' => 'Тімпанометрія'
+// );
+
+
 
 class Controller
 {
-
     private $medDB;
-
     private $arrayNamesServices;
-
-    private $arrayFilds;
+    private $arrayFilds;   
 
     public function __construct()
     {
@@ -96,32 +95,6 @@ class Controller
     // }
     // return $arr;
     // }
-    public function GetGenerationTimeFor7($startTime = 7)
-    {
-        $a = $startTime;
-        if ($a == 7) {
-            echo "<option value=\"7\" selected=\"selected\">07.00</option>";
-        }
-        $a ++;
-        while ($a != $startTime) {
-            if ($a < 10) {
-                echo "<option value=\"$a\">0$a.00</option>";
-            } else {
-                echo "<option value=\"$a\">$a.00</option>";
-            }
-            if ($a == 24) {
-                $a = 0;
-            }
-            $a ++;
-        }
-    }
-
-    public function GetGenerationTimeFor19()
-    {
-        $startTime = 19;
-        echo "<option value=\"19\" selected=\"selected\">19.00</option>";
-        $this->GetGenerationTimeFor7($startTime);
-    }
 
     // Название(Компания) 2 колонка
     public function GetOrganizationAll()
@@ -182,17 +155,33 @@ class Controller
     {
         return $this->medDB->GetServiceAllCol();
     }
-
+/////////////////////////////////////////////////////////////
     // Тип учереждения
-    public function GetTypeInstitutionAll()
+    public function GetTypeInstitution()
     {
-        return $this->medDB->GetTypeInstitutionOneCol();
+        $id = array();
+        $name = array();
+        foreach ($this->medDB->GetTypeInstitution() as $key => $value) {
+            foreach ($value as $key => $value) {
+                array_push($id, $key);
+                array_push($name, $value);
+            }
+        }
+        
+        $summ = array();
+        $summ['id'] = $id;
+        $summ['name'] = $name;
+        return $summ;
     }
-
-    // страховая компания
-    public function GetInsuranceCompanyAll()
+    // сервис
+    public function GetNamesServices()
     {
-        return $this->medDB->GetInsuranceCompanyOneCol();
+        return $this->medDB->GetNamesServices();
+    }
+    // страховая компания
+    public function GetNamesInsuranceCompanes()
+    {
+        return $this->medDB->GetNamesInsuranceCompanes();
     }
 
     // суммарную таблицу 10 колонки
@@ -627,9 +616,9 @@ class Controller
 
     public function RedirectBack()
     {
-        // echo empty($_SERVER['HTTP_REFERER']).' - empty($_SERVER[HTTP_REFERER])<br/>';
         if (! empty($_SERVER['HTTP_REFERER'])) {
             header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit();
         } else {
             $this->RedirectMain();
         }
@@ -645,17 +634,8 @@ class Controller
 
     public function RedirectKabinet()
     {
-        header('Location: index.php');
+        header('Location: indexcabinet.php');
         exit();
     }
-    
-    // public function RedirectError() {
-    // header('Location: index.html'); exit();
-    // }
-    
-    // public function IsAuthorized($id, $hash){
-    // $this->medDB->GetUserById($id);//получить данные по id
-    
-    // }
 }
 ?>

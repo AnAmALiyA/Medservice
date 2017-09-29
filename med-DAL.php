@@ -2,25 +2,65 @@
 
 class MedDB
 {
-
+    // офицыальный сайт медсервиса
     // private $host='10.0.0.10';
     // private $user='uh347272_med24';
     // private $password='a6qxcqaby';
     // private $database='uh347272_med24';
+    
+    // локальное подключение
     private $host = 'localhost';
-
     private $user = 'root';
-
     private $password = '';
-
     private $database = 'uh347272_med24';
 
-    /*
-     * private $host='localhost';
-     * private $user='andrew19_med';
-     * private $password='a6qxcqabymed';
-     * private $database='andrew19_uh347272_med24';
-     */
+    // webspectrum
+    // private $host='localhost';
+    // private $user='andrew19_med';
+    // private $password='a6qxcqabymed';
+    // private $database='andrew19_uh347272_med24';
+    
+    private $arrayNamesServices;
+    private $arrayNamesInsuranceCompany;
+
+    public function __construct()
+    {
+        $this->arrayNamesServices = array('dentistry' => 'Стоматологія',
+            'childrens_dentistry' => 'Дитяча стоматологія',
+            'therapeutic_dentistry' => 'Терапевтична стоматологія',
+            'aesthetic_dentistry' => 'Естетична стоматологія',
+            'orthodontics' => 'Ортодонтія',
+            'dental_othopedics' => 'Стоматологічна ортопедія (протезування)',
+            'dental_surgery' => 'Стоматологічна хірургія',
+            'dental_Implantology' => 'Стоматологічна імплантологія',
+            'periodontology' => 'Пародонтологія',
+            'dental_prophylaxis' => 'Стоматологічна профілактика',
+            'dentistry_pregnant_women' => 'Стоматологія для вагітних',
+            'tooth_whitening' => 'Відбілювання зубів',
+            'gnathology' => 'Гнатологія',
+            'dental_bone_plastics' => 'Стоматологічна кістяна пластика',
+            'dentistry_at_home' => 'Стоматологія на дому',
+            'allergy' => 'Алергіологія',
+            'alcoholism' => 'Алкоголізм',
+            'gastroenterology' => 'Гастроентерологія',
+            'childrens_consultation' => 'Дитяча консультація',
+            'ecg' => 'ЕКГ',
+            'ct' => 'КТ',
+            'mammography' => 'Мамографія',
+            'mri' => 'МРТ',
+            'oncology' => 'Онкологія',
+            'wounded' => 'Опікове',
+            'otorhinolaryngology' => 'Оториноларингологія (ЛОР)',
+            'radiology' => 'Рентгенологія',
+            'sports_medicine' => 'Спортивна медицина',
+            'surgery' => 'Сурдологія',
+            'ultrasound_diagnosis' => 'Ультразвукова діагностика',
+            'call_doctor_home' => 'Виклик лікаря додому',
+            'family_medicine' => 'Сімейна медицина',
+            'timpanometry' => 'Тімпанометрія');
+        $this->arrayNamesInsuranceCompany = array('usk' =>'УСК', 'aska' =>'АСКА');
+    }
+    
     private function ConnectDB()
     {
         $link = mysqli_connect($this->host, $this->user, $this->password, $this->database) or die("Ошибка " . mysqli_error($link));
@@ -262,26 +302,32 @@ class MedDB
         $table = 'med_services';
         return $this->GetArrayAllCol($table);
     }
-
+///////////////////////////////////////////////////
     // Тип учереждения
-    public function GetTypeInstitutionOneCol()
+    public function GetTypeInstitution()
     {
         $table = 'med_type_institution';
-        $nameFilldArray = 'type_description';
-        return $this->GetArrayOneCol($table, $nameFilldArray);
+        return $this->QuerySelectAll($table);
     }
 
-    // страховая компания
-    public function GetInsuranceCompanyOneCol()
+    // сервисы - имена
+    public function GetNamesServices()
     {
-        $arrayInsuranceCompanyes = array(
-            'usk' => 'УСК',
-            'aska' => 'АСКА'
-        );
-        // $table = 'med_insurance_companies';
-        // $nameFilldArray='name_companie';
-        // return $this->GetArrayOneCol($table, $nameFilldArray);
-        return $arrayInsuranceCompanyes;
+        $arrayNames = array();
+        for ($i = 0; $i < count($this->arrayNamesServices); $i++) {
+            array_push($arrayNames, $this->arrayNamesServices[$i]);
+        }
+        return $arrayNames;
+    }
+    
+    // страховая компания - имена
+    public function GetNamesInsuranceCompanes()
+    {
+        $arrayNames = array();
+        for ($i = 0; $i < count($this->arrayNamesInsuranceCompany); $i++) {
+            array_push($arrayNames, $this->arrayNamesInsuranceCompany[$i]);
+        }
+        return $arrayNames;
     }
 
     // суммарную таблицу 10 колонки
@@ -996,7 +1042,6 @@ class MedDB
 
     public function GetUserById($id)
     {
-        // echo $id.' - id из БД<br/>';
         $query = $this->QuerySelectId('med_users', $id);
         foreach ($query as $key => $value) {
             return $value;

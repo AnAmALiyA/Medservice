@@ -1,12 +1,25 @@
 <?php
 require_once 'authorize.php';
+require_once 'med-BAL.php';
 
-$data = array();
+$returnArrayData = array();
 $auth = new Authorization();
+$bal = new Controller();
 
-if (empty($_POST['login'])){
-    $data['login'] = $auth->IsLogin($_POST['login']);
-    echo json_encode($data);
+if (isset($_POST['ajax_form_main']) && empty($_POST['ajax_form_main'])){
+    if($auth->IsAuthorized('organization')){
+        
+        $returnArrayData['arrayTypeCompany'] = $bal->GetTypeInstitution();
+        
+        $returnArrayData['arrayServices'] = $bal->GetNamesServices();
+        $returnArrayData['arrayInsuranceCompanes'] = $bal->GetNamesInsuranceCompanes();
+        
+        $returnArrayData['arrayLocation'] = $bal->;
+        $returnArrayData['arrayPhone'] = $bal->;
+        $returnArrayData['arrayError'] = $bal->;
+       
+        echo json_encode($returnArrayData);
+    }    
 }
 
 

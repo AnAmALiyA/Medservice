@@ -4,9 +4,7 @@ require_once 'med-DAL.php';
 
 class Authorization
 {
-
     private $validate;
-
     private $dal;
 
     public function __construct()

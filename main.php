@@ -2,8 +2,8 @@
 $_SESSION['user_id'] = 1;
 $_SESSION['user_hash'] = 123123;
 
-setcookie('user_id', 1, time() + 3600 * 24 * 3);
-setcookie('user_hash', 123123, time() + 3600 * 24 * 3);
+setcookie('user_id', $_SESSION['user_id'], time() + 3600 * 24 * 3);
+setcookie('user_hash', $_SESSION['user_hash'], time() + 3600 * 24 * 3);
 
 require_once 'authorize.php';
 require_once 'action.php';
@@ -15,11 +15,11 @@ $bal = new Controller();
 if (!$auth->IsAuthorized('organization')) {
     $bal->RedirectBack();
 }
-//  для регистрации
-    $_SESSION['user_id'] = 1;
-    $_SESSION['user_hash'] = 123123;
+ //  для регистрации
+     $_SESSION['user_id'] = 1;
+     $_SESSION['user_hash'] = 123123;
 
-    $auth->SetCookie($_SESSION['user_id'], $_SESSION['user_hash']);
+     $auth->SetCookie($_SESSION['user_id'], $_SESSION['user_hash']);
 ?>
 <html>
 <head>
@@ -107,7 +107,7 @@ if (!$auth->IsAuthorized('organization')) {
     <link rel="stylesheet" href="css/font-awesome.css"/> <!--Added-->
     <link rel="stylesheet" href="css/style.css"/> <!--Added-->
 </head>
-<body class="page-template page-template-pages page-template-template-home page-template-pagestemplate-home-php page page-id-5">
+<body class="page-template page-template-pages page-template-template-home page-template-pagestemplate-home-php page page-id-5 main_js">
     <header id="header">
         <div class="row">
             <div class="logo">
@@ -272,313 +272,8 @@ if (!$auth->IsAuthorized('organization')) {
                         <span class="allert-block">Закрыто на ремонт</span>
                     </div>
                 </div>
-                <form action="action_ajax.php" method=post enctype=multipart/form-data class="right-col">
-                    <div class="info-holder">
-                        <div class="row">
-                            <div class="col1">
-                                <label for="type">Тип учереждения</label>
-                            </div>
-                            <div class="col2">
-                                <select name="typeCompany" class="type <?php $_SESSION['typeCompany_error']?>" id="typeCompany">
-<!--                                 //Нужно будет в том случае, если человек не использует JavaScript 
-                                    ($sessionFlag)?'':'selected' -->
-                                  <option value="0" selected></option>	
-                                  <?php
-                                  foreach ($bal->GetTypeInstitutionAll() as $key => $value)
-                                    {
-                                        echo "<option value=\"$key\">$value</option>";
-//                                         //Нужно будет в том случае, если человек не использует JavaScript
-//                                         $selected = ($sessionFlag && $_SESSION['typeCompany'] == $key)?'selected':'';
-//                                         echo "<option value=\"$key\" $selected>$value</option>";
-                                    }
-                                  ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1">
-                                <label for="services">Направления/услуги</label>
-                            </div>
-                            <div class="col2">
-                                <select name="services" class="services <?php $_SESSION['service_error']?>" id="services">
-                                  <option value="0" selected></option>
-                                  <?php
-                                  $itemServiceOption = 1;
-                                 foreach ($arrayNamesServices as $key => $value)
-                                 {
-                                     echo "<option value=\"$itemServiceOption\">$value</option>";
-                                   $itemServiceOption++;
-                                 }
-                                  ?>
-                                </select>
-                                <button type="button" name="button">Выбрать</button>
-                            </div>
-                            <hr/>
-                            <div class="">
-                              <p>Для инпутов</p>
-                              <?php
-                              $itemServiceInput = 1;
-                             foreach ($arrayNamesServices as $key => $value)
-                             {
-                                 echo "<input type=\"checkbox\" name=\"$itemServiceInput-service\" value=\"$itemServiceInput\">$value</input>";
-//                                  //Нужно будет в том случае, если человек не использует JavaScript
-//                                  $checked = ($sessionFlag && $_SESSION[$itemServiceInput.'-service'] == $key)?'checked':'';
-//                                  echo "<input type=\"checkbox\" name=\"$itemServiceInput-service\" value=\"$itemServiceInput\" $checked>$value</input>";                               
-                               $itemServiceInput++;
-                             }
-                              ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1">
-                                <label for="company">Страховые компании</label>
-                            </div>
-                            <div class="col2">
-                                <select name="insuranceCompany" class="insuranceCompany <?php $_SESSION['insurance_error']?>" id="insuranceCompany">
-                                    <option value="0" selected></option>
-                                    <?php
-                                      $itemInsuranceOption = 1;
-                                      foreach ($bal->GetInsuranceCompanyAll() as $key => $value)
-                                      {
-                                          echo "<option value=\"$key\">$value</option>";
-                                        $itemInsuranceOption++;
-                                      }
-                                    ?>
-                                </select>
-                                <button type="button" name="button">Выбрать</button>
-                            </div>
-                            <hr/>
-                            <div class="">
-                              <p>Для инпутов</p>
-                              <?php
-                              $itemInsuranceInput = 1;                              
-                              foreach ($bal->GetInsuranceCompanyAll() as $key => $value)
-                             {
-                                 echo "<input type=\"checkbox\" name=\"$key\" value=\"\">$value</input>";
-//                                  //Нужно будет в том случае, если человек не использует JavaScript
-//                                  $checked = ($sessionFlag && $_SESSION[$itemInsuranceInput.'-insurance'] == $key)?'checked':'';
-//                                  echo "<input type=\"checkbox\" name=\"$itemInsuranceInput-insurance\" value=\"$itemInsuranceInput\" $checked>$value</input>";
-
-                                   //"<option value=\"$itemInsuranceInput\">$value</option>"; Он не передаст в value украиские слова
-                                   //$itemInsuranceInput я потом смогу использовать для быстрого поиска по массиву $arrayNamesServices
-                               $itemInsuranceInput++;
-                             }
-                              ?>                              
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1">
-                                <label for="name">Название</label>
-                            </div>
-                            <div class="col2 <?php $_SESSION['nameCompany_error']?>">
-                                <input type="text" placeholder="" id="name" name="nameCompany" value="Тест поле компания">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1">
-                                <span>Адрес:</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1 <?php $_SESSION['region_error']?>">
-                                <label for="region">Область</label>
-                            </div>
-                            <div class="col2">
-                                <input type="text" placeholder="" id="region" name="region" value="Тест поле область">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1 <?php $_SESSION['town_error']?>">
-                                <label for="town">Город</label>
-                            </div>
-                            <div class="col2">
-                                <input type="text" placeholder="" id="town" name="town" value="Тест поле город">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1 <?php $_SESSION['district_error']?>">
-                                <label for="district">Район</label>
-                            </div>
-                            <div class="col2">
-                                <input type="text" placeholder="" id="district" name="districtCity" value="Тест поле район">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1 <?php $_SESSION['street_error']?>">
-                                <label for="street">Улица</label>
-                            </div>
-                            <div class="col2">
-                                <input type="text" placeholder="" id="street" name="street" value="Тест поле улица">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1 <?php $_SESSION['home_error']?>">
-                                <label for="home">Дом</label>
-                            </div>
-                            <div class="col2">
-                                <input type="text" placeholder="" id="home" name="home" value="Тест поле home">
-                            </div>
-                        </div>
-                        <div id="phones" class="row">
-                            <div class="col1">
-                                <label for="phone">Телефон</label>
-                            </div>
-                            <div class="col2 phone <?php $_SESSION['1-phone_error']?>">
-                                <input id="phone1" type="tel" name="1-phone" placeholder="(___) 000 00 00" value="34636365645">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </div>
-                            <div class="col2 phone <?php $_SESSION['2-phone_error']?>">
-                                <input id="phone2" type="tel" name="2-phone" placeholder="(___) 000 00 00" value="45657687вапва">
-                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </div>
-                            <div class="col2">
-                                <div class="add">
-                                    <span>Добавить</span>
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col1">
-                                <label for="time">Время работы</label>
-                            </div>
-                            <div class="col2">
-                                <span>пн</span>
-                                <select name="mondayStart" class="time" id="mondayStart">
-                                    <?php
-                                    $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="mondayEnd" class="time" id="mondayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col2">
-                                <span>вт</span>
-                                <select name="tuesdayStart" class="time" id="tuesdayStart">
-                                    <?php
-                                    $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="tuesdayEnd" class="time" id="tuesdayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col2">
-                                <span>ср</span>
-                                <select name="wednesdayStart" class="time" id="wednesdayStart">
-                                    <?php
-                                    $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="wednesdayEnd" class="time" id="wednesdayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col2">
-                                <span>чт</span>
-                                <select name="thursdayStart" class="time" id="thursdayStart">
-                                    <?php
-                                      $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="thursdayEnd" class="time" id="thursdayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col2">
-                                <span>пт</span>
-                                <select name="fridayStart" class="time" id="fridayStart">
-                                    <?php
-                                      $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="fridayEnd" class="time" id="fridayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col2">
-                                <span>сб</span>
-                                <select name="saturdayStart" class="time" id="saturdayStart">
-                                    <?php
-                                      $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="saturdayEnd" class="time" id="saturdayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="col2">
-                                <span>вс</span>
-                                <select name="sundayStart" class="time" id="sundayStart">
-                                    <?php
-                                      $bal->GetGenerationTimeFor7();
-                                    ?>
-                                </select>
-                                <span>до</span>
-                                <select name="sundayEnd" class="time" id="sundayEnd">
-                                    <?php
-                                      $bal->GetGenerationTimeFor19();
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row last">
-                            <div class="col1">
-                                <label for="holiday">Выходной</label>
-                            </div>
-                            <div class="col2">
-                              <div class="">
-                                <a id="mutliSelectHoliday" href="#">
-                                  <span class="hida">Select</span>
-                                  <p class="multiSel"></p>
-                                </a>
-                              </div>
-                                <ul class="mutliSelect">
-                                  <li><input type="checkbox" name="none" value="none"/></li>
-                                  <li><input type="checkbox" name="monday" value="Понедельник"/>Понедельник</li>
-                                  <li><input type="checkbox" name="tuesday" value="Вторник"/>Вторник</li>
-                                  <li><input type="checkbox" name="wednesday" value="Среда"/>Среда</li>
-                                  <li><input type="checkbox" name="thursday" value="Четверг"/>Четверг</li>
-                                  <li><input type="checkbox" name="friday" value="Пятница"/>Пятница</li>
-                                  <li><input type="checkbox" name="saturday" value="Суббота"/>Суббота</li>
-                                  <li><input type="checkbox" name="sunday" value="Воскресение" checked/>Воскресение</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <input type="submit" name="submit" value="Сохранить">
-                    </div>
-                    <div class="logo-holder">
-                        <span class="top-txt">Логотип</span>
-                        <input type=file name="img" accept="image/*">
-                          <img src="img/empty-img.jpg" alt="empty">
-                        </input>
-                        <div class="icon-holder">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </div>
-                        <span>Загрузить файл</span>
-                    </div>                    
+                <form action="action.php" method="post" enctype="multipart/form-data" class="right-col">
+                <?php echo 'закомичено';?>
                 </form>
             </div>
         </section>

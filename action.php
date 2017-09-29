@@ -75,7 +75,7 @@ class HandlingData
         
         // Тип учереждения
         // if (!isset($_POST['typeCompany']) && empty($_POST['typeCompany']))
-        if (! $validateData->IsExist($_POST['typeCompany'])) {
+        if (!$validateData->IsExist($_POST['typeCompany'])) {
             $this->SetError('typeCompany', 'em');
             $flag = false;
         }
@@ -145,6 +145,8 @@ class HandlingData
             // $flag = false;
         }
         
+        //тут получить массив телефонов и проверить их существование
+        
         // // Телефон
         // $tempPhone = false;
         // for ($i = 1; $i <= 10; $i ++) {
@@ -169,7 +171,13 @@ class HandlingData
         }
         
         // Выходной
-        if (! $validateData->IsExist($_POST['none']) || ! $validateData->IsExist($_POST['monday']) || ! $validateData->IsExist($_POST['tuesday']) || ! $validateData->IsExist($_POST['wednesday']) || ! $validateData->IsExist($_POST['thursday']) || ! $validateData->IsExist($_POST['saturday']) || ! $validateData->IsExist($_POST['sunday'])) {
+        if (   !$validateData->IsExist($_POST['none']) 
+            || !$validateData->IsExist($_POST['monday']) 
+            || !$validateData->IsExist($_POST['tuesday']) 
+            || !$validateData->IsExist($_POST['wednesday']) 
+            || !$validateData->IsExist($_POST['thursday']) 
+            || !$validateData->IsExist($_POST['saturday']) 
+            || !$validateData->IsExist($_POST['sunday'])) {
             $this->SetError('holiday', 'em');
         }
     }
@@ -275,97 +283,94 @@ class HandlingData
         }
     }
 
-    public function SaveData()
+    public function SaveDataForm()
     {
-        if (! $this->IsFillField()) {
-            // $_SESSION['session_errors'] = true;
-            // $this->SaveIntoSessions();
-            $this->controller->RedirectBack($_SERVER);
+        if (!$this->IsFillField()) {
+            $this->controller->RedirectBack();
         }
         
-        if (! $this->IsValidFild()) {
-            // $_SESSION['session_errors'] = true;
-            // $this->SaveIntoSessions();
-            $this->controller->RedirectBack($_SERVER);
+        if (!$this->IsValidFild()) {
+            $this->controller->RedirectBack();
         }
         
-        // после проверки данных сохранить в БД
         $isSave = $this->controller->Save($_POST);
         if ($isSave == - 1) {
             return false;
         }
-        // $_SESSION['session_errors'] = false;
         return true;
     }
 
-    public function Redirect()
-    {
-        $this->controller->RedirectBack($_SERVER);
-    }
+//     public function Redirect()
+//     {
+//         $this->controller->RedirectBack();
+//     }
 
-    public function RedirectKabinet()
-    {
-        $this->controller->RedirectKabinet();
-    }
+//     public function RedirectKabinet()
+//     {
+//         $this->controller->RedirectKabinet();
+//     }
 
-    public function RedirectError()
-    {
-        $this->controller->RedirectError();
-    }
+//     public function RedirectError()
+//     {
+//         $this->controller->RedirectError();
+//     }
 
-    public function IsLogin($login)
-    {
-        return $this->controller->IsLogin($login);
-    }
+//     public function IsLogin($login)
+//     {
+//         return $this->controller->IsLogin($login);
+//     }
 
-    public function ValidataLoginPass($login, $password)
-    {
-        $valid = true;
-        if (! $this->validateData->ValidIntegerString($login)) {
-            $valid = false;
-            $this->SetError($login, 'notVStr');
-        }
+//     public function ValidataLoginPass($login, $password)
+//     {
+//         $valid = true;
+//         if (! $this->validateData->ValidIntegerString($login)) {
+//             $valid = false;
+//             $this->SetError($login, 'notVStr');
+//         }
         
-        if (! $this->validateData->ValidIntegerString($password)) {
-            $valid = false;
-            $this->SetError($password, 'notVStr');
-        }
-        return $valid;
-    }
+//         if (! $this->validateData->ValidIntegerString($password)) {
+//             $valid = false;
+//             $this->SetError($password, 'notVStr');
+//         }
+//         return $valid;
+//     }
 
-    public function Authorize($login, $password, $check = false)
-    {
-        $arrLogPass = $this->controller->SaveLoginPassword($login, $password);
-        if (count($arrLogPass) != 1) {
-            $_SESSION['id'] = $arrLogPass[1];
-            $_SESSION['hash'] = $arrLogPass[2];
+//     public function Authorize($login, $password, $check = false)
+//     {
+//         $arrLogPass = $this->controller->SaveLoginPassword($login, $password);
+//         if (count($arrLogPass) != 1) {
+//             $_SESSION['id'] = $arrLogPass[1];
+//             $_SESSION['hash'] = $arrLogPass[2];
             
-            if ($check) {
-                setcookie('id', $id, time() + 3600 * 24 * 3);
-                setcookie('hash', $hash, time() + 3600 * 24 * 3);
-            }
-        }
-    }
+//             if ($check) {
+//                 setcookie('id', $id, time() + 3600 * 24 * 3);
+//                 setcookie('hash', $hash, time() + 3600 * 24 * 3);
+//             }
+//         }
+//     }
 
-    public function IsAuthorized($id, $hash)
-    {
-        return $this->controller->IsAuthorized($id, $hash);
-    }
+//     public function IsAuthorized($id, $hash)
+//     {
+//         return $this->controller->IsAuthorized($id, $hash);
+//     }
 }
 
 $auth = new Authorization();
 $bal = new Controller();
+$handling = new HandlingData();
 
 if ($auth->IsAuthorized('organization')) {
-    echo "методы для организации";
+//     echo "методы для организации";
+//     if ($_POST['submit'] == 'Сохранить') {
+//         $handling->SaveDataForm();
+//     }
     //если проходит проверку, то проверяются запросы
 }
 elseif ($auth->IsAuthorized('client')) {
-    echo "методы для клиентов";
+//     echo "методы для клиентов";
     //если проходит проверку, то проверяются запросы
 }
-elseif($_POST['submit'] == 'Авторизация') {
-    $handling = new HandlingData();
+elseif($_POST['submit'] == 'Авторизация') {    
     if ($auth->IsLogin($_POST['login'])) {        
         $handling->SetError('login', 'notUL');
         $bal->RedirectBack();
