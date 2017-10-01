@@ -52,61 +52,12 @@ class Controller
         $this->arrayFilds = $arrayFilds;
     }
 
-    /*
-     * private function QueryMedServices()
-     * {
-     * $table = "med_services";
-     * return $this->medDB->QuerySelect($this->selectAll, $table);
-     * // SELECT COLUMN_NAME FROM {database_name}.INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}'
-     * }
-     *
-     * private function GetArrayServices($obj) // метод для получения всех данных и формирование их в массив.
-     * {
-     * $arr = array();
-     * $count = 0;
-     *
-     * while ($result = mysqli_fetch_assoc($querySelectResult))
-     * {
-     * //echo $result." count = $count";
-     * $tempArr = array();
-     * foreach ($result as $key => $value) {
-     * //echo "key - $key / value - $value<br>";
-     * $tempArr[$key] = $value;
-     * }
-     * $arr[$count] = $tempArr;
-     * $count++;
-     * }
-     * return $arr;
-     * }
-     *
-     * function GetMedServices() // метод для получения всех данных и формирование их в массив.
-     * {
-     * $querySelectResult = $this->QueryMedServices();
-     * return $this->GetArrayServices($querySelectResult);
-     * }
-     */
-    
-    // private function GetArrayInsuranceCompany($obj)
-    // {
-    // $arr = array();
-    // while ($result = mysqli_fetch_assoc($obj))
-    // {
-    // $arr[$result['id']] = $result['name_companie'];
-    // }
-    // return $arr;
-    // }
-
     // Название(Компания) 2 колонка
     public function GetOrganizationAll()
     {
         return $this->medDB->GetOrganizationOneCol();
     }
 
-    // Область 2 колонка
-    public function GetRegionAll()
-    {
-        return $this->medDB->GetRegionOneCol();
-    }
 
     // Районы 3 колонки
     public function GetDistrictRegionAll()
@@ -156,15 +107,20 @@ class Controller
         return $this->medDB->GetServiceAllCol();
     }
 /////////////////////////////////////////////////////////////
+    //получить данные организации
+    public function GetOrganizationData(){
+        return GetOrganizationData();
+    }
+    
     // Тип учереждения
     public function GetTypeInstitution()
     {
         $id = array();
         $name = array();
         foreach ($this->medDB->GetTypeInstitution() as $key => $value) {
-            foreach ($value as $key => $value) {
+            foreach ($value as $key => $value2) {
                 array_push($id, $key);
-                array_push($name, $value);
+                array_push($name, $value2);
             }
         }
         
@@ -183,7 +139,26 @@ class Controller
     {
         return $this->medDB->GetNamesInsuranceCompanes();
     }
-
+    
+    // Область
+    public function GetRegion()
+    {
+        $arrayData = mysqli_fetch_assoc($this->medDB->GetRegion());
+        $id = array();
+        $name = array();
+        foreach ($this->medDB->GetRegion()as $key => $value) {
+            foreach ($value as $key2 => $value2) {
+                array_push($id, $key2);
+                array_push($name, $value2);
+            }
+        }
+        
+        $summ = array();
+        $summ['id'] = $id;
+        $summ['name'] = $name;
+        return $summ;
+    }
+    ////////////////////////////////////////
     // суммарную таблицу 10 колонки
     public function GetSummaryTableAll()
     {
@@ -200,14 +175,6 @@ class Controller
             }
         }
         return $stringPhones;
-    }
-
-    private function GetArrayInsuranceCompany()
-    {
-        $arr = array();
-        $_POST['usk'] != null ? array_push($arr, $_POST['usk']) : array_push($arr, null);
-        $_POST['aska'] != null ? array_push($arr, $_POST['aska']) : array_push($arr, null);
-        return $arr;
     }
 
     // private function GetStrDayWork(){

@@ -9,12 +9,14 @@ $bal = new Controller();
 if (isset($_POST['ajax_form_main']) && empty($_POST['ajax_form_main'])){
     if($auth->IsAuthorized('organization')){
         
+        $returnArrayData['arrayOrganizationData'] = $bal->GetOrganizationData();
+        
         $returnArrayData['arrayTypeCompany'] = $bal->GetTypeInstitution();
         
         $returnArrayData['arrayServices'] = $bal->GetNamesServices();
         $returnArrayData['arrayInsuranceCompanes'] = $bal->GetNamesInsuranceCompanes();
         
-        $returnArrayData['arrayLocation'] = $bal->;
+        $returnArrayData['arrayLocation'] = $bal->GetRegion();
         $returnArrayData['arrayPhone'] = $bal->;
         $returnArrayData['arrayError'] = $bal->;
        

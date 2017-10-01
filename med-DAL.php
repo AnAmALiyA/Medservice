@@ -303,6 +303,11 @@ class MedDB
         return $this->GetArrayAllCol($table);
     }
 ///////////////////////////////////////////////////
+    // получить данные организации
+    public function GetOrganizationData(){
+        //TODO получить данные организации
+    }
+    
     // Тип учереждения
     public function GetTypeInstitution()
     {
@@ -330,6 +335,10 @@ class MedDB
         return $arrayNames;
     }
 
+    
+    
+    
+    
     // суммарную таблицу 10 колонки
     public function GetSummaryTableAllCol()
     {
@@ -501,7 +510,12 @@ class MedDB
             }
         }
     }
-
+    //область
+    public function GetRegion(){
+        $table = 'med_region';
+        return $result = $this->QuerySelectAll($table);
+    }
+    
     // вставка области - тут либо делаю вставку или нахожу существующую и возвращаю id области
     public function GetIdInsertGetRegion($region)
     {

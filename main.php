@@ -382,6 +382,7 @@ if (!$auth->IsAuthorized('organization')) {
             <div role="form" class="wpcf7" id="wpcf7-f90-o2" dir="ltr" lang="en-GB">
                 <div class="screen-reader-response"></div>
                 <form action="action.php" method="post" class="wpcf7-form" novalidate="novalidate">
+<!--                 тут по идее будет записана форма из jquery -->
                     <div style="display: none;">
                         <input name="_wpcf7" value="90" type="hidden">
                         <input name="_wpcf7_version" value="4.6" type="hidden">

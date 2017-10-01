@@ -226,7 +226,7 @@ function addFormFotoMarkup (marker) {
 	$('.' + marker + '-list').append(formMarkup);
 }
 
-function addFormOrganization(arrayTypeCompany, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError = null) {
+function addFormOrganization(arrayTypeCompany, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayOrganizationData = null, arrayError = null) {
 	var formOrganization = '<div class="info-holder">' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
