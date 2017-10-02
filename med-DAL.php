@@ -778,5 +778,39 @@ class MedDB
       }
       return false;
   }
+  //
+  public function GetNewsAllCol(){
+      $table = 'med_news';
+       return $this->GetArrayAllCol($table);
+  }
+  
+  public function SaveNews($news_title , $med_user_fk , $news_descripion){
+      $arrayNamesTabelRows = array( 'news_title', 'med_user_fk', 'news_descripion');
+      $arrayValuesTabelRows = array($news_title , $med_user_fk , $news_descripion);
+      $getResult = $this->QueryInsert('med_news', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      if ($getResult) {
+          return true;
+      }else {
+          return false;
+      }
+  }
+  
+  
+  public function GetPromoAllCol(){
+      $table = 'med_promo';
+      return $this->GetArrayAllCol($table);
+  }
+  
+  public function SavePromo($promo_title , $med_user_fk , $promo_descripion){
+      $arrayNamesTabelRows = array( 'promo_title', 'med_user_fk', 'promo_descripion');
+      $arrayValuesTabelRows = array($promo_title , $med_user_fk , $promo_descripion);
+      $getResult = $this->QueryInsert('med_promo', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      if ($getResult) {
+          return true;
+      }else {
+          return false;
+      }
+  }
+  
 }
  ?>

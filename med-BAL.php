@@ -681,6 +681,27 @@ class Controller
     
     public function IsAuthorized($id, $hash){
         return $this->medDB->IsAuthorize($id, $hash);
-    }    
+    }
+    
+    ////v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v////
+    
+    //fetch from DB all news
+    public function GetNewsAll(){
+        return $this->medDB->GetNewsAllCol();
+    }
+    //fetch from DB all promo  
+    public function GetPromoAll(){
+        return $this->medDB->GetPromoAllCol();
+    }
+    
+    public function SaveNews($title, $description, $user){
+        
+    }
+    
+    public  function  SavePromo($title, $description, $user){
+        
+    }
+    
+    
 }
 ?>
