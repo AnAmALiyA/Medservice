@@ -93,6 +93,17 @@ class MedDB
         $this->CloseConnectDB($link);
         return $result;
     }
+    
+    private function QuerySelectWhere($table, $stringSelect, $select)
+    {
+        $query = "SELECT * FROM $table WHERE $stringSelect = $select";
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        return $result;
+    }
 
     private function FindId($table, $nameRow, $select)
     {
@@ -334,11 +345,30 @@ class MedDB
         }
         return $arrayNames;
     }
-
+    //область
+    public function GetRegion(){
+        $table = 'med_region';
+        return $this->QuerySelectAll($table);
+    }
+    //телефоны
+    public function GetPhones($organizationId) {
+        $table = 'med_phone';
+        $stringSelect = 'id_organization';
+        return $this->QuerySelectWhere($table, $stringSelect, $organizationId);
+    }
     
     
     
-    
+    private function QuerySelectWhere($table, $stringSelect, $select)
+    {
+        $query = "SELECT * FROM $table WHERE $stringSelect = $select";
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        return $result;
+    }
     // суммарную таблицу 10 колонки
     public function GetSummaryTableAllCol()
     {
@@ -510,11 +540,7 @@ class MedDB
             }
         }
     }
-    //область
-    public function GetRegion(){
-        $table = 'med_region';
-        return $result = $this->QuerySelectAll($table);
-    }
+
     
     // вставка области - тут либо делаю вставку или нахожу существующую и возвращаю id области
     public function GetIdInsertGetRegion($region)

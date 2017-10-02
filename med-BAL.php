@@ -107,27 +107,34 @@ class Controller
         return $this->medDB->GetServiceAllCol();
     }
 /////////////////////////////////////////////////////////////
-    //получить данные организации
-    public function GetOrganizationData(){
-        return GetOrganizationData();
-    }
-    
-    // Тип учереждения
-    public function GetTypeInstitution()
+    private function GenerateArrayWhithObj($obj)
     {
         $id = array();
         $name = array();
-        foreach ($this->medDB->GetTypeInstitution() as $key => $value) {
-            foreach ($value as $key => $value2) {
-                array_push($id, $key);
-                array_push($name, $value2);
+        foreach ($obj as $value) {
+            foreach ($value as $keyIn => $valueIn) {
+                if ($keyIn == 'id') {
+                    array_push($id, $valueIn);
+                    continue;
+                }
+                array_push($name, $valueIn);
             }
         }
-        
         $summ = array();
         $summ['id'] = $id;
         $summ['name'] = $name;
         return $summ;
+    }
+    
+    //получить данные организации
+    public function GetOrganizationData(){
+        return GetOrganizationData();
+    }    
+    // Тип учереждения
+    public function GetTypeInstitution()
+    {
+        $result = $this->medDB->GetTypeInstitution();
+        return  $this->GenerateArrayWhithObj($result);
     }
     // сервис
     public function GetNamesServices()
@@ -138,25 +145,17 @@ class Controller
     public function GetNamesInsuranceCompanes()
     {
         return $this->medDB->GetNamesInsuranceCompanes();
-    }
-    
+    }    
     // Область
     public function GetRegion()
     {
-        $arrayData = mysqli_fetch_assoc($this->medDB->GetRegion());
-        $id = array();
-        $name = array();
-        foreach ($this->medDB->GetRegion()as $key => $value) {
-            foreach ($value as $key2 => $value2) {
-                array_push($id, $key2);
-                array_push($name, $value2);
-            }
-        }
-        
-        $summ = array();
-        $summ['id'] = $id;
-        $summ['name'] = $name;
-        return $summ;
+        $result = $this->medDB->GetRegion();
+        return  $this->GenerateArrayWhithObj($result);
+    }
+    //телефоны
+    public function GetPhones() {
+        $organizationId = ; //TODO определить организацию
+        return $this->medDB->GetPhones($organizationId);
     }
     ////////////////////////////////////////
     // суммарную таблицу 10 колонки
