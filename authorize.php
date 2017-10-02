@@ -5,11 +5,11 @@ require_once 'med-DAL.php';
 class Authorization
 {
     private $validate;
-    private $dal;
+    private $bal;
 
     public function __construct()
     {
-        $this->dal = new MedDB();
+        $this->bal = new BAL();
         $this->validate = new ValidateData();
     }
 
@@ -37,9 +37,9 @@ class Authorization
     {
         $id = $this->validate->FilterStringOnHtmlSql($id);
         if ($this->validate->ValidInteger($id)) {
-            $userdata = $this->dal->GetUserById($id);
+            $userData = $this->bal->GetUserById($id);
             // echo 'userdata[\'hash\'] - '.$userdata['hash'].' == hash - '.$hash.'<br/>';
-            if ($userdata['hash'] == $hash && $userdata['user_category'] == $user_category) {
+            if ($userData['hash'] == $hash && $userData['user_category'] == $user_category) {
                 return true;
             }
         }
@@ -84,7 +84,7 @@ class Authorization
     {
         $login = $this->validate->FilterStringOnHtmlSql($login);
         if ($this->validate->ValidIntegerString($login)) {
-            return $this->dal->FindIdLogin($login);
+            return $this->bal->FindIdByLogin($login);
         }
     }
     
@@ -99,14 +99,16 @@ class Authorization
     {
         $id = $this->GetIsLogin($login);
         if ($id < 0) {
-            $id = $this->dal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
-            
+            $id = $this->bal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
+            $id++;
             $passwordMd5 = md5(md5(trim($password)));
             $hash = md5($this->GenerateCode(10));
             
-            $this->dal->SaveUser($id, $login, $passwordmd5, $hash, $user_category);
-            $arrSave = array($id, $hash);
-            return $arrSave;
+            $result = $this->bal->SaveUser($id, $login, $passwordmd5, $hash, $user_category);
+            if ($result) {
+                return array($id, $hash);
+            }
+            return array(-1);
         }
         return array(-1);
     }

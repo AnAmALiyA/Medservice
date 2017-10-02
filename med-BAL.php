@@ -1,4 +1,5 @@
 <?php
+//session_start();
 // require_once 'med-dataBAL.php';
 require_once 'med-DAL.php'; // записать переменные сюда
 // $arrayNamesServices = array(
@@ -39,15 +40,15 @@ require_once 'med-DAL.php'; // записать переменные сюда
 
 
 
-class Controller
+class BAL
 {
-    private $medDB;
+    private $dal;
     private $arrayNamesServices;
     private $arrayFilds;   
 
     public function __construct()
     {
-        $this->medDB = new MedDB();
+        $this->dal = new DAL();
         $this->arrayNamesServices = $arrayNamesServicesBAL;
         $this->arrayFilds = $arrayFilds;
     }
@@ -55,56 +56,56 @@ class Controller
     // Название(Компания) 2 колонка
     public function GetOrganizationAll()
     {
-        return $this->medDB->GetOrganizationOneCol();
+        return $this->dal->GetOrganizationOneCol();
     }
 
 
     // Районы 3 колонки
     public function GetDistrictRegionAll()
     {
-        return $this->medDB->GetDistrictRegionAllCol();
+        return $this->dal->GetDistrictRegionAllCol();
     }
 
     // Город 4 колонки
     public function GetLocalityAll()
     {
-        return $this->medDB->GetLocalityAllCol();
+        return $this->dal->GetLocalityAllCol();
     }
 
     // улица 3 колонки
     public function GetActualLocationAll()
     {
-        return $this->medDB->GetActualLocationAllCol();
+        return $this->dal->GetActualLocationAllCol();
     }
 
     // дом 3 колонки
     public function GetHomeAll()
     {
-        return $this->medDB->GetHomeAllCol();
+        return $this->dal->GetHomeAllCol();
     }
 
     // телефон 2 колонки
     public function GetPhoneAll()
     {
-        return $this->medDB->GetPhoneOneCol();
+        return $this->dal->GetPhoneOneCol();
     }
 
     // время работы 3 колонки
     public function GetTimeWorkAll()
     {
-        return $this->medDB->GetTimeWorkAllCol();
+        return $this->dal->GetTimeWorkAllCol();
     }
 
     // дни работы 3 колонки
     public function GetDayWorkOneCol()
     {
-        return $this->medDB->GetDayWorkOneCol();
+        return $this->dal->GetDayWorkOneCol();
     }
 
     // сервисы 34 колонки
     public function GetServiceAll()
     {
-        return $this->medDB->GetServiceAllCol();
+        return $this->dal->GetServiceAllCol();
     }
 /////////////////////////////////////////////////////////////
     private function GenerateArrayWhithObj($obj)
@@ -133,35 +134,58 @@ class Controller
     // Тип учереждения
     public function GetTypeInstitution()
     {
-        $result = $this->medDB->GetTypeInstitution();
+        $result = $this->dal->GetTypeInstitution();
         return  $this->GenerateArrayWhithObj($result);
     }
     // сервис
     public function GetNamesServices()
     {
-        return $this->medDB->GetNamesServices();
+        return $this->dal->GetNamesServices();
     }
     // страховая компания
     public function GetNamesInsuranceCompanes()
     {
-        return $this->medDB->GetNamesInsuranceCompanes();
+        return $this->dal->GetNamesInsuranceCompanes();
     }    
     // Область
-    public function GetRegion()
+    public function GetRegiones()
     {
-        $result = $this->medDB->GetRegion();
+        $result = $this->dal->GetRegion();
         return  $this->GenerateArrayWhithObj($result);
     }
     //телефоны
     public function GetPhones() {
-        $organizationId = ; //TODO определить организацию
-        return $this->medDB->GetPhones($organizationId);
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId != null) {
+            $result = $this->dal->GetPhones($organizationId);
+            return  $this->GenerateArrayWhithObj($result);
+        }
+        return array(-1);
+    }
+    //время работы
+    public function GetDaysWork(){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId != null) {
+            $result = $this->dal->GetDaysWork($organizationId);
+        }
+        return array(-1);
+    }
+    //дни работы
+    public function GetTimeWork(){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId != null) {
+            $result = $this->dal->GetTimeWork($organizationId);
+        }
+        return array(-1);
     }
     ////////////////////////////////////////
     // суммарную таблицу 10 колонки
     public function GetSummaryTableAll()
     {
-        return $this->medDB->GetSummaryTableAllCol();
+        return $this->dal->GetSummaryTableAllCol();
     }
 
     // ------------разобраться
@@ -520,43 +544,43 @@ class Controller
     public function Save($post)
     {
         // проверить существование организации(Название)
-        $idOrganization = $this->medDB->GetIdInsertOrganization($post['nameCompany']);
+        $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompany']);
         // область
-        $idRegion = $this->medDB->GetIdInsertGetRegion($post['region']);
+        $idRegion = $this->dal->GetIdInsertGetRegion($post['region']);
         // город
-        $idTown = $this->medDB->GetIdInsertGetDistrictCity($post['town'], $idRegion);
+        $idTown = $this->dal->GetIdInsertGetDistrictCity($post['town'], $idRegion);
         // район области
-        $idDistrictRegion = $this->medDB->GetIdInsertGetDistrictRegion($post['districtCity'], $idTown);
+        $idDistrictRegion = $this->dal->GetIdInsertGetDistrictRegion($post['districtCity'], $idTown);
         // улица
-        $idStreet = $this->medDB->GetIdInsertActualLocation($post['street'], $idTown);
+        $idStreet = $this->dal->GetIdInsertActualLocation($post['street'], $idTown);
         
         $idHome = null;
         if (! isset($post['home']) || ! empty($post['home'])) {
             // дом
-            $idHome = $this->medDB->GetIdInsertHome($post['home'], $idStreet);
+            $idHome = $this->dal->GetIdInsertHome($post['home'], $idStreet);
         }
         
         $idPhone = null;
         if (GetStrPhones() != null) {
             // телефон
-            $idPhone = $this->medDB->GetIdInsertPhone($this->GetStrPhones());
+            $idPhone = $this->dal->GetIdInsertPhone($this->GetStrPhones());
         }
         // типу учереждение
-        $idTypeCompany = $this->medDB->GetIdInsertTypeInstitution($post['typeCompany']);
+        $idTypeCompany = $this->dal->GetIdInsertTypeInstitution($post['typeCompany']);
         // страховаые компании - тут непонятки т.к. тут чекбоксы из 1 таблицы
-        $idInsuranceCompany = $this->medDB->GetIdInsertInsuranceCompany($this->GetArrayInsuranceCompany());
+        $idInsuranceCompany = $this->dal->GetIdInsertInsuranceCompany($this->GetArrayInsuranceCompany());
         
         // дни работы(определить рабочие дни)
         $arrWeekEndDay = $this->GetArrayWeekEnd();
         $arrayNameDays = $this->GetArrayNameDays();
-        $idDayWork = $this->medDB->GetIdInsertDayWork($this->GetStringWorkDay($arrWeekEndDay, $arrayNameDays));
+        $idDayWork = $this->dal->GetIdInsertDayWork($this->GetStringWorkDay($arrWeekEndDay, $arrayNameDays));
         
         // время работы(определить дни работы)
         $arrTimeWorkStart = $this->GetArrayTimeWorkStart();
         $arrTimeWorkEnd = $this->GetArrayTimeWorkEnd();
-        $idTimeWork = $this->medDB->GetIdInsertTimeWork($this->GetArrayTimeWork($arrWeekEndDay, $arrayNameDays, $arrTimeWorkStart, $arrTimeWorkEnd));
+        $idTimeWork = $this->dal->GetIdInsertTimeWork($this->GetArrayTimeWork($arrWeekEndDay, $arrayNameDays, $arrTimeWorkStart, $arrTimeWorkEnd));
         // Направления/услуги
-        $idServices = $this->medDB->GetIdInsertServices($this->GetArrayServices($arrayNamesServices));
+        $idServices = $this->dal->GetIdInsertServices($this->GetArrayServices($arrayNamesServices));
         
         $arraySaveError = array(
             $idOrganization,
@@ -576,7 +600,7 @@ class Controller
             echo 'Error save.';
         }
         // сохранить все в одной таблие
-        $idSummaryTable = $this->medDB->GetIdInsertSummaryTable();
+        $idSummaryTable = $this->dal->GetIdInsertSummaryTable();
         return $idSummaryTable;
     }
 
@@ -603,5 +627,25 @@ class Controller
         header('Location: indexcabinet.php');
         exit();
     }
+////////Методы по авторизации // начало
+    public function GetUserById($id)
+    {
+        return $this->dal->GetUserById($id);
+    }
+    
+    public function FindIdByLogin($login)
+    {
+        return $this->dal->FindIdByLogin($login);
+    }
+    public function GetLastLoginId()
+    {
+        return $this->dal->GetLastLoginId();
+    }
+    
+    public function SaveUser($id, $login, $password, $hash, $user_category)
+    {
+        return SaveUser($id, $login, $password, $hash, $user_category);
+    }
+    //////Методы по авторизации // конец
 }
 ?>

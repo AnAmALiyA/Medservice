@@ -23,12 +23,12 @@ class HandlingData
         'End'
     );
 
-    private $controller;
+    private $bal;
     private $validateData;
 
     function __construct()
     {        
-        $this->controller = new Controller();
+        $this->bal = new BAL();
         $this->validateData = new ValidateData();
     }
 
@@ -96,7 +96,7 @@ class HandlingData
         
         // Страховые компании
         $tempFlagInsurance = false;
-        for ($i = 1; $i <= count($this->controller->GetInsuranceCompany()); $i ++) {
+        for ($i = 1; $i <= count($this->bal->GetInsuranceCompany()); $i ++) {
             // if (isset($_POST[$i.'-insurance']) && !empty($_POST[$i.'-insurance']))
             if ($validateData->IsExist($_POST[$i . '-insurance'])) {
                 $tempFlagInsurance = true;
@@ -286,14 +286,14 @@ class HandlingData
     public function SaveDataForm()
     {
         if (!$this->IsFillField()) {
-            $this->controller->RedirectBack();
+            $this->bal->RedirectBack();
         }
         
         if (!$this->IsValidFild()) {
-            $this->controller->RedirectBack();
+            $this->bal->RedirectBack();
         }
         
-        $isSave = $this->controller->Save($_POST);
+        $isSave = $this->bal->Save($_POST);
         if ($isSave == - 1) {
             return false;
         }
@@ -302,22 +302,22 @@ class HandlingData
 
 //     public function Redirect()
 //     {
-//         $this->controller->RedirectBack();
+//         $this->bal->RedirectBack();
 //     }
 
 //     public function RedirectKabinet()
 //     {
-//         $this->controller->RedirectKabinet();
+//         $this->bal->RedirectKabinet();
 //     }
 
 //     public function RedirectError()
 //     {
-//         $this->controller->RedirectError();
+//         $this->bal->RedirectError();
 //     }
 
 //     public function IsLogin($login)
 //     {
-//         return $this->controller->IsLogin($login);
+//         return $this->bal->IsLogin($login);
 //     }
 
 //     public function ValidataLoginPass($login, $password)
@@ -337,7 +337,7 @@ class HandlingData
 
 //     public function Authorize($login, $password, $check = false)
 //     {
-//         $arrLogPass = $this->controller->SaveLoginPassword($login, $password);
+//         $arrLogPass = $this->bal->SaveLoginPassword($login, $password);
 //         if (count($arrLogPass) != 1) {
 //             $_SESSION['id'] = $arrLogPass[1];
 //             $_SESSION['hash'] = $arrLogPass[2];
@@ -351,12 +351,12 @@ class HandlingData
 
 //     public function IsAuthorized($id, $hash)
 //     {
-//         return $this->controller->IsAuthorized($id, $hash);
+//         return $this->bal->IsAuthorized($id, $hash);
 //     }
 }
 
 $auth = new Authorization();
-$bal = new Controller();
+$bal = new bal();
 $handling = new HandlingData();
 
 if ($auth->IsAuthorized('organization')) {

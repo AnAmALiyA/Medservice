@@ -1,6 +1,6 @@
 <?php
 
-class MedDB
+class DAL
 {
     // офицыальный сайт медсервиса
     // private $host='10.0.0.10';
@@ -94,9 +94,9 @@ class MedDB
         return $result;
     }
     
-    private function QuerySelectWhere($table, $stringSelect, $select)
+    private function QuerySelectWhere($table, $selectCol = '*', $stringSelect, $select)
     {
-        $query = "SELECT * FROM $table WHERE $stringSelect = $select";
+        $query = "SELECT $selectCol FROM $table WHERE $stringSelect = $select";
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -353,22 +353,20 @@ class MedDB
     //телефоны
     public function GetPhones($organizationId) {
         $table = 'med_phone';
-        $stringSelect = 'id_organization';
-        return $this->QuerySelectWhere($table, $stringSelect, $organizationId);
+        $selectCol = 'phone , id';
+        $stringSelect = 'phone';
+        $stringSelect = 'summary_table_fk';
+        return $this->QuerySelectWhere($table, $selectCol, $stringSelect, $organizationId);
+    }
+    //время работы
+    public function GetTimeWork($organizationId){
+        
+    }
+    //дни работы    
+    public function GetDaysWork($organizationId){
+        
     }
     
-    
-    
-    private function QuerySelectWhere($table, $stringSelect, $select)
-    {
-        $query = "SELECT * FROM $table WHERE $stringSelect = $select";
-        $link = $this->ConnectDB();
-        
-        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-        
-        $this->CloseConnectDB($link);
-        return $result;
-    }
     // суммарную таблицу 10 колонки
     public function GetSummaryTableAllCol()
     {
@@ -1038,7 +1036,7 @@ class MedDB
     }
 
     // методы авторизации // начало
-    public function FindIdLogin($login)
+    public function FindIdByLogin($login)
     {
         return $this->FindId('med_users', 'login', $login);
     }
@@ -1073,11 +1071,7 @@ class MedDB
             $user_category
         );
         $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
-        if ($getResult) {
-            return $lastId;
-        } else {
-            return - 1;
-        }
+        return $getResult; // вернуть результат сохранения
     }
 
     public function GetUserById($id)
@@ -1088,5 +1082,12 @@ class MedDB
         }
     }
     // методы авторизации // конец
+    public function GetOrganizationIdByUser($id){
+        $result = $this->GetUserById($id);
+        $organizationId = $result['summary_table_fk'];
+        return $organizationId;
+    }
+    
+    
 }
 ?>

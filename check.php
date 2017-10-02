@@ -13,13 +13,13 @@
 require_once 'med-DAL.php';
 require_once 'med-BAL.php';
 
- $dal = new MedDB();
-//$dal = new Controller();
-
-echo '<br/>-----------foreach -----($dal->GetRegion())-----------<br/>';
-var_dump($dal->GetRegion());
+ $dal = new DAL();
+//$dal = new BAL();
+ var_dump(array(-1));
+echo '<br/>-----------foreach -----($dal->GetPhones($organizationId))-----------<br/>';
+var_dump($dal->GetPhones(4));
 echo '<br/>';
-foreach ($dal->GetRegion() as $key => $value) {
+foreach ($dal->GetPhones(4) as $key => $value) {
     echo $key.' - key => value -'.$value.'<br/>';
     foreach ($value as $key2 => $value2) {
         echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
@@ -27,11 +27,11 @@ foreach ($dal->GetRegion() as $key => $value) {
 }
 echo '<br/>';
 echo '<br/>-----------foreach ----(mysqli_fetch_assoc($dal->GetRegion()))-----------<br/>';
-var_dump(mysqli_fetch_assoc($dal->GetRegion()));
+var_dump(mysqli_fetch_assoc($dal->GetPhones(4)));
 echo '<br/>';
 $id = array();
 $name = array();
-foreach ($dal->GetRegion() as $key => $value) {
+foreach ($dal->GetPhones(4) as $key => $value) {
     echo $key.' - key => value -'.$value.'<br/>';
     foreach ($value as $key2 => $value2) {
         echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
@@ -74,7 +74,7 @@ var_dump($name);
 // //     foreach ($value as $key => $value) {
 // //         echo '_____________>'.$key.' - key => value -'.$value.'<br/>';
 // //     }
-// while ($result = mysqli_fetch_assoc($dal->GetRegion())) {
+// while ($result = mysqli_fetch_assoc($dal->GetPhones(4))) {
 //     echo '<br/>_____________'.$result['id'].'_____________'.$result['region'].'<br/>';
 // }
 

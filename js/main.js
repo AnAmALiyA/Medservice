@@ -79,6 +79,7 @@ jQuery(document).ready(function($){
 	let formMain = $('body.main_js form');
 	formMain != null ? setFormMain(formMain) : '';
 
+	//тут может быть нужно отменить маску
 	$('.phone_js').mask('+38 (099) 999-99-99');
 
 	// Отображение загруженного изображения

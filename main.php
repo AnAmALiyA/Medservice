@@ -10,7 +10,7 @@ require_once 'action.php';
 require_once 'med-BAL.php';
 
 $auth = new Authorization();
-$bal = new Controller();
+$bal = new BAL();
 
 if (!$auth->IsAuthorized('organization')) {
     $bal->RedirectBack();
