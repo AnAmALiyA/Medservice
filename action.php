@@ -446,10 +446,11 @@ class HandlingData
             }
             return $this->Redirect();
         }
-        public function SavePics(){
+        
+        public function SavePic(news_id = NULL, promo_id = NULL){
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
-            
+                
             if(isset($_POST['upload'])) {
                 if(empty($_FILES['file']['size']))  die('Вы не выбрали файл');
                 if($_FILES['file']['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
@@ -467,17 +468,20 @@ class HandlingData
                     if($mov) {
                         //здесь коннект к БД
                         $name = htmlentities(stripslashes(strip_tags(trim($name))),ENT_QUOTES,'UTF-8');
-           
-                      $result =   $this->controller->SavePics($name);
+                    if(!empty($news_id))  $result =   $this->controller->SavePics($id,$news_id ,$name );
+                    if(!empty($promo_id))  $result =   $this->controller->SavePics($id , $promo_id ,$name );
+                    
+                    
                         if($result){
                             return true;
                         }
                         else return false;
+                           }
                          }
-                }
+                     }
+                 }
             }
-            }
-}
-}
+        }
+
 
 ?>

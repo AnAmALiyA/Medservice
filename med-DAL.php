@@ -812,21 +812,40 @@ class MedDB
       }
   }
   
-  public  function SavePics($name){
+  
+  //TODO more
+  public  function SavePicsNews($id , $news_id , $name){
       
      
                           $table = 'med_image';
                           // dopisat
-                          $getResult = $this->QueryInsert($table , $name);
-  if($getResult){
-      return true;
-  }
+                          $arrayNamesTabelRows = array( 'id',	'image_userId',	'med_news_fk',	'image_path');
+                          $arrayValuesTabelRows = array($id , $news_id , $name);
+                          $getResult = $this->QueryInsert($table , $arrayNamesTabelRows ,$arrayValuesTabelRows);
+                  if($getResult){
+                      return true;
+                  }
+                  
+                      return false;
+                    
+                  }
   
-      return false;
-  
-  
-  }
+  public  function SavePicsPromo($id , $promo_id , $name){
       
+      
+                  $table = 'med_image';
+                  // dopisat
+                  $arrayNamesTabelRows = array( 'id' , 'image_userId' ,	'med_promo_fk',	'image_path');
+                  $arrayValuesTabelRows = array($id , $promo_id , $name);
+                  $getResult = $this->QueryInsert($table , $arrayNamesTabelRows , $arrayValuesTabelRows);
+              if($getResult){
+                  return true;
+              }
+              
+              return false;
+  
+      
+  }
                      
          
 
