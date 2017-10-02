@@ -397,8 +397,8 @@ class HandlingData
 //        }
 //        return $isAuthorized;
 //    }
-
-}
+        
+   
 
 // $handlingData = new HandlingData();
 // $isAuthorized = $handlingData->AuthorizationCheck();
@@ -420,4 +420,64 @@ class HandlingData
 //         $handlingData->RedirectBack($_SERVER);
 //     }
 // }
+
+     public function SaveNews(){
+        
+         if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+         {
+             
+        $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
+        $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
+        $result = $this->controller->SaveNews($title,$description, $_SESSION['id']);
+        return true;
+         }
+         return $this->Redirect();
+        }
+        
+        public function SavePromo(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+                
+                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
+                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
+                $result = $this->controller->SavePromo($title,$description, $_SESSION['id']);
+                return true;
+            }
+            return $this->Redirect();
+        }
+        public function SavePics(){
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+            
+            if(isset($_POST['upload'])) {
+                if(empty($_FILES['file']['size']))  die('Вы не выбрали файл');
+                if($_FILES['file']['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
+                $imageinfo = getimagesize($_FILES['file']['tmp_name']);
+                $arr = array('image/jpeg','image/gif','image/png');
+                if(!array_search($imageinfo['mime'],$arr)) echo ('Картинка должна быть формата JPG, GIF или PNG');
+                else {
+                    $id =$_SESSION['id'];
+                    $upload_dir = 'upload/'; //имя папки с картинками
+                    $id_dir = $id.'/';
+                    
+                    $name = $upload_dir.$id_dir.basename($_FILES['file']['name']);
+                    $mov = move_uploaded_file($_FILES['file']['tmp_name'],$name);
+                    
+                    if($mov) {
+                        //здесь коннект к БД
+                        $name = htmlentities(stripslashes(strip_tags(trim($name))),ENT_QUOTES,'UTF-8');
+           
+                      $result =   $this->controller->SavePics($name);
+                        if($result){
+                            return true;
+                        }
+                        else return false;
+                         }
+                }
+            }
+            }
+}
+}
+
 ?>

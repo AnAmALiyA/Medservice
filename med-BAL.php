@@ -696,12 +696,24 @@ class Controller
     
     public function SaveNews($title, $description, $user){
         
+        $this->medDB->SaveNews($title, $description, $user);
+        return true;
     }
     
     public  function  SavePromo($title, $description, $user){
         
+        $this->medDB->SavePromo($title, $description, $user);
+        return true;
     }
     
-    
+    public  function  SaveImage($name){
+        
+     $result =  $this->medDB->SavePics($name);
+        
+        if($result){
+            return true;
+        }
+        else return false;
+    }
 }
 ?>

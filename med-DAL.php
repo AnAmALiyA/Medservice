@@ -812,5 +812,26 @@ class MedDB
       }
   }
   
+  public  function SavePics($name){
+      
+     
+                          $table = 'med_image';
+                          // dopisat
+                          $getResult = $this->QueryInsert($table , $name);
+  if($getResult){
+      return true;
+  }
+  
+      return false;
+  
+  
+  }
+      
+                     
+         
+
+  
+  
+  
 }
  ?>
