@@ -633,9 +633,9 @@ class HandlingData
                     $id =$_SESSION['id'];
                     $upload_dir = 'upload/'; //имя папки с картинками
                     $id_dir = $id.'/';
-                    $news_dir = 'news/'
+                    $news_dir = 'news/';
                     
-                    $name = $upload_dir.$id_dir.$news_dir.basename($_FILES['file']['name']);
+                    $name = $upload_dir.$id_dir.basename($_FILES['file']['name']);
                     
                     $mov = move_uploaded_file($_FILES['file']['tmp_name'],$name);
                     
@@ -668,7 +668,7 @@ class HandlingData
                              $id =$_SESSION['id'];
                              $upload_dir = 'upload/'; //имя папки с картинками
                              $id_dir = $id.'/';
-                             $promo_dir = 'promo/'
+                             $promo_dir = 'promo/';
                              
                              $name = $upload_dir.$id_dir.$promo_dir.basename($_FILES['file']['name']);
                              
