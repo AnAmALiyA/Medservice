@@ -429,9 +429,13 @@ class HandlingData
         $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
         $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
         $result = $this->controller->SaveNews($title,$description, $_SESSION['id']);
-        //TODO: try to push data further
-        $result_pic = $this->SavePic($_POST['id']);
+        //TODO: try to push id news further to pics
+        if(isset($_POST['news_img_[]'])){
+            
+        
+        $result_pic = $this->SavePic($news_id = $result);
         return true;
+         }
          }
          return $this->Redirect();
         }
@@ -444,18 +448,49 @@ class HandlingData
                 $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
                 $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
                 $result = $this->controller->SavePromo($title,$description, $_SESSION['id']);
+                //TODO: try to push id promo further to pics
+                if(isset($_POST['promo_img_[]'])){
+                    
+                $result_pic = $this->SavePic($promo_id = $result);
+                return true;
+                }
+            }
+            return $this->Redirect();
+        }
+        public function SaveSpecial(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+                
+                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
+                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
+                $result = $this->controller->SaveSpecial($title,$description, $_SESSION['id']);
+               
+                return true;
+            }
+            return $this->Redirect();
+        }
+        
+        public function SaveMedturism(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+                
+                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
+                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
+                $result = $this->controller->SaveMedturism($title,$description, $_SESSION['id']);
                 
                 return true;
             }
             return $this->Redirect();
         }
         
+        
         public function SavePic($news_id = NULL, $promo_id = NULL){
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
                 
-            if(isset($_POST['upload'])) {
-                if(empty($_FILES['file']['size']))  die('Вы не выбрали файл');
+          
                 if($_FILES['file']['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
                 $imageinfo = getimagesize($_FILES['file']['tmp_name']);
                 $arr = array('image/jpeg','image/gif','image/png');
@@ -466,6 +501,7 @@ class HandlingData
                     $id_dir = $id.'/';
                     
                     $name = $upload_dir.$id_dir.basename($_FILES['file']['name']);
+                    
                     $mov = move_uploaded_file($_FILES['file']['tmp_name'],$name);
                     
                     if($mov) {
@@ -484,7 +520,7 @@ class HandlingData
                      }
                  }
             }
-        }
+        
 
 
 ?>

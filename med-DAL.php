@@ -787,9 +787,9 @@ class MedDB
   public function SaveNews($news_title , $med_user_fk , $news_descripion){
       $arrayNamesTabelRows = array( 'news_title', 'med_user_fk', 'news_descripion');
       $arrayValuesTabelRows = array($news_title , $med_user_fk , $news_descripion);
-      $getResult = $this->QueryInsert('med_news', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      $getResult = $this->QueryInsertGetId('med_news', $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
-          return true;
+          return $getResult;
       }else {
           return false;
       }
@@ -804,7 +804,23 @@ class MedDB
   public function SavePromo($promo_title , $med_user_fk , $promo_descripion){
       $arrayNamesTabelRows = array( 'promo_title', 'med_user_fk', 'promo_descripion');
       $arrayValuesTabelRows = array($promo_title , $med_user_fk , $promo_descripion);
-      $getResult = $this->QueryInsert('med_promo', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      $getResult = $this->QueryInsertGetId('med_promo', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      if (isset($getResult)) {
+          return $getResult;
+      }else {
+          return false;
+      }
+  }
+  
+  public function GetSpecialAllCol(){
+      $table = 'med_special';
+      return $this->GetArrayAllCol($table);
+  }
+  
+  public function SaveSpecial($special_title , $med_user_fk , $special_descripion){
+      $arrayNamesTabelRows = array( 'special_title', 'med_user_fk', 'special_descripion');
+      $arrayValuesTabelRows = array($special_title , $med_user_fk , $special_descripion);
+      $getResult = $this->QueryInsert('med_special', $arrayNamesTabelRows, $arrayValuesTabelRows);
       if ($getResult) {
           return true;
       }else {
@@ -812,14 +828,30 @@ class MedDB
       }
   }
   
+  public function GetMedturismAllCol(){
+      $table = 'med_medturism';
+      return $this->GetArrayAllCol($table);
+  }
   
-  //TODO more
+  public function SaveMedturism($medturism_title , $med_user_fk , $medturism_descripion){
+      $arrayNamesTabelRows = array( 'medturism_title', 'med_user_fk', 'medturism_descripion');
+      $arrayValuesTabelRows = array($medturism_title , $med_user_fk , $medturism_descripion);
+      $getResult = $this->QueryInsert('med_medturism', $arrayNamesTabelRows, $arrayValuesTabelRows);
+      if ($getResult) {
+          return true;
+      }else {
+          return false;
+      }
+  }
+  
+  //TODO: find a significant way to reveal id fro database of the last inserted item
   public  function SavePicsNews($id , $news_id , $name){
       
      
                           $table = 'med_image';
-                          // dopisat
-                          $arrayNamesTabelRows = array( 'id',	'image_userId',	'med_news_fk',	'image_path');
+                          //TODO: insert id of last item in db here                         
+                          
+                          $arrayNamesTabelRows = array(	'image_userId',	'med_news_fk',	'image_path');
                           $arrayValuesTabelRows = array($id , $news_id , $name);
                           $getResult = $this->QueryInsert($table , $arrayNamesTabelRows ,$arrayValuesTabelRows);
                   if($getResult){
@@ -834,8 +866,8 @@ class MedDB
       
       
                   $table = 'med_image';
-                  // dopisat
-                  $arrayNamesTabelRows = array( 'id' , 'image_userId' ,	'med_promo_fk',	'image_path');
+                  //TODO: insert id of last item in db here    
+                  $arrayNamesTabelRows = array(  'image_userId' ,	'med_promo_fk',	'image_path');
                   $arrayValuesTabelRows = array($id , $promo_id , $name);
                   $getResult = $this->QueryInsert($table , $arrayNamesTabelRows , $arrayValuesTabelRows);
               if($getResult){
@@ -846,8 +878,20 @@ class MedDB
   
       
   }
-                     
-         
+               // findout your expected id      
+  private function QueryInsertGetId($table, $arrayNamesColumns, $arrayValuesColumns)
+  {
+    
+      $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
+      $link = ConnectDB();
+      
+      $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+      
+    $id =  mysqli_insert_id($link);
+      
+      $this->CloseConnectDB($link);
+      return $id;
+  }
 
   
   

@@ -696,16 +696,27 @@ class Controller
     
     public function SaveNews($title, $description, $user){
         
-        $this->medDB->SaveNews($title, $description, $user);
-        return true;
+        $result =    $this->medDB->SaveNews($title, $description, $user);
+        return $result;
     }
     
     public  function  SavePromo($title, $description, $user){
         
-        $this->medDB->SavePromo($title, $description, $user);
+      $result =  $this->medDB->SavePromo($title, $description, $user);
+      return $result;
+    }
+    
+    public function SaveSpecial($title, $description, $user){
+        
+        $this->medDB->SaveSpecial($title, $description, $user);
         return true;
     }
     
+    public function SaveMedturism($title, $description, $user){
+        
+        $this->medDB->SaveMedturism($title, $description, $user);
+        return true;
+    }
     
     public  function  SavePicsNews($id , $news_id , $name){
         
