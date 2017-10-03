@@ -227,7 +227,7 @@ function addFormFotoMarkup (marker) {
 	$('.' + marker + '-list').append(formMarkup);
 }
 
-function addFormOrganization(arrayTypeCompany, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayOrganizationData = null, arrayError = null) {
+function addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError = null) {
 	var formOrganization = '<div class="info-holder">' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
@@ -235,7 +235,7 @@ function addFormOrganization(arrayTypeCompany, arrayServices, arrayInsuranceComp
 		                            '</div>' +
 		                            '<div class="col2">' +
 		                                '<select name="typeCompany" class="type ' + arrayError['typeCompany_error'] != null ? arrayError['typeCompany_error'] : ''; + '" id="typeCompany">' +
-		                                  '<option value="0" selected></option>'
+																			'<option value="0" selected></option>'
 																			for (let i = 0; i < arrayTypeCompany.id.length; i++) {
 																				+ '<option value="' + arrayTypeCompany.id[i] + '">' + arrayTypeCompany.name[i] + '</option>'
 																			}
@@ -276,8 +276,8 @@ function addFormOrganization(arrayTypeCompany, arrayServices, arrayInsuranceComp
 		                            '<div class="col1">' +
 		                                '<label for="name">Название</label>' +
 		                            '</div>' +
-		                            '<div class="col2 <?php $_SESSION['nameCompany_error']?>">' +
-		                                '<input type="text" placeholder="" id="name" name="nameCompany" value="Тест поле компания">' +
+		                            '<div class="col2">' +
+		                                '<input type="text" placeholder="" id="nameCompany" name="nameCompany-' + nameCompany != null ? nameCompany.id : 'null'; + '" value="' + arrayOrganizationData.nameCompany != null ? arrayOrganizationData.nameCompany.name : 'Тест поле компания'; + '">' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -440,14 +440,22 @@ function setFormMain(formM) {
     // .done(function(response, textStatus, jqXHR) {
     .done(function(response) {
       console.log(response);
-      let arrayTypeCompany = response.arrayTypeCompany;
+			let arrayOrganizationData = response.arrayOrganizationData;
+			if (arrayOrganizationData != null) {
+				//достать данные
+					//'arrayTypeCompanes'
+	        //'arrayServices'
+	        //'arrayInsuranceCompanes'
+					//'arrayLocation'
+			}
+      let arrayTypeCompanes = response.arrayTypeCompanes;
       let arrayServices = response.arrayServices;
       let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
-      let arrayLocation = response.arrayLocation;
+      let arrayLocation = response.arrayLocation;			
       let arrayPhone = response.arrayPhone;
       let arrayError = response.arrayError;
 
-      let form = addFormOrganization(arrayTypeCompany, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError);
+      let form = addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError);
       formM.html(form);
     });
 }

@@ -127,10 +127,105 @@ class BAL
         return $summ;
     }
     
-    //получить данные организации
+    // TODO получить данные организации
     public function GetOrganizationData(){
-        return GetOrganizationData();
-    }    
+        $arrayOrganizationData = array();
+        $id = $_SESSION['user_id'];
+        
+        
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId > 0) {
+            $arrayOrganizationData = array();            
+            $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);            
+            
+            $typeInstitutionId = $resultOrganizationData['typeInstitution'];            
+            $resultInstitution = $this->dal->GetTypeInstitutionById($typeInstitutionId);            
+            $arrayOrganizationData['typeCompany'] = array(
+                'id' => $resultInstitution['id'],
+                'name' => $resultInstitution['typeDescription']
+            );
+            
+            $servicesId = $resultOrganizationData['service'];
+            $resultServicesData = $this->dal->GetServicesData($servicesId);            
+            $resultServicesId = array();
+            $resultServicesNames = array();
+            foreach ($resultServicesData as $key => $value) {
+                array_push($resultServices, $key);
+                array_push($resultServicesNames, $value);
+            }
+            $arrayOrganizationData['arrayServices'] = array(
+                'id' => $resultServicesId, 
+                'name' => $resultServicesNames
+            );
+            
+            $insuranceCompanesId = $resultOrganizationData['insuranceCompanie'];
+            $resultInsuranceCompanesData = $this->dal->GetInsuranceCompanesData($insuranceCompanesId);
+            $resultInsuranceCompanesId = array();
+            $resultInsuranceCompanesNames = array();
+            foreach ($resultInsuranceCompanesData as $key => $value) {
+                array_push($resultInsuranceCompanesId, $key);
+                array_push($resultInsuranceCompanesNames, $value);
+            }
+            $arrayOrganizationData['arrayInsuranceCompanes'] = array(
+                'id' => $resultInsuranceCompanesId,
+                'name' => $resultInsuranceCompanesNames
+            );
+            
+            $actualLocationId = $resultOrganizationData['actualLocation'];
+            $resultActualLocation = $this->dal->GetActualLocation($actualLocationId);            
+            $actualLocationData = array(
+                ['street'] => array(
+                    'id' => $resultActualLocation['id'],
+                    'name' => $resultActualLocation['actualLocation']
+                )
+            );
+            
+            $localityId = $resultActualLocation['locality'];
+            $resultLocation = $this->dal->GetLocation($localityId);
+            $locationData = array(
+                ['city'] => array(
+                    'id' => $resultLocation['id'],
+                    'name' => $resultLocation['locality']
+                )
+            );
+            
+            $districtRegionId = $resultLocation['districtRegion'];
+            $resultDistrictRegion = $this->dal->GetDistrictRegion($districtRegionId);
+            $districtRegionData = array(
+                ['district'] => array(
+                    'id' => $resultDistrictRegion['id'],
+                    'name' => $resultDistrictRegion['district']
+                )
+            );
+            
+            $regionId = $resultDistrictRegion['region'];
+            $resultRegion = $this->dal->GetRegion($regionId);
+            $regionData = array(
+                ['region'] => array(
+                    'id' => $resultRegion['id'],
+                    'name' => $resultRegion['region']
+                )
+            );
+            
+            $resultHome = $this->dal->GetHome($actualLocationId);
+            $homeData = array(
+                ['home'] => array(
+                    'id' => $resultHome['id'],
+                    'numberHome' => $resultHome['numberHome']
+                )
+            );
+            
+            $arrayOrganizationData['arrayLocation'] = array(
+                $actualLocationData,
+                $locationData,
+                $districtRegionData,
+                $regionData,
+                $homeData
+            );
+            return $arrayOrganizationData;
+        }
+        return null;
+    }
     // Тип учереждения
     public function GetTypeInstitution()
     {
@@ -147,11 +242,37 @@ class BAL
     {
         return $this->dal->GetNamesInsuranceCompanes();
     }    
+    private function GetNameCompany(){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId > 0) {
+            $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);            
+            $arrayCompany = array();
+            $arrayCompany['id'] = $resultOrganizationData['id'];
+            $resultOrganization = $this->dal->GetOrganization($resultOrganizationData['id']);
+            $arrayCompany['name'] = $resultOrganization['name'];
+            return $arrayCompany;
+        }
+        return null;
+    }
     // Область
     public function GetRegiones()
     {
         $result = $this->dal->GetRegion();
         return  $this->GenerateArrayWhithObj($result);
+    }//TODO локации
+    public function GetLocation(){
+     $arrayLocationData = array();
+     //область
+     $id = $_SESSION['user_id'];
+     $organizationId = $this->dal->GetOrganizationIdByUser($id);
+     if ($organizationId > 0) {
+         
+     }
+     //город
+    // район
+    // улица
+    // дом
     }
     //телефоны
     public function GetPhones() {
@@ -163,24 +284,24 @@ class BAL
         }
         return array(-1);
     }
-    //время работы
-    public function GetDaysWork(){
-        $id = $_SESSION['user_id'];
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
-        if ($organizationId != null) {
-            $result = $this->dal->GetDaysWork($organizationId);
-        }
-        return array(-1);
-    }
-    //дни работы
-    public function GetTimeWork(){
-        $id = $_SESSION['user_id'];
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
-        if ($organizationId != null) {
-            $result = $this->dal->GetTimeWork($organizationId);
-        }
-        return array(-1);
-    }
+    //TODO время и дни работы
+//     public function GetDaysWork(){
+//         $id = $_SESSION['user_id'];
+//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
+//         if ($organizationId != null) {
+//             $result = $this->dal->GetDaysWork($organizationId);
+//         }
+//         return array(-1);
+//     }
+
+//     public function GetTimeWork(){
+//         $id = $_SESSION['user_id'];
+//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
+//         if ($organizationId != null) {
+//             $result = $this->dal->GetTimeWork($organizationId);
+//         }
+//         return array(-1);
+//     }
     ////////////////////////////////////////
     // суммарную таблицу 10 колонки
     public function GetSummaryTableAll()
