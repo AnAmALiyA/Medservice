@@ -422,7 +422,10 @@ class HandlingData
 // }
 
      public function SaveNews(){
-        
+       
+        foreach ($_POST as $element => $value) {
+             
+         
          if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
          {
              
@@ -439,7 +442,7 @@ class HandlingData
          }
          return $this->Redirect();
         }
-        
+     } 
         public function SavePromo(){
             
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
@@ -490,8 +493,8 @@ class HandlingData
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
                 
-          
-                if($_FILES['file']['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
+          //checking and approving img
+              if($_FILES['file']['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
                 $imageinfo = getimagesize($_FILES['file']['tmp_name']);
                 $arr = array('image/jpeg','image/gif','image/png');
                 if(!array_search($imageinfo['mime'],$arr)) echo ('Картинка должна быть формата JPG, GIF или PNG');
@@ -519,8 +522,8 @@ class HandlingData
                          }
                      }
                  }
-            }
-        
-
+            
+}
+      
 
 ?>
