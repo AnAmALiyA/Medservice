@@ -429,6 +429,8 @@ class HandlingData
         $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
         $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
         $result = $this->controller->SaveNews($title,$description, $_SESSION['id']);
+        //TODO: try to push data further
+        $result_pic = $this->SavePic($_POST['id']);
         return true;
          }
          return $this->Redirect();
@@ -442,12 +444,13 @@ class HandlingData
                 $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
                 $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
                 $result = $this->controller->SavePromo($title,$description, $_SESSION['id']);
+                
                 return true;
             }
             return $this->Redirect();
         }
         
-        public function SavePic(news_id = NULL, promo_id = NULL){
+        public function SavePic($news_id = NULL, $promo_id = NULL){
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
                 
@@ -468,8 +471,8 @@ class HandlingData
                     if($mov) {
                         //здесь коннект к БД
                         $name = htmlentities(stripslashes(strip_tags(trim($name))),ENT_QUOTES,'UTF-8');
-                    if(!empty($news_id))  $result =   $this->controller->SavePics($id,$news_id ,$name );
-                    if(!empty($promo_id))  $result =   $this->controller->SavePics($id , $promo_id ,$name );
+                    if(!empty($news_id))  $result =   $this->controller->SavePicsNews($id,$news_id ,$name );
+                    if(!empty($promo_id))  $result =   $this->controller->SavePicsProo($id , $promo_id ,$name );
                     
                     
                         if($result){

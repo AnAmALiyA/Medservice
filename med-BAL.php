@@ -707,10 +707,18 @@ class Controller
     }
     
     
-    //TODO:  SaveImagePromo
-    public  function  SaveImageNews($id , $news_id , $name){
+    public  function  SavePicsNews($id , $news_id , $name){
         
         $result =  $this->medDB->SavePicsNews($id , $news_id , $name);
+        
+        if($result){
+            return true;
+        }
+        else return false;
+    }
+    public  function  SavePicsPromo($id , $promo_id , $name){
+        
+        $result =  $this->medDB->SavePicsPromo($id , $promo_id , $name);
         
         if($result){
             return true;
