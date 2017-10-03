@@ -421,6 +421,12 @@ class HandlingData
 //     }
 // }
 
+
+
+
+/* temporary no need due to ArraySave funct has similiar defenition
+ * 
+ * 
      public function SaveNews(){
        
         
@@ -432,7 +438,7 @@ class HandlingData
         $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
         $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
         $result = $this->controller->SaveNews($title,$description, $_SESSION['id']);
-        //TODO: try to push id news further to pics
+        
         if(isset($_POST['news_img_[]'])){
             
         
@@ -451,7 +457,7 @@ class HandlingData
                 $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
                 $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
                 $result = $this->controller->SavePromo($title,$description, $_SESSION['id']);
-                //TODO: try to push id promo further to pics
+              
                 if(isset($_POST['promo_img_[]'])){
                     
                 $result_pic = $this->SavePic($promo_id = $result);
@@ -486,7 +492,7 @@ class HandlingData
                 return true;
             }
             return $this->Redirect();
-        }
+        } */
         
         //TODO: making update start to work
         public function UpdateNews(){
@@ -533,7 +539,7 @@ class HandlingData
                 if(isset($_POST["news_img_[$i]"])){
                     
                     
-                    $result_pic = $this->SavePic($news_id = $result);
+                    $result_pic = $this->SavePicNews($news_id = $result);
                     return true;
                 }
                 }
@@ -566,7 +572,7 @@ class HandlingData
                     if(isset($_POST["promo_img_[$i]"])){
                         
                         
-                        $result_pic = $this->SavePic($promo_id = $result);
+                        $result_pic = $this->SavePicPromo($promo_id = $result);
                         return true;
                     }
                 }
@@ -578,7 +584,7 @@ class HandlingData
             
         }
         
-        public function SaveSpecialArrayl(){
+        public function SaveSpecialArray(){
             
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
@@ -596,7 +602,7 @@ class HandlingData
             return $this->Redirect();
         }
         
-        public function SaveMedturismArrayl(){
+        public function SaveMedturismArray(){
             
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
@@ -614,7 +620,7 @@ class HandlingData
             return $this->Redirect();
         }
         
-        public function SavePic($news_id = NULL, $promo_id = NULL){
+        public function SavePicNews($news_id ){
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
             {
                 
@@ -627,8 +633,9 @@ class HandlingData
                     $id =$_SESSION['id'];
                     $upload_dir = 'upload/'; //имя папки с картинками
                     $id_dir = $id.'/';
+                    $news_dir = 'news/'
                     
-                    $name = $upload_dir.$id_dir.basename($_FILES['file']['name']);
+                    $name = $upload_dir.$id_dir.$news_dir.basename($_FILES['file']['name']);
                     
                     $mov = move_uploaded_file($_FILES['file']['tmp_name'],$name);
                     
@@ -636,7 +643,7 @@ class HandlingData
                         //здесь коннект к БД
                         $name = htmlentities(stripslashes(strip_tags(trim($name))),ENT_QUOTES,'UTF-8');
                     if(!empty($news_id))  $result =   $this->controller->SavePicsNews($id,$news_id ,$name );
-                    if(!empty($promo_id))  $result =   $this->controller->SavePicsProo($id , $promo_id ,$name );
+                 
                     
                     
                         if($result){
@@ -648,6 +655,40 @@ class HandlingData
                      }
                  }
             
+                 public function SavePicPromo($promo_id ){
+                     if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+                     {
+                         
+                         //checking and approving img
+                         if($_FILES['file']['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
+                         $imageinfo = getimagesize($_FILES['file']['tmp_name']);
+                         $arr = array('image/jpeg','image/gif','image/png');
+                         if(!array_search($imageinfo['mime'],$arr)) echo ('Картинка должна быть формата JPG, GIF или PNG');
+                         else {
+                             $id =$_SESSION['id'];
+                             $upload_dir = 'upload/'; //имя папки с картинками
+                             $id_dir = $id.'/';
+                             $promo_dir = 'promo/'
+                             
+                             $name = $upload_dir.$id_dir.$promo_dir.basename($_FILES['file']['name']);
+                             
+                             $mov = move_uploaded_file($_FILES['file']['tmp_name'],$name);
+                             
+                             if($mov) {
+                                 //здесь коннект к БД
+                                 $name = htmlentities(stripslashes(strip_tags(trim($name))),ENT_QUOTES,'UTF-8');
+                              
+                                 if(!empty($promo_id))  $result =   $this->controller->SavePicsProo($id , $promo_id ,$name );
+                                 
+                                 
+                                 if($result){
+                                     return true;
+                                 }
+                                 else return false;
+                             }
+                         }
+                     }
+                 }
 }
       
 
