@@ -423,7 +423,7 @@ class HandlingData
 
      public function SaveNews(){
        
-        foreach ($_POST as $element => $value) {
+        
              
          
          if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
@@ -441,7 +441,7 @@ class HandlingData
          }
          }
          return $this->Redirect();
-        }
+        
      } 
         public function SavePromo(){
             
@@ -488,6 +488,131 @@ class HandlingData
             return $this->Redirect();
         }
         
+        //TODO: making update start to work
+        public function UpdateNews(){
+            
+            foreach ($_POST as $element => $value) {
+                
+                
+                if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+                {
+                    
+                    $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
+                    $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
+                    $result = $this->controller->UpdateNews($title,$description, $_SESSION['id']);
+                    //TODO: try to push id news further to pics
+                    if(isset($_POST['news_img_[]'])){
+                        
+                        
+                        $result_pic = $this->SavePic($news_id = $result);
+                        return true;
+                    }
+                }
+                return $this->Redirect();
+            }
+        } 
+        
+        public function SaveNewsArray(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+                
+                for($i=0; count($_POST['title'])>$i; $i++ ){
+                
+                  /*  $child[]=array(
+                        'med_user_fk' => $_SESSION['id'],
+                        'news_title' => $this->validateData->FilterStringOnHtmlSql( $_POST['name'][$i] ),
+                        'news_descripion' => $this->validateData->FilterStringOnHtmlSql( $_POST['description'][$i] )
+                    );
+                    */
+                    
+                    $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
+                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                $result = $this->controller->SaveNews($title,$description, $_SESSION['id']);
+           
+                if(isset($_POST["news_img_[$i]"])){
+                    
+                    
+                    $result_pic = $this->SavePic($news_id = $result);
+                    return true;
+                }
+                }
+               
+                
+                
+            }
+            return $this->Redirect();
+            
+        } 
+        
+        public function SavePromoArray(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+                
+                for($i=0; count($_POST['title'])>$i; $i++ ){
+                    
+                    /*  $child[]=array(
+                     'med_user_fk' => $_SESSION['id'],
+                     'promo_title' => $this->validateData->FilterStringOnHtmlSql( $_POST['name'][$i] ),
+                     'promo_descripion' => $this->validateData->FilterStringOnHtmlSql( $_POST['description'][$i] )
+                     );
+                     */
+                    
+                    $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
+                    $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                    $result = $this->controller->SavePromo($title,$description, $_SESSION['id']);
+                    
+                    if(isset($_POST["promo_img_[$i]"])){
+                        
+                        
+                        $result_pic = $this->SavePic($promo_id = $result);
+                        return true;
+                    }
+                }
+                
+                
+                
+            }
+            return $this->Redirect();
+            
+        }
+        
+        public function SaveSpecialArrayl(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+               
+                for($i=0; count($_POST['title'])>$i; $i++ ){
+                    
+                
+                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
+                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                $result = $this->controller->SaveSpecial($title,$description, $_SESSION['id']);
+                
+                return true;
+                }
+            }
+            return $this->Redirect();
+        }
+        
+        public function SaveMedturismArrayl(){
+            
+            if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+            {
+               
+                for($i=0; count($_POST['title'])>$i; $i++ ){
+                    
+                    
+                    $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
+                    $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                    $result = $this->controller->SaveMedturism($title,$description, $_SESSION['id']);
+                    
+                    return true;
+                }
+            }
+            return $this->Redirect();
+        }
         
         public function SavePic($news_id = NULL, $promo_id = NULL){
             if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
