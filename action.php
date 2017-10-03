@@ -689,6 +689,45 @@ class HandlingData
                          }
                      }
                  }
+                 
+                 private function SavePics(){
+                     
+                     if ($this->IsAuthorized( $_SESSION['id'] , $_SESSION['hash'] ) )
+                     {
+                         
+                         for($i=0; count($_POST['title'])>$i; $i++ ){
+                     if(isset($_POST["img_[$i]"])){
+                         
+                         if($_FILES['file'][$i]['size'] > (5 * 1024 * 1024)) die('Размер файла не должен превышать 5Мб');
+                         $imageinfo = getimagesize($_FILES['file'][$i]['tmp_name']);
+                         $arr = array('image/jpeg','image/gif','image/png');
+                         if(!array_search($imageinfo['mime'],$arr)) echo ('Картинка должна быть формата JPG, GIF или PNG');
+                         else {
+                             $id =$_SESSION['id'];
+                             $upload_dir = 'upload/'; //имя папки с картинками
+                             $id_dir = $id.'/';
+                            
+                             
+                             $name = $upload_dir.$id_dir.basename($_FILES['file'][$i]['name']);
+                             
+                             $mov = move_uploaded_file($_FILES['file'][$i]['tmp_name'],$name);
+                             
+                             if($mov) {
+                                 //здесь коннект к БД
+                                 $name = htmlentities(stripslashes(strip_tags(trim($name))),ENT_QUOTES,'UTF-8');
+                                 
+                                 if(!empty($promo_id))  $result =   $this->controller->SavePics($id , $name );
+                                 
+                                 
+                                 if($result){
+                                     return true;
+                                 }
+                                 else return false;
+                     }
+                     
+                         }
+                         
+                 }
 }
       
 

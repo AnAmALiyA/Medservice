@@ -736,5 +736,14 @@ class Controller
         }
         else return false;
     }
+    public  function  SavePics($id , $name){
+        
+        $result =  $this->medDB->SavePics($id  , $name);
+        
+        if($result){
+            return true;
+        }
+        else return false;
+    }
 }
 ?>

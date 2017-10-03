@@ -844,12 +844,12 @@ class MedDB
       }
   }
   
-  //TODO: find a significant way to reveal id fro database of the last inserted item
+  //TODO: check??? find a significant way to reveal id fro database of the last inserted item
   public  function SavePicsNews($id , $news_id , $name){
       
      
                           $table = 'med_image';
-                          //TODO: insert id of last item in db here                         
+                          //TODO: check??? insert id of last item in db here                         
                           
                           $arrayNamesTabelRows = array(	'image_userId',	'med_news_fk',	'image_path');
                           $arrayValuesTabelRows = array($id , $news_id , $name);
@@ -866,7 +866,7 @@ class MedDB
       
       
                   $table = 'med_image';
-                  //TODO: insert id of last item in db here    
+                  //TODO: check??? insert id of last item in db here    
                   $arrayNamesTabelRows = array(  'image_userId' ,	'med_promo_fk',	'image_path');
                   $arrayValuesTabelRows = array($id , $promo_id , $name);
                   $getResult = $this->QueryInsert($table , $arrayNamesTabelRows , $arrayValuesTabelRows);
@@ -876,6 +876,24 @@ class MedDB
               
               return false;
   
+      
+  }
+  
+  // just downloading pictures
+  public  function SavePics($id  , $name){
+      
+      
+      $table = 'med_image';
+     
+      $arrayNamesTabelRows = array(  'image_userId' ,	'image_path');
+      $arrayValuesTabelRows = array($id ,  $name);
+      $getResult = $this->QueryInsert($table , $arrayNamesTabelRows , $arrayValuesTabelRows);
+      if($getResult){
+          return true;
+      }
+      
+      return false;
+      
       
   }
                // findout your expected id      
