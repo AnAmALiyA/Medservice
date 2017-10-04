@@ -21,22 +21,31 @@ if (isset($_POST['ajax_form_main']) && empty($_POST['ajax_form_main'])){
             //arrayInsuranceCompanes.id
             //arrayInsuranceCompanes.name
             
-            //arrayLocation.id
-            //arrayLocation.name    //область / город /район /улица /дом
+            //arrayLocation.
+                        //улица - actualLocation
+                        //город - locality
+                        //регион область - districtRegion
+                        //область - region
+                        //дом - numberHome
+                            //id
+                            //name
 
         //получить массив выпадающих списков
         $returnArrayData['arrayTypeCompanes'] = $bal->GetTypeInstitution();
         $returnArrayData['arrayServices'] = $bal->GetNamesServices();
         $returnArrayData['arrayInsuranceCompanes'] = $bal->GetNamesInsuranceCompanes();
-        $returnArrayData['arrayLocation'] = $bal->GetLocation();
-        
+        $returnArrayData['arrayRegiones'] = $bal->GetRegiones();
+            //id
+            //name
         $returnArrayData['arrayPhone'] = $bal->GetPhones();
+            //id
+            //name
         $returnArrayData['arrayDayTimeWork'] = $bal->GetDaysTimesWork();
-//         $returnArrayData['arrayTimeWork'] = $bal->GetTimesWork();
+
         $returnArrayData['logo'] = $bal->GetLogo();
        
         echo json_encode($returnArrayData);
-    }    
+    }
 }
 
 

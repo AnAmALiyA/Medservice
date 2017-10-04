@@ -227,7 +227,7 @@ function addFormFotoMarkup (marker) {
 	$('.' + marker + '-list').append(formMarkup);
 }
 
-function addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError = null) {
+function addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayRegiones, arrayPhone, arrayError = null) {
 	var formOrganization = '<div class="info-holder">' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
@@ -451,7 +451,7 @@ function setFormMain(formM) {
       let arrayTypeCompanes = response.arrayTypeCompanes;
       let arrayServices = response.arrayServices;
       let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
-      let arrayLocation = response.arrayLocation;			
+      let arrayLocation = response.arrayLocation;
       let arrayPhone = response.arrayPhone;
       let arrayError = response.arrayError;
 

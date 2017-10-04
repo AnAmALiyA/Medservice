@@ -14,32 +14,28 @@ require_once 'med-DAL.php';
 require_once 'med-BAL.php';
 
  $dal = new DAL();
-// //$dal = new BAL();
- var_dump($dal->GetHome(2));
-// echo '<br/>-----------foreach ----------------<br/>';
-// var_dump($dal->GetServicesData(4));
-// echo '<br/>';
-// foreach ($dal->GetServicesData(4) as $key => $value) {
-//     echo $key.' - key => value -'.$value.'<br/>';
+ $m = $dal->GetDayTimeWork(1);
+//$dal = new BAL();
+ var_dump($m);
+echo '<br/>-----------foreach ----------------<br/>';
+echo '<br/>';
+foreach ($m as $key => $value) {
+    echo $key.' - key => value -'.$value.'<br/>';
+    
 //     foreach ($value as $key2 => $value2) {
 //         echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
 //     }
-// }
+}
 // echo '<br/>';
 // echo '<br/>-----------foreach ----mysqli_fetch_assoc()-----------<br/>';
 // var_dump(mysqli_fetch_assoc($dal->GetTypeInstitutionById(1)));
 // echo '<br/>';
 // $id = array();
 // $name = array();
-// foreach ($dal->GetTypeInstitutionById(4) as $key => $value) {
+// foreach ($m as $key => $value) {
 //     echo $key.' - key => value -'.$value.'<br/>';
 //     foreach ($value as $key2 => $value2) {
 //         echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
-//         if ($key2 == 'id') {
-//             array_push($id, $value2);
-//             continue;
-//         }
-//         array_push($name, $value2);
 //     }
 // }
 // echo '<br/>-----<br/>';

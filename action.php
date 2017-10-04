@@ -360,6 +360,9 @@ $bal = new bal();
 $handling = new HandlingData();
 
 if ($auth->IsAuthorized('organization')) {
+    isset($_POST['save_form_main']) && empty($_POST['save_form_main']) {
+        $handling->SaveDataForm();
+    }
 //     echo "методы для организации";
 //     if ($_POST['submit'] == 'Сохранить') {
 //         $handling->SaveDataForm();

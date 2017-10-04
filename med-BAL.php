@@ -1,44 +1,6 @@
 <?php
 //session_start();
-// require_once 'med-dataBAL.php';
-require_once 'med-DAL.php'; // записать переменные сюда
-// $arrayNamesServices = array(
-//     'dentistry' => 'Стоматологія',
-//     'childrens_dentistry' => 'Дитяча стоматологія',
-//     'therapeutic_dentistry' => 'Терапевтична стоматологія',
-//     'aesthetic_dentistry' => 'Естетична стоматологія',
-//     'orthodontics' => 'Ортодонтія',
-//     'dental_othopedics' => 'Стоматологічна ортопедія (протезування)',
-//     'dental_surgery' => 'Стоматологічна хірургія',
-//     'dental_Implantology' => 'Стоматологічна імплантологія',
-//     'periodontology' => 'Пародонтологія',
-//     'dental_prophylaxis' => 'Стоматологічна профілактика',
-//     'dentistry_pregnant_women' => 'Стоматологія для вагітних',
-//     'tooth_whitening' => 'Відбілювання зубів',
-//     'gnathology' => 'Гнатологія',
-//     'dental_bone_plastics' => 'Стоматологічна кістяна пластика',
-//     'dentistry_at_home' => 'Стоматологія на дому',
-//     'allergy' => 'Алергіологія',
-//     'alcoholism' => 'Алкоголізм',
-//     'gastroenterology' => 'Гастроентерологія',
-//     'childrens_consultation' => 'Дитяча консультація',
-//     'ecg' => 'ЕКГ',
-//     'ct' => 'КТ',
-//     'mammography' => 'Мамографія',
-//     'mri' => 'МРТ',
-//     'oncology' => 'Онкологія',
-//     'wounded' => 'Опікове',
-//     'otorhinolaryngology' => 'Оториноларингологія (ЛОР)',
-//     'radiology' => 'Рентгенологія',
-//     'sports_medicine' => 'Спортивна медицина',
-//     'surgery' => 'Сурдологія',
-//     'ultrasound_diagnosis' => 'Ультразвукова діагностика',
-//     'call_doctor_home' => 'Виклик лікаря додому',
-//     'family_medicine' => 'Сімейна медицина',
-//     'timpanometry' => 'Тімпанометрія'
-// );
-
-
+require_once 'med-DAL.php';
 
 class BAL
 {
@@ -51,87 +13,22 @@ class BAL
         $this->dal = new DAL();
         $this->arrayNamesServices = $arrayNamesServicesBAL;
         $this->arrayFilds = $arrayFilds;
-    }
-
-    // Название(Компания) 2 колонка
-    public function GetOrganizationAll()
-    {
-        return $this->dal->GetOrganizationOneCol();
-    }
-
-
-    // Районы 3 колонки
-    public function GetDistrictRegionAll()
-    {
-        return $this->dal->GetDistrictRegionAllCol();
-    }
-
-    // Город 4 колонки
-    public function GetLocalityAll()
-    {
-        return $this->dal->GetLocalityAllCol();
-    }
-
-    // улица 3 колонки
-    public function GetActualLocationAll()
-    {
-        return $this->dal->GetActualLocationAllCol();
-    }
-
-    // дом 3 колонки
-    public function GetHomeAll()
-    {
-        return $this->dal->GetHomeAllCol();
-    }
-
-    // телефон 2 колонки
-    public function GetPhoneAll()
-    {
-        return $this->dal->GetPhoneOneCol();
-    }
-
-    // время работы 3 колонки
-    public function GetTimeWorkAll()
-    {
-        return $this->dal->GetTimeWorkAllCol();
-    }
-
-    // дни работы 3 колонки
-    public function GetDayWorkOneCol()
-    {
-        return $this->dal->GetDayWorkOneCol();
-    }
-
-    // сервисы 34 колонки
-    public function GetServiceAll()
-    {
-        return $this->dal->GetServiceAllCol();
-    }
-/////////////////////////////////////////////////////////////
-    private function GenerateArrayWhithObj($obj)
-    {
-        $id = array();
-        $name = array();
-        foreach ($obj as $value) {
-            foreach ($value as $keyIn => $valueIn) {
-                if ($keyIn == 'id') {
-                    array_push($id, $valueIn);
-                    continue;
-                }
-                array_push($name, $valueIn);
-            }
-        }
-        $summ = array();
-        $summ['id'] = $id;
-        $summ['name'] = $name;
-        return $summ;
+        $this->arrayDay = array(
+            'monday' => 'Понедельник',
+            'tuesday' => 'Вторник',
+            'wednesday' => 'Среда',
+            'thursday' => 'Четверг',
+            'friday' => 'Пятница',
+            'saturday' => 'Суббота',
+            'sunday' => 'Воскресенье'
+        );
     }
     
-    // TODO получить данные организации
+/////////// получить данные организации// старт /////////
+//TODO проработать метод на возможные пусты значение, когда пользователь только зарегался
     public function GetOrganizationData(){
         $arrayOrganizationData = array();
         $id = $_SESSION['user_id'];
-        
         
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId > 0) {
@@ -146,12 +43,12 @@ class BAL
             );
             
             $servicesId = $resultOrganizationData['service'];
-            $resultServicesData = $this->dal->GetServicesData($servicesId);            
+            $resultServicesData = $this->dal->GetServicesData($servicesId);   
             $resultServicesId = array();
             $resultServicesNames = array();
-            foreach ($resultServicesData as $key => $value) {
-                array_push($resultServices, $key);
-                array_push($resultServicesNames, $value);
+            for ($i = 0; $i < count($resultServicesData); $i++) {
+                array_push($resultServices, $i);
+                array_push($resultServicesNames, $resultServicesData[$i]);
             }
             $arrayOrganizationData['arrayServices'] = array(
                 'id' => $resultServicesId, 
@@ -162,9 +59,9 @@ class BAL
             $resultInsuranceCompanesData = $this->dal->GetInsuranceCompanesData($insuranceCompanesId);
             $resultInsuranceCompanesId = array();
             $resultInsuranceCompanesNames = array();
-            foreach ($resultInsuranceCompanesData as $key => $value) {
-                array_push($resultInsuranceCompanesId, $key);
-                array_push($resultInsuranceCompanesNames, $value);
+            for ($i = 0; $i < count($resultServicesData); $i++) {
+                array_push($resultInsuranceCompanesId, $i);
+                array_push($resultInsuranceCompanesNames, $resultServicesData[$i]);
             }
             $arrayOrganizationData['arrayInsuranceCompanes'] = array(
                 'id' => $resultInsuranceCompanesId,
@@ -211,7 +108,7 @@ class BAL
             $homeData = array(
                 ['home'] => array(
                     'id' => $resultHome['id'],
-                    'numberHome' => $resultHome['numberHome']
+                    'name' => $resultHome['numberHome']
                 )
             );
             
@@ -220,17 +117,16 @@ class BAL
                 $locationData,
                 $districtRegionData,
                 $regionData,
-                $homeData
+                $homeData  
             );
             return $arrayOrganizationData;
         }
         return null;
     }
     // Тип учереждения
-    public function GetTypeInstitution()
+    public function GetTypeInstitutions()
     {
-        $result = $this->dal->GetTypeInstitution();
-        return  $this->GenerateArrayWhithObj($result);
+        return  $this->dal->GetTypeInstitutions();
     }
     // сервис
     public function GetNamesServices()
@@ -241,73 +137,52 @@ class BAL
     public function GetNamesInsuranceCompanes()
     {
         return $this->dal->GetNamesInsuranceCompanes();
-    }    
-    private function GetNameCompany(){
-        $id = $_SESSION['user_id'];
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
-        if ($organizationId > 0) {
-            $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);            
-            $arrayCompany = array();
-            $arrayCompany['id'] = $resultOrganizationData['id'];
-            $resultOrganization = $this->dal->GetOrganization($resultOrganizationData['id']);
-            $arrayCompany['name'] = $resultOrganization['name'];
-            return $arrayCompany;
-        }
-        return null;
     }
     // Область
     public function GetRegiones()
     {
-        $result = $this->dal->GetRegion();
-        return  $this->GenerateArrayWhithObj($result);
-    }//TODO локации
-    public function GetLocation(){
-     $arrayLocationData = array();
-     //область
-     $id = $_SESSION['user_id'];
-     $organizationId = $this->dal->GetOrganizationIdByUser($id);
-     if ($organizationId > 0) {
-         
-     }
-     //город
+        return $this->dal->GetRegionsArray();
+    }
+    // район области TODO може измениться
+    public function GetDistrictRegionByRegion($id){
+        return $this->dal->GetDistrictRegionArrayByRegion($id);
+    }
+    //город
+    public function GetCitesByDistrictRegion($id){
+        return $this->dal->GetCitesArrayByDistrictRegion($id);
+    }
     // район
     // улица
-    // дом
+    public function GetActualLocationByCity($id){
+        return $this->dal->GetActualLocationArrayByCity($id);
+    }
+    // дом (т.е. конкретный)
+    public function GetHome($id){
+        return $this->dal->GetHome($id);
     }
     //телефоны
     public function GetPhones() {
         $id = $_SESSION['user_id'];
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId != null) {
-            $result = $this->dal->GetPhones($organizationId);
-            return  $this->GenerateArrayWhithObj($result);
+            return $this->dal->GetPhones($organizationId);
         }
         return array(-1);
     }
-    //TODO время и дни работы
-//     public function GetDaysWork(){
-//         $id = $_SESSION['user_id'];
-//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
-//         if ($organizationId != null) {
-//             $result = $this->dal->GetDaysWork($organizationId);
-//         }
-//         return array(-1);
-//     }
-
-//     public function GetTimeWork(){
-//         $id = $_SESSION['user_id'];
-//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
-//         if ($organizationId != null) {
-//             $result = $this->dal->GetTimeWork($organizationId);
-//         }
-//         return array(-1);
-//     }
-    ////////////////////////////////////////
-    // суммарную таблицу 10 колонки
-    public function GetSummaryTableAll()
-    {
-        return $this->dal->GetSummaryTableAllCol();
+    //дни время работы
+    public function GetDaysTimesWork(){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId != null) {
+            $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);
+            return $this->GetDaysTimeWork($resultOrganizationData['dayWork']);
+        }
+        return array(-1);
     }
+    //TODO логотип в BAL
+    public function GetLogo(){}
+///////// получить данные организации// конец /////////
+///////// сохранить данные организации// старт /////////
 
     // ------------разобраться
     private function GetStrPhones()

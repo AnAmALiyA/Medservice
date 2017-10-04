@@ -22,10 +22,12 @@ class DAL
     
     private $arrayNamesServices;
     private $arrayNamesInsuranceCompany;
+    private $arrayDay;
 
     public function __construct()
     {
-        $this->arrayNamesServices = array('dentistry' => 'Стоматологія',
+        $this->arrayNamesServices = array(
+            'dentistry' => 'Стоматологія',
             'childrens_dentistry' => 'Дитяча стоматологія',
             'therapeutic_dentistry' => 'Терапевтична стоматологія',
             'aesthetic_dentistry' => 'Естетична стоматологія',
@@ -57,10 +59,20 @@ class DAL
             'ultrasound_diagnosis' => 'Ультразвукова діагностика',
             'call_doctor_home' => 'Виклик лікаря додому',
             'family_medicine' => 'Сімейна медицина',
-            'timpanometry' => 'Тімпанометрія');
+            'timpanometry' => 'Тімпанометрія'
+        );
         $this->arrayNamesInsuranceCompany = array('usk' =>'УСК', 'aska' =>'АСКА');
+        $this->arrayDay = array(
+            'monday_fk' => 'monday',
+            'tuesday_fk' => 'tuesday',
+            'wednesday_fk' => 'wednesday',
+            'thursday_fk' => 'thursday',
+            'friday_fk' => 'friday',
+            'saturday_fk' => 'saturday',
+            'sunday_fk' => 'sunday'
+        );
     }
-    
+    ///////////////////// методы запросов до БД // начало //////////////////////////
     private function ConnectDB()
     {
         $link = mysqli_connect($this->host, $this->user, $this->password, $this->database) or die("Ошибка " . mysqli_error($link));
@@ -97,7 +109,7 @@ class DAL
     private function QuerySelectWhere($table, $stringSelect, $select, $selectCol = '*')
     {
         $query = "SELECT $selectCol FROM $table WHERE $stringSelect = $select";
-        echo  $query;
+        echo  $query.'___ отчет запроса<br>';
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -111,47 +123,34 @@ class DAL
         $query = "SELECT 'id' FROM $table WHERE $nameRow = $select";
         $link = $this->ConnectDB();
         
-        $queryResult = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         
         // вернуть 1 результат массива
-        $result = mysqli_fetch_assoc($query);
-        if (count($result) == 1) {
-            return $result['id'];
+        $resultObj = mysqli_fetch_assoc($result);
+        if (count($resultObj) == 1) {
+            return $resultObj['id'];
         }
         return - 1;
     }
-
-    /*
-     * Функции для генерации стоки из имен столбцов и значений
-     * function GetStrNames($arrayNamesTabelRows)
-     * {
-     * $strNamesTabelRows = '';
-     * for($i=0;$i<=count($arrayNamesTabelRows);$i++)
-     * {
-     * $strNamesTabelRows .=$arrayNamesTabelRows[i];
-     * if(i!=count($arrayNamesTabelRows))
-     * {
-     * $strNamesTabelRows .=',';
-     * }
-     * }
-     * return $strNamesTabelRows;
-     * }
-     *
-     * function GetStrValues($arrayValuesTabelRows)
-     * {
-     * $strValuesTabelRows = '';
-     * for($j=0;$j<=count($arrayValuesTabelRows);$j++)
-     * {
-     * $strValuesTabelRows = $arrayValuesTabelRows[j];
-     * if (j!=count($arrayValuesTabelRows)) {
-     * $strValuesTabelRows .=',';
-     * }
-     * }
-     * return $strValuesTabelRows;
-     * }
-     */
+    
+    private function GetLastId($table)
+    {
+        $query = "SELECT id FROM $table ORDER BY id DESC LIMIT 1";
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        
+        $resultObj = mysqli_fetch_assoc($result);
+        if (count($resultObj) == 1) {
+            return $resultObj['id'];
+        }
+        return - 1;
+    }
+    
     private function QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns)
     {
         $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
@@ -202,13 +201,89 @@ class DAL
      * }
      */
 
-///////////////////////////////////////////////////
+///////////////////// методы запросов до БД  // конец //////////////////////////
+///////////////////// методы авторизации // начало //////////////////////////
+    private function GetUserById($id)
+    {
+        $table = 'med_users';
+        return $this->SelectById($table, $id);
+    }
+    
+    public function FindIdByLogin($login)
+    {
+        return $this->FindId('med_users', 'login', $login);
+    }
+    
+    public function GetLastLoginId()
+    {
+        $query = "SELECT id FROM med_users ORDER BY id DESC LIMIT 1";
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        return $result;
+    }
+    
+    public function SaveUser($id, $login, $password, $hash, $user_category)
+    {
+        $arrayNamesTabelRows = array(
+            'id',
+            'login',
+            'password',
+            'hash',
+            'user_category'
+        );
+        $arrayValuesTabelRows = array(
+            $id,
+            $login,
+            $password,
+            $hash,
+            $user_category
+        );
+        $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        return $getResult; // вернуть результат сохранения
+    }
+/////////////////////// методы авторизации // конец //////////////////////////
+/////////////// методы получения данных в ворму // начало ///////////////////
+    private function SelectById($table, $id){
+        $result = $this->QuerySelectById($table, $id);
+        foreach ($result as $key => $value) {
+            return $value;
+        }
+    }
+    
+    private function SelectByIdWhere($table, $stringSelect, $id, $selectCol = '*') {
+        $result = $this->QuerySelectWhere($table, $stringSelect, $id, $selectCol);
+        return $this->GenerateArrayWhithObj($result);
+    }
+    
+    private function GenerateArrayWhithObj($obj)
+    {
+        $id = array();
+        $name = array();
+        foreach ($obj as $value) {
+            foreach ($value as $keyIn => $valueIn) {
+                if ($keyIn == 'id') {
+                    array_push($id, $valueIn);
+                    continue;
+                }
+                array_push($name, $valueIn);
+            }
+        }
+        return $summ = array(
+            'id' => $id,
+            'name' => $name
+        );
+    }
     // Тип учереждения
-    public function GetTypeInstitution()
+    public function GetTypeInstitutions()
     {
         $table = 'med_type_institution';
-        return $this->QuerySelectAll($table);
+        $result = $this->QuerySelectAll($table);
+        return  $this->GenerateArrayWhithObj($result);
     }
+    
     public function GetTypeInstitutionById($selectId)
     {
         $table = 'med_type_institution';
@@ -221,51 +296,23 @@ class DAL
     // сервисы - имена
     public function GetNamesServices()
     {
-        $arrayNames = array();
-        for ($i = 0; $i < count($this->arrayNamesServices); $i++) {
-            array_push($arrayNames, $this->arrayNamesServices[$i]);
+        $summ = array();
+        foreach ($this->arrayNamesServices as $value) {
+            array_push($summ, $value);
         }
-        return $arrayNames;
+        return $summ;
     }
+    
     public function GetServicesData($servicesId){
         $table = 'med_services';
         $result = $this->SelectById($table, $servicesId);
-        return array(
-            'id' => $result['id'],
-            'dentistry' => $result['dentistry'],
-            'childrensDentistry' => $result['childrens_dentistry'],
-            'therapeuticDentistry' => $result['therapeutic_dentistry'],
-            'aestheticDentistry' => $result['aesthetic_dentistry'],
-            'orthodontics' => $result['orthodontics'],
-            'dentalOthopedics' => $result['dental_othopedics'],
-            'dentalSurgery' => $result['dental_surgery'],
-            'dentalImplantology' => $result['dental_Implantology'],
-            'periodontology' => $result['periodontology'],
-            'dentalProphylaxis' => $result['dental_prophylaxis'],
-            'dentistryPregnant_women' => $result['dentistry_pregnant_women'],
-            'toothWhitening' => $result['tooth_whitening'],
-            'gnathology' => $result['gnathology'],
-            'dentalBonePlastics' => $result['dental_bone_plastics'],
-            'dentistryAtHome' => $result['dentistry_at_home'],
-            'allergy' => $result['allergy'],
-            'alcoholism' => $result['alcoholism'],
-            'gastroenterology' => $result['gastroenterology'],
-            'childrensConsultation' => $result['childrens_consultation'],
-            'ecg' => $result['ecg'],
-            'ct' => $result['ct'],
-            'mammography' => $result['mammography'],
-            'mri' => $result['mri'],
-            'oncology' => $result['oncology'],
-            'wounded' => $result['wounded'],
-            'otorhinolaryngology' => $result['otorhinolaryngology'],
-            'radiology' => $result['radiology'],
-            'sportsMedicine' => $result['sports_medicine'],
-            'surgery' => $result['surgery'],
-            'ultrasound_diagnosis' => $result['ultrasound_diagnosis'],
-            'callDoctorHome' => $result['call_doctor_home'],
-            'familyMedicine' => $result['family_medicine'],
-            'timpanometry' => $result['timpanometry']
-        );
+        $arrayServices = array();
+        foreach ($result as $key => $value) {
+            if ($value != null) {
+                array_push($arrayServices, $this->arrayNamesServices[$key]);
+            }
+        }
+        return $arrayServices;
     }
     // страховая компания - имена
     public function GetNamesInsuranceCompanes()
@@ -276,13 +323,17 @@ class DAL
         }
         return $arrayNames;
     }
+    
     public function GetInsuranceCompanesData($id){
         $table = 'med_insurance_companies';
         $result = $this->SelectById($table, $id);
-        return array(
-            'usk' => $result['usk'],
-            'aska' => $result['aska']
-        );
+        $arrayInsuranceCompanes = array();
+        foreach ($result as $key => $value) {
+            if ($value != null) {
+                array_push($arrayServices, $this->arrayNamesInsuranceCompany[$key]);
+            }
+        }
+        return $arrayServices;
     }
     // получить данные связанные с организацией
     public function GetOrganizationData($id)
@@ -319,9 +370,19 @@ class DAL
         return $result['summary_table_fk'];
     }
     //область
-    public function GetNamesRegions(){
+    public function GetRegionsArray(){
         $table = 'med_region';
-        return $this->QuerySelectAll($table);
+        $result = $this->QuerySelectAll($table);
+        return $this->GenerateArrayWhithObj($result);
+    }
+
+    public function GetRegion($id) {
+        $table = 'med_region';
+        $result = $this->SelectById($table, $id);
+        return array(
+            'id' => $result['id'],
+            'region' => $result['region']
+        );
     }
     //улица
     public function GetActualLocation($id)
@@ -334,7 +395,21 @@ class DAL
           'locality' => $result['locality_fk']
         );
     }
+    
+    public function GetActualLocationArrayByCity($id) {
+        $table = 'med_actual_location';
+        $stringSelect = 'locality_fk';
+        $selectCol = 'id, actual_location';
+        return $this->SelectByIdWhere($table, $stringSelect, $id, $selectCol);
+    }
     //город
+    public function GetCitesArrayByDistrictRegion($id) {
+        $table = 'med_locality';
+        $stringSelect = 'district_region_fk';
+        $selectCol = 'id, locality';
+        return $this->SelectByIdWhere($table, $stringSelect, $id, $selectCol);
+    }
+    
     public function GetLocation($id){
         $table = 'med_locality';
         $result = $this->SelectById($table, $id);
@@ -354,14 +429,12 @@ class DAL
             'region' => $result['region_fk']
         );
     }
-    //область
-    public function GetRegion($id) {
-        $table = 'med_region';
-        $result = $this->SelectById($table, $id);
-        return array(
-            'id' => $result['id'],
-            'region' => $result['region']
-        );
+    
+    public function GetDistrictRegionArrayByRegion($id){
+        $table = 'med_district_region';
+        $stringSelect = 'region_fk';
+        $selectCol = 'id, district';
+        return $this->SelectByIdWhere($table, $stringSelect, $id, $selectCol);
     }
     //дом
     public function GetHome($id) {
@@ -376,28 +449,62 @@ class DAL
     //телефоны
     public function GetPhones($organizationId) {
         $table = 'med_phone';
-        $selectCol = 'phone , id';
-        $stringSelect = 'phone';
+        $selectCol = 'id, phone';
         $stringSelect = 'summary_table_fk';
-        return $this->QuerySelectWhere($table, $selectCol, $stringSelect, $organizationId);
+        return $this->SelectByIdWhere($table, $stringSelect, $organizationId, $selectCol);
     }
 
-    // суммарную таблицу 10 колонки
-    public function GetSummaryTableAllCol()
+    // выходные дни
+    public function GetDaysTimeWork($id)
     {
-        $table = 'med_summary_table';
-        return $this->GetArrayAllCol($table);
-    }
-
-    private function GetLastId($query)
-    {
-        $lastId = '';
-        while ($result = mysqli_fetch_assoc($query)) {
-            
-            $lastId = $result['id'];
+        $resultDay = $this->GetDayWork($id);
+        
+        $dayWork = array();
+        $startTimeWork = array();
+        $endTimeWork = array();
+        
+        foreach ($resultDay as $key => $value) {
+            if ($key != 'id') {
+                $resultTimeWork = $this->GetTimeWork($value);
+                if ($resultTimeWork['weekend']) {
+                    $dayWork[$this->arrayDay[$key]] = true;
+                } else {
+                    $dayWork[$this->arrayDay[$key]] = false;
+                    
+                    $startTime = new DateTime($resultTimeWork['start_work']);
+                    $startTimeWork[$this->arrayDay[$key]] = $startTime->format('H');
+                    
+                    $endTime = new DateTime($resultTimeWork['end_work']);
+                    $endTimeWork[$this->arrayDay[$key]] = $endTime->format('H');
+//                     $date = new DateTime($value);
+//                     echo $date->format('H-i').'-----<br/>';
+//                     echo "Формат: $format; " . $date->format('Y-m-d H:i:s') . "\n";
+                }
+            }
         }
-        return $lastId;
+        return array($dayWork, $startTimeWork, $endTimeWork);
     }
+    
+    private function GetDayWork($id) {
+        $table = 'med_day_work';
+        return $this->SelectById($table, $id);
+    }
+    
+    private function GetTimeWork($id) {
+        $table = 'med_time_work';
+        return $this->SelectById($table, $id);
+    }
+    //TODO логотип DAL
+////////////////////////////////////////////////////////////    
+//     private function GetLastId($query)
+//     {
+//         $lastId = '';
+//         while ($result = mysqli_fetch_assoc($query)) {
+            
+//             $lastId = $result['id'];
+//         }
+//         return $lastId;
+//     }
 
     private function GetIdByData($query, $data, $nameTable)
     {
@@ -554,7 +661,6 @@ class DAL
         }
     }
 
-    
     // вставка области - тут либо делаю вставку или нахожу существующую и возвращаю id области
     public function GetIdInsertGetRegion($region)
     {
@@ -1049,57 +1155,5 @@ class DAL
             }
         }
     }
-
-    // методы авторизации // начало
-    public function FindIdByLogin($login)
-    {
-        return $this->FindId('med_users', 'login', $login);
-    }
-
-    public function GetLastLoginId()
-    {
-        $query = "SELECT id FROM med_users ORDER BY id DESC LIMIT 1";
-        $link = $this->ConnectDB();
-        
-        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-        
-        $this->CloseConnectDB($link);
-        return $result;
-    }
-
-    public function SaveUser($id, $login, $password, $hash, $user_category)
-    {
-        $arrayNamesTabelRows = array(
-            'id',
-            'login',
-            'password',
-            'hash',
-            'user_category'
-        );
-        $arrayValuesTabelRows = array(
-            $id,
-            $login,
-            $password,
-            $hash,
-            $user_category
-        );
-        $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
-        return $getResult; // вернуть результат сохранения
-    }
-
-    private function GetUserById($id)
-    {
-        $table = 'med_users';
-        return $this->SelectById($table, $id);
-    }
-    
-    private function SelectById($table, $id){
-        $query = $this->QuerySelectById($table, $id);
-        foreach ($query as $key => $value) {
-            return $value;
-        }
-    }
-    
-    
 }
 ?>
