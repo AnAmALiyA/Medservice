@@ -1173,5 +1173,84 @@ class MedDB
         $this->CloseConnectDB($link);
         return $id;
     }
+   private function FindExistedGetID($table, $indexDB , $indexCheck){
+       
+       $query = "SELECT 'id' FROM $table WHERE $indexDB = $indexCheck ";
+       $link = ConnectDB();
+       
+       $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+       $this->CloseConnectDB($link);
+      
+       if($result){
+           $row = $result->fetch_array(MYSQLI_ASSOC);
+           return $row['id'];
+         
+       
+       }
+      else return false;
+   }
+   
+   
+   public  function FindExistedNews($indexChek){
+       
+       $table = 'med_news';
+       $indexDB = 'news_title';
+       
+       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
+       return $result;
+       
+   }
+   
+   public  function FindExistedPromo($indexChek){
+       
+       $table = 'med_promo';
+       $indexDB = 'promo_title';
+       
+       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
+       return $result;
+       
+   }
+   public  function FindExistedSpecial($indexChek){
+       
+       $table = 'med_special';
+       $indexDB = 'special_title';
+       
+       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
+       return $result;
+       
+   }
+   public  function FindExistedMedturism($indexChek){
+       
+       $table = 'med_medturism';
+       $indexDB = 'medturism_title';
+       
+       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
+       return $result;
+       
+   }
+   
+   //TODO: in progress of macking individual funct for each category
+   public function UpdateNews(){
+       $table = 'med_news';
+       //TODO: constant place
+       $arrayDBCollums = '';
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id);
+       
+   }
+   
+   //TODO: make it multipurpose  
+   //sql example 
+   // UPDATE Customers
+ //  SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
+   //  WHERE CustomerID = 1;
+   
+   
+   // $id is row`s id of the particular table
+   private function UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id){
+       $query = "UPDATE $table SET $arrayDBCollums[0] = $arrayUpdatedData[0], $arrayDBCollums[1] = $arrayUpdatedData[1] WHERE id = $id";
+       
+   }
+   
 }
+
 ?>

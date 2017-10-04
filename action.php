@@ -513,6 +513,8 @@ class HandlingData
      * }
      */
     
+    ///vvvvvvvv///
+    
     // TODO: making update start to work
     public function UpdateNews()
     {
@@ -523,7 +525,7 @@ class HandlingData
                 $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
                 $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
                 $result = $this->controller->UpdateNews($title, $description, $_SESSION['id']);
-                // TODO: try to push id news further to pics
+                
                 if (isset($_POST['news_img_[]'])) {
                     
                     $result_pic = $this->SavePic($news_id = $result);
@@ -540,14 +542,11 @@ class HandlingData
             
             for ($i = 0; count($_POST['title']) > $i; $i ++) {
                 
-                /*
-                 * $child[]=array(
-                 * 'med_user_fk' => $_SESSION['id'],
-                 * 'news_title' => $this->validateData->FilterStringOnHtmlSql( $_POST['name'][$i] ),
-                 * 'news_descripion' => $this->validateData->FilterStringOnHtmlSql( $_POST['description'][$i] )
-                 * );
-                 */
-                
+                //TODO: finding id updating querry
+                $find_id = $this->controller->FindExistedNews($_POST['title'][$i]);
+               if(empty($find_id)){
+                   
+               
                 $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
                 $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
                 $result = $this->controller->SaveNews($title, $description, $_SESSION['id']);
@@ -557,6 +556,13 @@ class HandlingData
                     $result_pic = $this->SavePicNews($news_id = $result);
                     return true;
                 }
+               }
+               //TODO: confirm rightness
+               if(!empty($find_id)){
+                   $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
+                   $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                   $result = $this->controller->UpdateNews($title, $description);
+               }
             }
         }
         return $this->Redirect();

@@ -745,5 +745,39 @@ class Controller
         }
         else return false;
     }
+    
+    public  function FindExistedNews($indexChek){
+        
+      
+        
+        $result = $this->medDB->FindExistedNews( $indexChek);
+        return $result;
+        
+    }
+    
+    public  function FindExistedPromo($indexChek){
+        
+       
+        
+        $result = $this->medDB->FindExistedPromo($indexChek);
+        return $result;
+        
+    }
+    public  function FindExistedSpecial($indexChek){
+        
+     
+        $result = $this->medDB->FindExistedSpecial($indexChek);
+        return $result;
+        
+    }
+    public  function FindExistedMedturism($indexChek){
+        
+       
+        
+        $result = $this->medDB->FindExistedMedturism($indexChek);
+        return $result;
+        
+    }
+    //TODO: make bal Update func
 }
 ?>
