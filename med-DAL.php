@@ -1233,7 +1233,10 @@ class MedDB
    public function UpdateNews(){
        $table = 'med_news';
        //TODO: constant place
-       $arrayDBCollums = '';
+       $arrayDBCollums[] = 'news_title';
+       $arrayDBCollums[] = 'med_user_fk';
+       $arrayDBCollums[] = 'news_descripion';
+       
        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id);
        
    }
@@ -1247,7 +1250,7 @@ class MedDB
    
    // $id is row`s id of the particular table
    private function UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id){
-       $query = "UPDATE $table SET $arrayDBCollums[0] = $arrayUpdatedData[0], $arrayDBCollums[1] = $arrayUpdatedData[1] WHERE id = $id";
+       $query = "UPDATE $table SET $arrayDBCollums[0] = $arrayUpdatedData[0], $arrayDBCollums[1] = $arrayUpdatedData[1], $arrayDBCollums[2] = $arrayUpdatedData[2] WHERE id = $id";
        
    }
    

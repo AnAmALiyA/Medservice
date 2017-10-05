@@ -352,7 +352,7 @@ img.wp-smiley, img.emoji {
 			</div>
 			<div class="right-col">
 
-				<form name="formMulti" action="action.php" method="POST"
+				<form name="formMulti" action="newsSaveTest.php" method="POST"
 					class="dwnld form-news-list">
 
 					<div class="news-list">
@@ -367,7 +367,8 @@ img.wp-smiley, img.emoji {
 										class="fa fa-times" aria-hidden="true"></i>
 								</div>
 								<label class="file-label" for="add-news-img-<?php echo $i ?>">Загрузить
-									файл</label> <input type="file"
+									файл</label> 
+									<input type="file"
 									id="add-news-img-<?php echo $i ?>"
 									name="news_img_<?php echo $i ?>">
 							</div>
@@ -377,7 +378,7 @@ img.wp-smiley, img.emoji {
 									class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
 									class="fa fa-times remove_item_js" aria-hidden="true"></i>
 								<textarea class="form-control" required="required" rows="5"
-									id="comment[]" name="comment[]" placeholder="Описание"></textarea>
+									id="comment" name="comment" placeholder="Описание"></textarea>
 								<span> <input id="check-<?php echo $i ?>" type="checkbox"
 									name="check" value="check-<?php echo $i ?>"> <label
 									for="check-<?php echo $i ?>">Вывести дату</label>
