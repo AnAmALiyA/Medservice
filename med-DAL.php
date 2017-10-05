@@ -104,7 +104,7 @@ class MedDB
          * $strNamesTabelRows = GetStrNames($arrayNamesTabelRows);
          * $strValuesTabelRows = GetStrValues($arrayValuesTabelRows);
          */
-        $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
+        $query = "INSERT INTO $table($arrayNamesColumns) VALUES ($arrayValuesColumns)";
         $link = ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -1163,7 +1163,7 @@ class MedDB
     // findout your expected id
     private function QueryInsertGetId($table, $arrayNamesColumns, $arrayValuesColumns)
     {
-        $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
+        $query = "INSERT INTO $table($arrayNamesColumns) VALUES ($arrayValuesColumns)";
         $link = ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -1175,7 +1175,7 @@ class MedDB
     }
    private function FindExistedGetID($table, $indexDB , $indexCheck){
        
-       $query = "SELECT 'id' FROM $table WHERE $indexDB = $indexCheck ";
+       $query = "SELECT 'id' FROM $table WHERE $indexDB = $indexCheck";
        $link = ConnectDB();
        
        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));

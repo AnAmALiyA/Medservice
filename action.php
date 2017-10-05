@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 require_once 'med-BAL.php';
 require_once 'validate.php';
 
@@ -536,22 +536,22 @@ class HandlingData
         }
     }
 
-    public function SaveNewsArray()
+    public function SaveNewsArray($data)
     {
         if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
             
-            for ($i = 0; count($_POST['title']) > $i; $i ++) {
+            for ($i = 0; count($data['name']) > $i; $i ++) {
                 
                 //TODO: finding id updating querry
-                $find_id = $this->controller->FindExistedNews($_POST['title'][$i]);
+                $find_id = $this->controller->FindExistedNews($data['name'][$i]);
                if(empty($find_id)){
                    
                
-                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
-                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
                 $result = $this->controller->SaveNews($title, $description, $_SESSION['id']);
                 
-                if (isset($_POST["news_img_[$i]"])) {
+                if (isset($data["news_img_[$i]"])) {
                     
                     $result_pic = $this->SavePicNews($news_id = $result);
                     return true;
@@ -559,8 +559,8 @@ class HandlingData
                }
                //TODO: confirm rightness
                if(!empty($find_id)){
-                   $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
-                   $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
+                   $title = $this->validateData->FilterStringOnHtmlSql($_POST['name'][$i]);
+                   $description = $this->validateData->FilterStringOnHtmlSql($_POST['comment'][$i]);
                    $result = $this->controller->UpdateNews($title, $description);
                }
             }

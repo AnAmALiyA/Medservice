@@ -46,10 +46,10 @@ function addFormMarkup (marker) {
 							'<input type="file" id="add-' + marker + '-img" name="' + marker + '_img">' +
 						'</div>' +
 						'<div class="right-form">' +
-							'<input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>' +
+							'<input type="text" required="required" class="form-control" id="name[]" name="name[]" placeholder="Заголовок"/>' +
 							'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
 							'<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
-							'<textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>' +
+							'<textarea class="form-control" required="required" rows="5" id="comment" name="comment[]" placeholder="Описание"></textarea>' +
 							'<span>' +
 								'<input id="check2" type="checkbox" name="check" value="check1">' +
 								'<label for="check2">Вывести дату</label>' +

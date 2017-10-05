@@ -374,11 +374,11 @@ img.wp-smiley, img.emoji {
 							</div>
 							<div class="right-form">
 								<input type="text" required="required" class="form-control"
-									id="name" name="name" placeholder="Заголовок" /> <i
+									id="name" name="name[]" placeholder="Заголовок" /> <i
 									class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
 									class="fa fa-times remove_item_js" aria-hidden="true"></i>
 								<textarea class="form-control" required="required" rows="5"
-									id="comment" name="comment" placeholder="Описание"></textarea>
+									id="comment" name="comment[]" placeholder="Описание"></textarea>
 								<span> <input id="check-<?php echo $i ?>" type="checkbox"
 									name="check" value="check-<?php echo $i ?>"> <label
 									for="check-<?php echo $i ?>">Вывести дату</label>
