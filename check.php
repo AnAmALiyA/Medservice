@@ -15,34 +15,20 @@ require_once 'med-BAL.php';
 
  $dal = new DAL();
 //  $dal = new BAL();
-//  $m = $dal->FindIdService();
+ $m = $dal->FindIdService(16);
 
-//  var_dump($m);
-// echo '<br/>-----------foreach ----------------<br/>';
-// echo '<br/>';
-// foreach ($m as $key => $value) {
-//     echo $key.' - key => value -'.$value.'<br/>';
-    
-//     foreach ($value as $key2 => $value2) {
-//         echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
-//     }
-// }
-
-$resultServicesData = $dal->GetServicesData(16);
-var_dump($resultServicesData);
+ var_dump($m);
 echo '<br/>-----------foreach ----------------<br/>';
-$resultServices = array();
-$resultServicesNames = array();
-foreach ($resultServicesData as $key => $value) {
-    echo $key;
-    array_push($resultServices, $key.'');
-    array_push($resultServicesNames, $value);
+echo '<br/>';
+foreach ($m as $key => $value) {
+    echo $key.' - key => value -'.$value.'<br/>';
+    
+    foreach ($value as $key2 => $value2) {
+        echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
+    }
 }
-$test = array(
-    'id' => $resultServicesId,
-    'name' => $resultServicesNames
-);
-var_dump($test);
+
+
 // echo '<br/>';
 // echo '<br/>-----------foreach ----mysqli_fetch_assoc()-----------<br/>';
 // var_dump(mysqli_fetch_assoc($dal->GetTypeInstitutionById(1)));

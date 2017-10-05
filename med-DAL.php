@@ -244,16 +244,19 @@ class DAL
         $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
         return $getResult; // вернуть результат сохранения
     }
-/////////////////////// методы авторизации // конец //////////////////////////
-/////////////// методы получения данных в форму // начало ///////////////////
-    private function SelectById($table, $id){
+
+    // ///////////////////// методы авторизации // конец //////////////////////////
+    // ///////////// методы получения данных в форму // начало ///////////////////
+    private function SelectById($table, $id)
+    {
         $result = $this->QuerySelectById($table, $id);
         foreach ($result as $key => $value) {
             return $value;
         }
     }
-    
-    private function SelectByIdWhere($table, $stringSelect, $id, $selectCol = '*') {
+
+    private function SelectByIdWhere($table, $stringSelect, $id, $selectCol = '*')
+    {
         $result = $this->QuerySelectWhere($table, $stringSelect, $id, $selectCol);
         return $this->GenerateArrayWhithObj($result);
     }
@@ -494,12 +497,43 @@ class DAL
         $table = 'med_time_work';
         return $this->SelectById($table, $id);
     }
-    //TODO логотип DAL
-///////////////Сохранение данных/////////начало//////////////
-    public function FindIdService($arrayData){
+
+        // TODO логотип DAL
+        // /////////////Сохранение данных/////////начало//////////////
+    public function FindIdService($arrayData)
+    {
+        $arrayKey = array();
+        foreach ($arrayNamesServices as $key1 => $value1) {
+            foreach ($arrayData as $key2 => $value2) {
+                if ($value1 == $value2) {
+                    array_push($arrayKey, $key1);
+                }
+            }
+        }
+        
         $table = 'med_services';
-        return $this->QuerySelectAll($table);
-         
+        $result = $this->QuerySelectAll($table);
+        foreach ($result as $valueServ1) { // получаю строку из таблицы
+            $flag = true;
+            $flagId = '';
+            foreach ($valueServ1 as $keyServ2 => $valueServ2) { // перебираю строку - имя столбца и данных
+                if ($keyServ2 == 'id') {
+                    $flagId = $valueServ2;
+                    continue;
+                }
+                if ($valueServ2 != null && $arrayData[$keyServ2] == null) {                        
+                    $flag = false;
+                }
+            }
+            if ($flag) {
+                return $flagId;
+            }
+        }
+        return -1;
+    }
+    
+    public function InsertService($arrayData){
+        
     }
 ///////////////Сохранение данных/////////конец//////////////
 ////////////////////////////////////////////////////////////    

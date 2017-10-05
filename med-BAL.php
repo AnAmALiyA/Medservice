@@ -559,7 +559,12 @@ class BAL
         if ($organizationId != null && $this->IsExistData($post)) {
             $_POST['typeCompanyId']; //тип учереждения
             
-            $_POST['arrayServices']; // тут прийдет array(1,2,3)
+            $_POST['arrayServices']; // тут прийдет ассоциативный array
+            $serviceId = $this->dal->FindIdService($_POST['arrayServices']);
+            if ($serviceId == -1) {
+                $serviceId = $this->dal->InsertService($_POST['arrayServices']);
+            }
+            
             $_POST['arrayInsuranceCompanes'];  //тут прийдет array(1,2,3)
             $_POST['nameCompany'];
             $_POST['region'];
