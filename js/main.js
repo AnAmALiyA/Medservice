@@ -227,7 +227,7 @@ function addFormFotoMarkup (marker) {
 	$('.' + marker + '-list').append(formMarkup);
 }
 
-function addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayRegiones, arrayPhone, arrayError = null) {
+function addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayRegiones, arrayPhone, arrayDayTimeWork, arrayError = null) {
 	var formOrganization = '<div class="info-holder">' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
@@ -240,6 +240,7 @@ function addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServ
 																				+ '<option value="' + arrayTypeCompany.id[i] + '">' + arrayTypeCompany.name[i] + '</option>'
 																			}
 		                              + '</select>' +
+																	// отображение выбранных елементов
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +

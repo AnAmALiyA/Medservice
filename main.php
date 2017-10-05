@@ -275,6 +275,10 @@ if (!$auth->IsAuthorized('organization')) {
                 <form action="action.php" method="post" enctype="multipart/form-data" class="right-col">
                 <?php echo 'закомичено';?>
                 </form>
+                <!-- вывод ошибки -->
+                <div class="<?php $_SESSION['error'] != null ? 'visible_error' : 'hidden_error'?>">
+                  <span> <?php $_SESSION['error'] ?> </sapn>
+                </div>
             </div>
         </section>
     </main>

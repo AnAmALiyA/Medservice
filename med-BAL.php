@@ -175,7 +175,7 @@ class BAL
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId != null) {
             $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);
-            return $this->GetDaysTimeWork($resultOrganizationData['dayWork']);
+            return $this->dal->GetDaysTimeWork($resultOrganizationData['dayWork']);
         }
         return array(-1);
     }
@@ -536,11 +536,56 @@ class BAL
         return true;
     }
 
+    //проверка на существование сохраняемых данных в таблице
+//     public function IsExistData($post){
+//         $typeCompanyId = $_POST['typeCompanyId'];
+//         if(empty($this->dal->GetTypeInstitutionById($typeCompanyId))){
+//             return false;
+//         }
+        
+//         $arrayServicesId = $_POST['arrayServicesId'];
+//         for ($i = 0; $i < count($arrayServicesId); $i++) {
+//             if (empty($this->dal->$arrayServicesId[$i])) {
+//                 return false;
+//             }
+//         }
+//     }
+    
     // начать сохранение --- для рефакторинга разбить метод на 2 действия - GetIdInsert
     public function Save($post)
     {
-        // проверить существование организации(Название)
-        $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompany']);
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        if ($organizationId != null && $this->IsExistData($post)) {
+            $_POST['typeCompanyId']; //тип учереждения
+            
+            $_POST['arrayServices']; // тут прийдет array(1,2,3)
+            $_POST['arrayInsuranceCompanes'];  //тут прийдет array(1,2,3)
+            $_POST['nameCompany'];
+            $_POST['region'];
+            $_POST['town'];
+            $_POST['district'];
+            $_POST['street'];
+            $_POST['home']; //если существует
+            $_POST['arrayPhones']; //если существует тут прийдет array(1 => tel, 2 => tel, 3 => tel);
+            $_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
+        }
+            
+            
+//+             id
+//             actual_location_fk
+//             organization_fk
+//+             type_works_fk
+//             type_institution_fk
+//             day_work_fk
+//             insurance_companies_fk
+//             services_fk
+//             state
+
+            
+        
+        // организации(Название)
+        $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompanyId']);
         // область
         $idRegion = $this->dal->GetIdInsertGetRegion($post['region']);
         // город
@@ -599,7 +644,69 @@ class BAL
         $idSummaryTable = $this->dal->GetIdInsertSummaryTable();
         return $idSummaryTable;
     }
-
+    //TODO Обновление данных
+    public function Update(){
+        // проверить существование организации(Название)
+        $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompanyId']);
+        // область
+        $idRegion = $this->dal->GetIdInsertGetRegion($post['region']);
+        // город
+        $idTown = $this->dal->GetIdInsertGetDistrictCity($post['town'], $idRegion);
+        // район области
+        $idDistrictRegion = $this->dal->GetIdInsertGetDistrictRegion($post['districtCity'], $idTown);
+        // улица
+        $idStreet = $this->dal->GetIdInsertActualLocation($post['street'], $idTown);
+        
+        $idHome = null;
+        if (! isset($post['home']) || ! empty($post['home'])) {
+            // дом
+            $idHome = $this->dal->GetIdInsertHome($post['home'], $idStreet);
+        }
+        
+        $idPhone = null;
+        if (GetStrPhones() != null) {
+            // телефон
+            $idPhone = $this->dal->GetIdInsertPhone($this->GetStrPhones());
+        }
+        // типу учереждение
+        $idTypeCompany = $this->dal->GetIdInsertTypeInstitution($post['typeCompany']);
+        // страховаые компании - тут непонятки т.к. тут чекбоксы из 1 таблицы
+        $idInsuranceCompany = $this->dal->GetIdInsertInsuranceCompany($this->GetArrayInsuranceCompany());
+        
+        // дни работы(определить рабочие дни)
+        $arrWeekEndDay = $this->GetArrayWeekEnd();
+        $arrayNameDays = $this->GetArrayNameDays();
+        $idDayWork = $this->dal->GetIdInsertDayWork($this->GetStringWorkDay($arrWeekEndDay, $arrayNameDays));
+        
+        // время работы(определить дни работы)
+        $arrTimeWorkStart = $this->GetArrayTimeWorkStart();
+        $arrTimeWorkEnd = $this->GetArrayTimeWorkEnd();
+        $idTimeWork = $this->dal->GetIdInsertTimeWork($this->GetArrayTimeWork($arrWeekEndDay, $arrayNameDays, $arrTimeWorkStart, $arrTimeWorkEnd));
+        // Направления/услуги
+        $idServices = $this->dal->GetIdInsertServices($this->GetArrayServices($arrayNamesServices));
+        
+        $arraySaveError = array(
+            $idOrganization,
+            $idRegion,
+            $idTown,
+            $idDistrictRegion,
+            $idStreet,
+            $idHome,
+            $idPhone,
+            $idTypeCompany,
+            $idInsuranceCompany,
+            $idDayWork,
+            $idTimeWork,
+            $idServices
+        );
+        if ($this->SaveError($arrayParam)) {
+            echo 'Error save.';
+        }
+        // сохранить все в одной таблие
+        $idSummaryTable = $this->dal->GetIdInsertSummaryTable();
+        return $idSummaryTable;
+    }
+////////Методы для перенаправления // начало////////
     public function RedirectBack()
     {
         if (! empty($_SERVER['HTTP_REFERER'])) {
@@ -623,7 +730,8 @@ class BAL
         header('Location: indexcabinet.php');
         exit();
     }
-////////Методы по авторизации // начало
+////////Методы по авторизации // коенц////////
+////////Методы по авторизации // начало////////
     public function GetUserById($id)
     {
         return $this->dal->GetUserById($id);

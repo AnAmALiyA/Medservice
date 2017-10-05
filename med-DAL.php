@@ -245,7 +245,7 @@ class DAL
         return $getResult; // вернуть результат сохранения
     }
 /////////////////////// методы авторизации // конец //////////////////////////
-/////////////// методы получения данных в ворму // начало ///////////////////
+/////////////// методы получения данных в форму // начало ///////////////////
     private function SelectById($table, $id){
         $result = $this->QuerySelectById($table, $id);
         foreach ($result as $key => $value) {
@@ -495,6 +495,13 @@ class DAL
         return $this->SelectById($table, $id);
     }
     //TODO логотип DAL
+///////////////Сохранение данных/////////начало//////////////
+    public function FindIdService($arrayData){
+        $table = 'med_services';
+        return $this->QuerySelectAll($table);
+         
+    }
+///////////////Сохранение данных/////////конец//////////////
 ////////////////////////////////////////////////////////////    
 //     private function GetLastId($query)
 //     {
