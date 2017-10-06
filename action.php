@@ -535,7 +535,7 @@ class HandlingData
             return $this->Redirect();
         }
     }
-
+//TODO: checkboxes are omitted yet
     public function SaveNewsArray($data)
     {
       //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
