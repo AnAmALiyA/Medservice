@@ -26,14 +26,14 @@ class BAL
     
 /////////// получить данные организации// старт /////////
 //TODO проработать метод на возможные пусты значение, когда пользователь только зарегался
-    public function GetOrganizationData(){
+    public function GetOrganizationSummaryData(){
         $arrayOrganizationData = array();
         $id = $_SESSION['user_id'];
         
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId > 0) {
             $arrayOrganizationData = array();            
-            $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);            
+            $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);            
             
             $typeInstitutionId = $resultOrganizationData['typeInstitution'];            
             $resultInstitution = $this->dal->GetTypeInstitutionById($typeInstitutionId);            
@@ -66,6 +66,13 @@ class BAL
             $arrayOrganizationData['arrayInsuranceCompanes'] = array(
                 'id' => $resultInsuranceCompanesId,
                 'name' => $resultInsuranceCompanesNames
+            );
+            // имя организации и id
+            $companyId = $arrayOrganizationData['organization'];
+            $resultCompany = $this->dal->GetOrganization($companyId);
+            $arrayOrganizationData['nameCompany'] = array( //наименование
+                'id' => $resultInstitution['id'],
+                'name' => $resultInstitution['name']
             );
             
             $actualLocationId = $resultOrganizationData['actualLocation'];
@@ -174,7 +181,7 @@ class BAL
         $id = $_SESSION['user_id'];
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId != null) {
-            $resultOrganizationData = $this->dal->GetOrganizationData($organizationId);
+            $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
             return $this->dal->GetDaysTimeWork($resultOrganizationData['dayWork']);
         }
         return array(-1);
@@ -557,20 +564,58 @@ class BAL
         $id = $_SESSION['user_id'];
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId != null && $this->IsExistData($post)) {
-            $_POST['typeCompanyId']; //тип учереждения
+//             $_POST['typeCompanyId']; //тип учереждения
             
-            $_POST['arrayServices']; // тут прийдет ассоциативный array
-            $serviceId = $this->dal->FindIdService($_POST['arrayServices']);
+//             $_POST['arrayServices']; // тут прийдет ассоциативный array
+            $serviceId = $this->dal->FindServiceId($_POST['arrayServices']);
             if ($serviceId == -1) {
-                $serviceId = $this->dal->InsertService($_POST['arrayServices']);
+                $this->dal->InsertService($_POST['arrayServices']);//если не нахожу то создаю
+                $serviceId = $this->dal->FindLastServiceId();//получить id
             }
             
-            $_POST['arrayInsuranceCompanes'];  //тут прийдет array(1,2,3)
-            $_POST['nameCompany'];
-            $_POST['region'];
+//             $_POST['arrayInsuranceCompanes'];  //тут прийдет array(1,2,3)
+            $insuranceCompanesId = $this->dal->FindInsuranceCompanyId($_POST['arrayInsuranceCompanes']);
+            // тут тоже нужно будет добовлять код для добовления данных если разрастутся страхования
+            
+//             $_POST['nameCompany'];
+            $nameCompanyId = $this->dal->CheckForAmatchCompanyDateId($_POST['nameCompany']['id']);
+            if($nameCompanyId != -1){ // если найду по id //проверить на совпадание
+                if (!$this->CheckForAmatchCompanyDate($_POST['nameCompany']['name'])) {
+                    $this->dal->UpdateCompanyName($nameCompanyId, $_POST['nameCompany']['name']);
+                } 
+            }
+            else {
+                return -1;
+            }
+            
+            //1
+            $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+            $actualLocationId = $resultOrganizationData['actualLocation'];//улица id - $resultOrganizationData['actualLocation'];
+            if ($actualLocationId != $_POST['street']) { //если равно, то продолжаем работу
+//                 //2
+//                 $resultActualLocationData = $this->dal->GetActualLocation($actualLocationId);
+//                 $townId = $resultActualLocationData['locality'];
+//                 if ($resultActualLocationData['locality'] != $_POST['town']) {//город id - $resultActualLocationData['locality']
+                    
+//                 }
+//             }
+            
+            
+//             $resultLocationData = $this->dal->GetLocation($resultActualLocationData['locality']);
+//             if ($resultLocationData['districtRegion'] == $_POST['district']) {
+//                 $resultDistrictData = $this->dal->GetDistrictRegion($resultLocationData['districtRegion']);
+//                 if ($resultDistrictData['region'] = $_POST['region']) {
+                    
+//                 }
+//             }
+            
+//             if ($this->dal->FindActualLocationId($actualLocationId)) {
+//                 ;
+            }
+            
             $_POST['town'];
-            $_POST['district'];
-            $_POST['street'];
+            
+            
             $_POST['home']; //если существует
             $_POST['arrayPhones']; //если существует тут прийдет array(1 => tel, 2 => tel, 3 => tel);
             $_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))

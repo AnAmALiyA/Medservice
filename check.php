@@ -15,18 +15,18 @@ require_once 'med-BAL.php';
 
  $dal = new DAL();
 //  $dal = new BAL();
- $m = $dal->FindIdService(16);
+ $m = $dal->UpdateCompanyName(46, array('работает', 'работает'));
 
- var_dump($m);
-echo '<br/>-----------foreach ----------------<br/>';
-echo '<br/>';
-foreach ($m as $key => $value) {
-    echo $key.' - key => value -'.$value.'<br/>';
+//  var_dump($m);
+// echo '<br/>-----------foreach ----------------<br/>';
+// echo '<br/>';
+// foreach ($m as $key => $value) {
+//     echo $key.' - key => value -'.$value.'<br/>';
     
-    foreach ($value as $key2 => $value2) {
-        echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
-    }
-}
+//     foreach ($value as $key2 => $value2) {
+//         echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
+//     }
+// }
 
 
 // echo '<br/>';
