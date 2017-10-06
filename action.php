@@ -515,7 +515,7 @@ class HandlingData
     
     ///vvvvvvvv///
     
-    // TODO: making update start to work
+    // TODO: making update start to work || half done yet
     public function UpdateNews()
     {
         foreach ($_POST as $element => $value) {
