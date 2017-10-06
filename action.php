@@ -544,10 +544,10 @@ class HandlingData
             for ($i = 0; count($data['name']) > $i; $i ++) {
                 echo $data['name'][$i]."<br>";  //TODO: unwrite text
                     
-                //TODO: finding id updating querry
-                $find_id = $this->controller->FindExistedNews($data['name'][$i]);
-                echo $find_id." id"; //TODO: unwrite text
-               if(empty($find_id)){
+                //TODO: finding id from hidden form
+           //     $find_id = $this->controller->FindExistedNews($data['name'][$i]);
+           //     echo $find_id." id"; //TODO: unwrite text
+               if(!isset($_POST['id_news'])) {
                 
                 $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                 $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
@@ -560,11 +560,11 @@ class HandlingData
                 }
                }
                //TODO: confirm rightness
-               if(!empty($find_id)){
+               if(isset($_POST['id_news'])){
                    echo $find_id." <br>";
                    $title = $this->validateData->FilterStringOnHtmlSql($_POST['name'][$i]);
                    $description = $this->validateData->FilterStringOnHtmlSql($_POST['comment'][$i]);
-                   $result = $this->controller->UpdateNews($title, $id_user, $description, $find_id);
+                   $result = $this->controller->UpdateNews($title, $id_user, $description, $_POST['id_news']);
                
                    
                    if (isset($data["news_img_[$i]"])) {

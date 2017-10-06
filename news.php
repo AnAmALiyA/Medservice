@@ -361,6 +361,7 @@ img.wp-smiley, img.emoji {
 					$select = new Controller();
 					$result = $select->GetNewsAll(); 
 					
+					if($result){
 					foreach ($result as $key => $value){ ?>
 							<?php $i=0 //  for($i = 0; $i < 2; $i++) { ?>
 						<?php 
@@ -378,15 +379,16 @@ img.wp-smiley, img.emoji {
 									файл</label> 
 									<input type="file"
 									id="add-news-img-<?php echo $i ?>"
-									name="news_img_<?php echo $i ?>">
+									name="news_img_<?php echo $i ?>"/>
 							</div>
 							<div class="right-form">
+							<input type="hidden" name="id_news" value = "<?php echo $value['id']; ?> " />
 								<input type="text" required="required" class="form-control"
-									id="name" name="name[]" value="<?php echo $value['news_title'];  ?>" />  
+									id="name" name="name[]" value="<?php echo $value['news_title'];  ?>" placeholder="Заголовок" />  
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> 
 								<i	class="fa fa-times remove_item_js" aria-hidden="true"></i>
-								<textarea form ="formMulti"  class="form-control" required="required" rows="5"
-									id="comment" name="comment[]" placeholder="<?php echo$value['news_descripion']; ?>"></textarea>
+								<textarea   class="form-control" required="required" rows="5"
+									id="comment" name="comment[]" ><?php echo $value['news_descripion']; ?></textarea>
 								<span> <input id="check-<?php echo $i ?>" type="checkbox"
 									name="check" value="check-<?php echo $i ?>"> <label
 									for="check-<?php echo $i ?>">Вывести дату</label>
@@ -395,9 +397,40 @@ img.wp-smiley, img.emoji {
 						</div>
 
 							<?php } ?>
+					<?php }  else{ ?>
 					
+						<div class="download-holder clearfix">
+							<div class="left-form">
+								<img src="img/empty-img.jpg" alt="empty">
+								<div class="icon-holder">
+									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
+										class="fa fa-times" aria-hidden="true"></i>
+								</div>
+								<label class="file-label" for="add-news-img-[]">Загрузить
+									файл</label> <input type="file"
+									id="add-news-img-[]"
+									name="news_img_[]>" />
+							</div>
+							<div class="right-form">
+								<input hidden name="title" /> <input
+									type="text" required="required" class="form-control" id="name"
+									name="name[]" 
+									placeholder="Заголовок" /> <i class="fa fa-pencil-square-o"
+									aria-hidden="true"></i> <i class="fa fa-times remove_item_js"
+									aria-hidden="true"></i>
+								<textarea form="formMulti" class="form-control"
+									required="required" rows="5" id="comment" name="comment[]"
+									placeholder="Описание"></textarea>
+								<span> 
+								<input id="check-[]" type= "checkbox"	name="check" value="check-[]" /> 
+								<label for="check-[]">Вывести дату</label>
+								</span>
+							</div>
+						
 						</div>
 
+						<?php 	}?>
+				</div>
 					<div class="add">
 						<div class="button-add add_news_js">
 							<span>Добавить</span> <i class="fa fa-plus" aria-hidden="true"></i>
