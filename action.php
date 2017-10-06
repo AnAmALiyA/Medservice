@@ -538,18 +538,20 @@ class HandlingData
 
     public function SaveNewsArray($data)
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
-            
+      //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+               $_SESSION['id'];
+               $id_user = 1;//TODO: must be in SESSION
             for ($i = 0; count($data['name']) > $i; $i ++) {
-                
+                echo $data['name'][$i]."<br>";  //TODO: unwrite text
+                    
                 //TODO: finding id updating querry
                 $find_id = $this->controller->FindExistedNews($data['name'][$i]);
+                echo $find_id." id"; //TODO: unwrite text
                if(empty($find_id)){
-                   
-               
+                
                 $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                 $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                $result = $this->controller->SaveNews($title, $description, $_SESSION['id']);
+                $result = $this->controller->SaveNews($title, $id_user,$description );
                 
                 if (isset($data["news_img_[$i]"])) {
                     
@@ -559,13 +561,22 @@ class HandlingData
                }
                //TODO: confirm rightness
                if(!empty($find_id)){
+                   echo $find_id." <br>";
                    $title = $this->validateData->FilterStringOnHtmlSql($_POST['name'][$i]);
                    $description = $this->validateData->FilterStringOnHtmlSql($_POST['comment'][$i]);
-                   $result = $this->controller->UpdateNews($title, $description);
+                   $result = $this->controller->UpdateNews($title, $id_user, $description, $find_id);
+               
+                   
+                   if (isset($data["news_img_[$i]"])) {
+                       
+                       $result_pic = $this->SavePicNews($news_id = $result);
+                       return true;
+                   }
                }
             }
-        }
-        return $this->Redirect();
+       // }
+       //for times when user isn`t authorized
+       // return $this->Redirect();
     }
 
     public function SavePromoArray()

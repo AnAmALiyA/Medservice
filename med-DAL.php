@@ -1163,8 +1163,9 @@ class MedDB
     // findout your expected id
     private function QueryInsertGetId($table, $arrayNamesColumns, $arrayValuesColumns)
     {
-        $query = "INSERT INTO $table($arrayNamesColumns) VALUES ($arrayValuesColumns)";
-        $link = ConnectDB();
+        $query = "INSERT INTO $table ($arrayNamesColumns[0],$arrayNamesColumns[1],$arrayNamesColumns[2]) VALUES ('$arrayValuesColumns[0]' , '$arrayValuesColumns[1]' , '$arrayValuesColumns[2]')";
+        echo $query." <br>";
+        $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
@@ -1173,16 +1174,24 @@ class MedDB
         $this->CloseConnectDB($link);
         return $id;
     }
+    
+    //testcase seems to be completed
    private function FindExistedGetID($table, $indexDB , $indexCheck){
        
-       $query = "SELECT 'id' FROM $table WHERE $indexDB = $indexCheck";
-       $link = ConnectDB();
-       
-       $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+       $query = "SELECT id FROM $table WHERE $indexDB = '$indexCheck'";
+       echo $query."<br/>"; //TODO: unwrite text
+       $link = $this->ConnectDB();
+ //      var_dump(mysqli_query($link, $query) );
+ //      echo "<br/>";
+       $result = mysqli_query($link, $query) /*nah nenuzhon  or die("Ошибка " . mysqli_error($link)) */;
+     //  echo $result." vivod  <br>";
        $this->CloseConnectDB($link);
       
-       if($result){
+       if($result != null){
+           //cal of sql result
            $row = $result->fetch_array(MYSQLI_ASSOC);
+           echo $row." <br>";
+           echo $row['id']." <br>";
            return $row['id'];
          
        
@@ -1230,14 +1239,12 @@ class MedDB
    }
    
    //TODO: in progress of macking individual funct for each category
-   public function UpdateNews(){
+   public function UpdateNews($arrayUpdatedData, $id_post){
        $table = 'med_news';
        //TODO: constant place
-       $arrayDBCollums[] = 'news_title';
-       $arrayDBCollums[] = 'med_user_fk';
-       $arrayDBCollums[] = 'news_descripion';
-       
-       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id);
+       $arrayDBCollums = array('news_title', 'med_user_fk', 'news_descripion');
+  
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
        
    }
    
@@ -1250,8 +1257,14 @@ class MedDB
    
    // $id is row`s id of the particular table
    private function UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id){
-       $query = "UPDATE $table SET $arrayDBCollums[0] = $arrayUpdatedData[0], $arrayDBCollums[1] = $arrayUpdatedData[1], $arrayDBCollums[2] = $arrayUpdatedData[2] WHERE id = $id";
+       $query = "UPDATE $table SET $arrayDBCollums[0] = '$arrayUpdatedData[0]', $arrayDBCollums[1] = $arrayUpdatedData[1], $arrayDBCollums[2] = '$arrayUpdatedData[2]' WHERE id = $id";
        
+       $link = $this->ConnectDB();
+       
+       $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+       
+        $this->CloseConnectDB($link);
+        return $result;
    }
    
 }

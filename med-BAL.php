@@ -694,11 +694,11 @@ class Controller
         return $this->medDB->GetPromoAllCol();
     }
     
-    public function SaveNews($title, $description, $user){
+    public function SaveNews($title, $user, $description){
         
-        $result =    $this->medDB->SaveNews($title, $description, $user);
+        $result =    $this->medDB->SaveNews($title,$user, $description);
         return $result;
-    }
+    } 
     
     public  function  SavePromo($title, $description, $user){
         
@@ -746,6 +746,7 @@ class Controller
         else return false;
     }
     
+    //find content section
     public  function FindExistedNews($indexChek){
         
       
@@ -778,6 +779,13 @@ class Controller
         return $result;
         
     }
+    //end of  find content section
     //TODO: make bal Update func
+    public  function UpdateNews($title, $id_user, $description, $find_id) {
+        
+        $arrayUpdatedData = array($title,  $id_user, $description) ;
+        $result = $this->medDB->UpdateNews($arrayUpdatedData,  $find_id);
+        return $result;
+    }
 }
 ?>
