@@ -113,8 +113,8 @@ class DAL
     
     private function QuerySelectWhere($table, $stringSelect, $select, $selectCol = '*')
     {
-        $query = "SELECT $selectCol FROM $table WHERE $stringSelect = $select";
-        
+        $query = "SELECT $selectCol FROM $table WHERE $stringSelect = '$select'";
+        echo $query.'<br/>';
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -248,7 +248,7 @@ class DAL
         $this->CloseConnectDB($link);
         return $result;
     }
-    
+    //TODO проверить $id = null, он не должен быть тут указан DAL
     public function SaveUser($id, $login, $password, $hash, $user_category)
     {
         $arrayNamesTabelRows = array(
@@ -363,7 +363,7 @@ class DAL
         return $arrayServices;
     }
     // получить данные связанные с организацией
-    public function GetOrganizationData($id)
+    public function GetOrganizationSummaryData($id)
     {
         $table = 'med_summary_table';
         $result = $this->SelectById($table, $id);
@@ -414,7 +414,7 @@ class DAL
     //улица
     public function GetActualLocation($id)
     {
-        $table = 'actual_location_fk';
+        $table = 'med_actual_location';
         $result = $this->SelectById($table, $id);
         return array(
           'id' => $result['id'],            
@@ -676,9 +676,17 @@ class DAL
     
     public function UpdateCompanyName($id, $name){
         $table = 'med_organization';
-//         $nameCol = array('short_name', 'name');
         $nameCol = 'name';
         $this->QueryUpdate($table, $nameCol, $name, $id);
+    }
+
+    public function FindActualLocationId($select){
+        $table = 'med_actual_location';
+        $stringSelect = 'actual_location';
+        $selectCol = 'id';
+        $result = $this->QuerySelectWhere($table, $stringSelect, $select, $selectCol);
+        $cast = mysqli_fetch_assoc($result);
+        return $cast['id'];
     }
 ///////////////Сохранение данных/////////конец//////////////
 ////////////////////////////////////////////////////////////    

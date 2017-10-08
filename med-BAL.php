@@ -190,7 +190,7 @@ class BAL
     public function GetLogo(){}
 ///////// получить данные организации// конец /////////
 ///////// сохранить данные организации// старт /////////
-
+    
     // ------------разобраться
     private function GetStrPhones()
     {
@@ -563,10 +563,34 @@ class BAL
     {
         $id = $_SESSION['user_id'];
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+        if ($organizationId == null || $resultOrganizationSummaryData['actualLocation'] == null) {
+            $this->InsertData($post);
+        }
+        else {
+            $this->UpdateData($post);
+        }
+    }
+    
+    public function InsertData($post){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+        
+    }
+    
+    public function UpdateData($post){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+    }
+    function test($param) {
+        
+    
         if ($organizationId != null && $this->IsExistData($post)) {
 //             $_POST['typeCompanyId']; //тип учереждения
             
-//             $_POST['arrayServices']; // тут прийдет ассоциативный array
+//             $_POST['arrayServices']; // тут прийдет ассоциативный массив
             $serviceId = $this->dal->FindServiceId($_POST['arrayServices']);
             if ($serviceId == -1) {
                 $this->dal->InsertService($_POST['arrayServices']);//если не нахожу то создаю
@@ -591,7 +615,16 @@ class BAL
             //1
             $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
             $actualLocationId = $resultOrganizationData['actualLocation'];//улица id - $resultOrganizationData['actualLocation'];
-            if ($actualLocationId != $_POST['street']) { //если равно, то продолжаем работу
+            
+            //поднимаю данные об улице из юзера
+                //если у пользователя нет улици, то создаю новую //привязываю город, район, область, дом 
+            //найти улицуи её id
+            $streetId = $this->FindActualLocationId($_POST['street']);
+            if ($streetId == null) {
+                
+                $streetId = 
+            }
+            if ($actualLocationId != $streetId) { //если равно, то продолжаем работу
 //                 //2
 //                 $resultActualLocationData = $this->dal->GetActualLocation($actualLocationId);
 //                 $townId = $resultActualLocationData['locality'];
@@ -612,6 +645,7 @@ class BAL
 //             if ($this->dal->FindActualLocationId($actualLocationId)) {
 //                 ;
             }
+            //проверить дом
             
             $_POST['town'];
             
@@ -695,7 +729,7 @@ class BAL
         return $idSummaryTable;
     }
     //TODO Обновление данных
-    public function Update(){
+    public function Update($post){
         // проверить существование организации(Название)
         $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompanyId']);
         // область
@@ -795,10 +829,10 @@ class BAL
     {
         return $this->dal->GetLastLoginId();
     }
-    
+    //TODO проверить $id = null, он не должен быть тут указан BAL
     public function SaveUser($id, $login, $password, $hash, $user_category)
     {
-        return SaveUser($id, $login, $password, $hash, $user_category);
+        return $this->dal->SaveUser($id, $login, $password, $hash, $user_category);
     }
     //////Методы по авторизации // конец
 }
