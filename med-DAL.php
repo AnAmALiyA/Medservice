@@ -1177,7 +1177,7 @@ class MedDB
     
     //testcase seems to be completed
    private function FindExistedGetID($table, $indexDB , $indexCheck){
-       
+       echo 'error here';
        $query = "SELECT id FROM $table WHERE $indexDB = '$indexCheck'";
        echo $query."<br/>"; //TODO: unwrite text
        $link = $this->ConnectDB();

@@ -516,55 +516,47 @@ class HandlingData
     ///vvvvvvvv///
     
     // TODO: making update start to work || half done yet
-    public function UpdateNews()
-    {
-        foreach ($_POST as $element => $value) {
+//     public function UpdateNews()
+//     {
+//         foreach ($_POST as $element => $value) {
             
-            if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+//             if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
                 
-                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
-                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
-                $result = $this->controller->UpdateNews($title, $description, $_SESSION['id']);
+//                 $title = $this->validateData->FilterStringOnHtmlSql($_POST['title']);
+//                 $description = $this->validateData->FilterStringOnHtmlSql($_POST['description']);
+//                 $result = $this->controller->UpdateNews($title, $description, $_SESSION['id']);
                 
-                if (isset($_POST['news_img_[]'])) {
+//                 if (isset($_POST['news_img_[]'])) {
                     
-                    $result_pic = $this->SavePic($news_id = $result);
-                    return true;
-                }
-            }
-            return $this->Redirect();
-        }
-    }
+//                     $result_pic = $this->SavePic($news_id = $result);
+//                     return true;
+//                 }
+//             }
+//             return $this->Redirect();
+//         }
+//     }
 //TODO: checkboxes are omitted yet
     public function SaveNewsArray($data)
     {
       //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
                $_SESSION['id'];
                $id_user = 1;//TODO: must be in SESSION
+               $date_show = false;
             for ($i = 0; count($data['name']) > $i; $i ++) {
                 echo $data['name'][$i]."<br>";  //TODO: unwrite text
-                    
+             echo   $data['id_news'][$i] ;
                 //TODO: finding id from hidden form
            //     $find_id = $this->controller->FindExistedNews($data['name'][$i]);
            //     echo $find_id." id"; //TODO: unwrite text
-               if(!isset($_POST['id_news'])) {
-                
-                $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
-                $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                $result = $this->controller->SaveNews($title, $id_user,$description );
-                
-                if (isset($data["news_img_[$i]"])) {
-                    
-                    $result_pic = $this->SavePicNews($news_id = $result);
-                    return true;
-                }
-               }
+              
                //TODO: confirm rightness
-               if(isset($_POST['id_news'])){
+               if(isset($data['id_news'][$i])){
+                   if(isset($data["check[$i]"])) $date_show = true;
                    echo $find_id." <br>";
-                   $title = $this->validateData->FilterStringOnHtmlSql($_POST['name'][$i]);
-                   $description = $this->validateData->FilterStringOnHtmlSql($_POST['comment'][$i]);
-                   $result = $this->controller->UpdateNews($title, $id_user, $description, $_POST['id_news']);
+                   echo $date_show;
+                   $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                   $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                   $result = $this->controller->UpdateNews($title, $id_user, $description, $data['id_news'][$i] /*, $date_show */);
                
                    
                    if (isset($data["news_img_[$i]"])) {
@@ -572,6 +564,23 @@ class HandlingData
                        $result_pic = $this->SavePicNews($news_id = $result);
                        return true;
                    }
+               }
+               //try this way
+               else/* if (!isset($_POST['id_news'])) */ {
+                   $p =  20;
+                   if(isset($data["check[$p]"])) $date_show = true;
+                    echo "<br>vivo".$date_show."dd<br>";
+                   
+                   $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                   $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                   $result = $this->controller->SaveNews($title, $id_user,$description /* , $date_show */);
+                   
+                   if (isset($data["news_img_[$i]"])) {
+                       
+                       $result_pic = $this->SavePicNews($news_id = $result);
+                       return true;
+                   }
+               $p++;
                }
             }
        // }

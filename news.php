@@ -360,10 +360,10 @@ img.wp-smiley, img.emoji {
 					require_once 'med-BAL.php';
 					$select = new Controller();
 					$result = $select->GetNewsAll(); 
-					
+					 $i=0; //  for($i = 0; $i < 2; $i++) { 
 					if($result){
 					foreach ($result as $key => $value){ ?>
-							<?php $i=0 //  for($i = 0; $i < 2; $i++) { ?>
+							
 						<?php 
 						foreach ($value as $key => $val){
 						}
@@ -382,20 +382,23 @@ img.wp-smiley, img.emoji {
 									name="news_img_<?php echo $i ?>"/>
 							</div>
 							<div class="right-form">
-							<input type="hidden" name="id_news" value = "<?php echo $value['id']; ?> " />
-								<input type="text" required="required" class="form-control"
-									id="name" name="name[]" value="<?php echo $value['news_title'];  ?>" placeholder="Заголовок" />  
-									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> 
-								<i	class="fa fa-times remove_item_js" aria-hidden="true"></i>
-								<textarea   class="form-control" required="required" rows="5"
-									id="comment" name="comment[]" ><?php echo $value['news_descripion']; ?></textarea>
-								<span> <input id="check-<?php echo $i ?>" type="checkbox"
-									name="check" value="check-<?php echo $i ?>"> <label
-									for="check-<?php echo $i ?>">Вывести дату</label>
+								<input type="hidden" name="id_news[]"
+									value="<?php echo $value['id']; ?> " /> <input type="text"
+									required="required" class="form-control" 
+									name="name[]" value="<?php echo $value['news_title'];  ?>"
+									placeholder="Заголовок" /> <i class="fa fa-pencil-square-o"
+									aria-hidden="true"></i> <i class="fa fa-times remove_item_js"
+									aria-hidden="true"></i>
+								<textarea class="form-control" required="required" rows="5"
+									name="comment[]"><?php echo $value['news_descripion']; ?></textarea>
+								<span> <input  type="checkbox" id="check[<?php echo $i ?>]"
+									name="check[]" > 
+									<label for="check[<?php echo $i ?>]">Вывести
+										дату</label>
 								</span>
 							</div>
 						</div>
-
+								<?php $i++; ?>
 							<?php } ?>
 					<?php }  else{ ?>
 					
@@ -413,17 +416,17 @@ img.wp-smiley, img.emoji {
 							</div>
 							<div class="right-form">
 								<input hidden name="title" /> <input
-									type="text" required="required" class="form-control" id="name"
+									type="text" required="required" class="form-control" 
 									name="name[]" 
 									placeholder="Заголовок" /> <i class="fa fa-pencil-square-o"
 									aria-hidden="true"></i> <i class="fa fa-times remove_item_js"
 									aria-hidden="true"></i>
 								<textarea form="formMulti" class="form-control"
-									required="required" rows="5" id="comment" name="comment[]"
+									required="required" rows="5"  name="comment[]"
 									placeholder="Описание"></textarea>
 								<span> 
-								<input id="check-[]" type= "checkbox"	name="check" value="check-[]" /> 
-								<label for="check-[]">Вывести дату</label>
+								<input  type= "checkbox" id="check[1]"	name="check[]"  /> 
+								<label for="check[1]">Вывести дату</label>
 								</span>
 							</div>
 						

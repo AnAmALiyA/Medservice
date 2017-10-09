@@ -1,5 +1,6 @@
 jQuery(document).ready(function($){
-
+	cifra = 20;
+	
 	$('body').on('click', '.add_promo_js', function() {
 		addFormMarkup('promo');
 	});
@@ -35,6 +36,7 @@ jQuery(document).ready(function($){
 });
 
 function addFormMarkup (marker) {
+	
 	var formMarkup = '<div class="download-holder clearfix">' +
 						'<div class="left-form">' +
 							'<img src="img/empty-img.jpg" alt="empty">' +
@@ -46,18 +48,19 @@ function addFormMarkup (marker) {
 							'<input type="file" id="add-' + marker + '-img" name="' + marker + '_img">' +
 						'</div>' +
 						'<div class="right-form">' +
-							'<input type="text" required="required" class="form-control" id="name[]" name="name[]" placeholder="Заголовок"/>' +
+							'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
 							'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
 							'<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
-							'<textarea class="form-control" required="required" rows="5" id="comment" name="comment[]" placeholder="Описание"></textarea>' +
+							'<textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>' +
 							'<span>' +
-								'<input id="check2" type="checkbox" name="check" value="check1">' +
-								'<label for="check2">Вывести дату</label>' +
+								'<input  type="checkbox" name="check[' + cifra +']"  id="check[' + cifra +']" value="1">' +
+								'<label for="check[' + cifra +']">Вывести дату</label>' +
 							'</span>' +
 						'</div>' +
 					'</div>';
 
 	$('.' + marker + '-list').append(formMarkup);
+	cifra++;
 }
 
 function readURL(input) {
