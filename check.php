@@ -16,20 +16,14 @@ require_once 'med-BAL.php';
  $dal = new DAL();
 //  $dal = new BAL();
 
- $m = $dal->InsertPhone('873465834', 3);
+ $m = $dal->InsertDay(array(1,3,1,3,1,3,3));
 //  echo "[$m]-результатt<br/>";
- var_dump($m);
+  var_dump($m);
 // echo '<br/>-----------foreach ----------------<br/>';
 // echo '<br/>';
 // foreach ($m as $key => $value) {
 //     echo $key.' - key => value -'.$value.'<br/>';
     
-    foreach ($value as $key2 => $value2) {
-        echo '_____________'.$key2.' - key2 => value2 -'.$value2.'<br/>';
-    }
-}
-
-
 // echo '<br/>';
 // echo '<br/>-----------foreach ----mysqli_fetch_assoc()-----------<br/>';
 // var_dump(mysqli_fetch_assoc($dal->GetTypeInstitutionById(1)));

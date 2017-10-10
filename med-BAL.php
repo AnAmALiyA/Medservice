@@ -30,8 +30,7 @@ class BAL
         
         $organizationId = $this->dal->GetOrganizationIdByUser($id);
         if ($organizationId > 0) { // если существует
-            $arrayOrganizationData = array();
-            $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+            $resultOrganizationData = $this->dal->GetOrganizationSummaryData($organizationId);
             
             $typeInstitutionId = $resultOrganizationData['typeInstitution'];
             $resultInstitution = $this->dal->GetTypeInstitutionById($typeInstitutionId);
@@ -203,21 +202,19 @@ class BAL
             // id пользователя
         $id = $_SESSION['user_id'];
         // id организации
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $organizationSummaryId = $this->dal->GetOrganizationIdByUser($id);
+        // если сумарная таблица не установлена
+        if ($organizationSummaryId == null) {
+            return - 1; // не тот id - попытка взлома
+        }
         // данные из сумарной таблици
-        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
-        
+        $resultOrganizationData = $this->dal->GetOrganizationSummaryData($organizationSummaryId);
         // id тип учереждения
         $idTypeCompany = $_POST['typeCompanyId'];
         // проверить существует ли тип учереждения
         if ($this->dal->GetTypeInstitutionById($selectId) == null) {
             $idTypeCompany = null;
         }
-        // если сумарная таблица не установлена
-        if ($organizationId == null) {
-            return - 1; // не тот id - попытка взлома
-        }
-        
         // id сервисов - тут прийдет массив из названий сервисов
         $serviceId = $this->dal->FindServiceId($_POST['arrayServices']); // ищу похожую строку
         if ($serviceId == - 1) {
@@ -233,16 +230,16 @@ class BAL
         // id Наименование(name company)
         $nameCompanyId = $this->dal->CheckForAmatchCompanyDateId($_POST['nameCompany']['id']);
         if ($nameCompanyId != - 1) { // если найду по id //проверить на совпадание
-            if (! $this->CheckForAmatchCompanyDate($_POST['nameCompany']['name'])) { // проверить совпадают ли имена
+            if (! $this->CheckForAmatchCInserompanyDate($_POST['nameCompany']['name'])) { // проверить совпадают ли имена
                 $this->dal->UpdateCompanyName($nameCompanyId, $_POST['nameCompany']['name']); // если нет - обновить
             }
         } else {
             return - 1; // не тот id - попытка взлома
         }
         
-        // id улица из суммарной таблицы
+/////////// id улица из суммарной таблицы
         $actualLocationId = $resultOrganizationData['actualLocation'];
-        if ($actualLocationId == null) { // написать если равен null
+        if ($actualLocationId == null) { //если 1 раз сохраняються //начало метода
                                                      
             // дом
             $homeId = $this->dal->GetHomeIdByNumber($_POST['home']['name']);
@@ -265,8 +262,8 @@ class BAL
             // улица
             $streetStr = $_POST['street']['name'];
             $this->dal->InsertActualLocation($streetStr, $homeId, $cityId);
-            $actualLocationData = $this->dal->GetActualLocationByStreetHomeCity($streetStr, $homeId, $cityId); // получить таблицу
-            if ($actualLocationData == null) {
+            $actualLocationId = $this->dal->GetActualLocationIdByStreetHomeCity($streetStr, $homeId, $cityId); // получить таблицу
+            if ($actualLocationId == null) {
                 return - 1; // ненайдена таблица
             }
             // телефоны $_POST['arrayPhones']; //если существует тут прийдет 2 array( is => array(1 => tel, 2 => tel, 3 => tel), new => array(null-4 => tel)); - новосозданные);
@@ -277,11 +274,61 @@ class BAL
                 }
             }
             // дни часы$_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
-            $_POST['arrayDayTimeWork']['day'];
-            $_POST['arrayDayTimeWork']['startTime'];
-            $_POST['arrayDayTimeWork']['endTime'];
-        }
-//         else { // если нет таблицы actualLocation
+            $arrayTimeWorkId = array();
+            //$_POST['arrayDayTimeWork']['day'];
+            foreach ($_POST['arrayDayTimeWork']['day'] as $key => $value) {
+                $timeWorkId = '';
+                $start = '';
+                $end = '';
+//                 $arrayTimeWorkId = array();//проверить  $arrayTimeWorkId[] = $timeWorkId;
+                if (!$value) {
+                    $start = $_POST['arrayDayTimeWork']['startTime'][$key];
+                    $end = $_POST['arrayDayTimeWork']['endTime'][$key];
+                    //найти id
+                    $timeWorkId = $this->dal->FindIdTimeWork($value, $start, $end);
+                    if ($timeWorkId == -1) {//если его нет то сохранить
+                        $this->dal->InsertTimeWork($value, $start, $end);
+                        $timeWorkId = $this->dal->FindIdTimeWork($value, $start, $end);
+                    }
+                }
+                else
+                {
+                    $timeWorkId = $this->dal->FindIdTimeWork($value);
+                }
+                $arrayTimeWorkId[] = $timeWorkId;
+//                 array_push($arrayTimeWorkId, $timeWorkId);//проверить  $arrayTimeWorkId[] = $timeWorkId;
+            }
+            //найти id схожего дня
+            $dayTimneWorkId = $this->dal->FindDayId($arrayTimeWorkId);
+            if ($dayTimneWorkId == -1) {
+                $this->dal->InsertDay($arrayTimeWorkId);
+                $dayTimneWorkId = $this->dal->FindDayId($arrayTimeWorkId);
+            }
+            
+            $arrayOrganizationData = array(
+                $actualLocationId,//'actual_location_fk',
+                $nameCompanyId,//'organization_fk',
+                //'type_works_fk',тип работ
+                $idTypeCompany,//'type_institution_fk',тип учереждения
+                $dayTimneWorkId,//'day_work_fk',
+                $insuranceCompanesId,//'insurance_companies_fk',страховые
+                $serviceId,//'services_fk',
+                $_POST['state']//'state'
+            );
+            //обновляю, потому, что сумарная таблица должна бы создана и привязана к пользователю до 1 сохранения
+            $this->dal->UpdateOrganizationData($organizationId, $arrayOrganizationData);
+        }//если 1 раз сохраняються //конец метода
+        else //////////////////////////////////////////////////////////////////////////////////////
+        { //update data //начало метода
+            $actualLocationData = $this->dal->GetActualLocation($actualLocationId);
+            if ($actualLocationData['actualLocation'] != $_POST['street']['name']) {//если не одинаковое
+               //проверяю город
+                if ($actualLocationData['locality'] == $_POST['city']['id']){
+                    $this->dal->UpdateActualLocation();
+                }
+            }
+            
+            
 //             $actualLocationData = null; // / чтобы потом от сюда взять данные
 //             if ($_POST['street']['id'] != null) {
 //                 $actualLocationData = $this->dal->FindActualLocationDataById($_POST['street']['id']);
@@ -313,7 +360,7 @@ class BAL
 //                 $this->dal->InsertHome($_POST['home']['name']);
 //                 $idHome = $this->dal->GetHomeByNumber($_POST['home']['name']);
 //             }
-//телефоны
+// //телефоны
 //         if ($arrayPhones != null) {
 //             //найти id телефона из существующих
 //             foreach ($_POST['arrayPhones']['exist'] as $key => $value) {
@@ -327,7 +374,7 @@ class BAL
 //                     return -1;
 //                 }
 //             }
-//         }
+        }
 
     }
 ///////// сохранить данные организации// конец /////////
@@ -368,10 +415,10 @@ class BAL
     {
         return $this->dal->GetLastLoginId();
     }
-    //TODO проверить $id = null, он не должен быть тут указан BAL
-    public function SaveUser($id, $login, $password, $hash, $user_category)
+    
+    public function SaveUser($login, $password, $hash, $user_category)
     {
-        return $this->dal->SaveUser($id, $login, $password, $hash, $user_category);
+        return $this->dal->SaveUser($login, $password, $hash, $user_category);
     }
     //////Методы по авторизации // конец
 }

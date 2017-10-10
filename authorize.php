@@ -80,7 +80,7 @@ class Authorization
         return $code;
     }
 
-    private function GetIsLogin($login)
+    public function GetIsLogin($login)
     {
         $login = $this->validate->FilterStringOnHtmlSql($login);
         if ($this->validate->ValidIntegerString($login)) {
@@ -97,16 +97,18 @@ class Authorization
 
     public function SaveUser($login, $password, $user_category)
     {
-        $id = $this->GetIsLogin($login);
+        $id = $this->GetIsLogin($login, $passwordMd5);
         if ($id < 0) {
-            $id = $this->bal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
-            $id++;
+//             $id = $this->bal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
+//             $id++;
             $passwordMd5 = md5(md5(trim($password)));
             $hash = md5($this->GenerateCode(10));
             
-            $result = $this->bal->SaveUser($id, $login, $passwordmd5, $hash, $user_category);
+            $result = $this->bal->SaveUser($login, $passwordmd5, $hash, $user_category);
+            echo $result;
             if ($result) {
-                return array($id, $hash);
+                $userId = $this->dal->GetIdByLoginPassword($login, $passwordmd5);
+                return array(userId, $hash);
             }
             return array(-1);
         }
