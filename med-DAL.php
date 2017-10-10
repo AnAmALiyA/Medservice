@@ -165,14 +165,41 @@ class DAL
         return - 1;
     }
     
+//     private function QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns)
+//     {
+//         $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
+//         echo $query.'<br/>';
+//         $link = $this->ConnectDB();
+        
+//         //$result = mysqli_query($link, $query);
+//                  $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+//         $this->CloseConnectDB($link);
+//         return $result;
+//     }
     private function QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns)
     {
-        $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
+        $namesColumns = '';
+        $valuesColumns = '';
+        echo is_array($arrayNamesColumns).'<br/>';
+        echo count($arrayNamesColumns).'<br/>';
+        if(is_array($arrayNamesColumns)){
+            for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+                $dot = $i != 0 ? ', ' : '';
+                $namesColumns .= "$dot $arrayNamesColumns[$i]";
+                $valuesColumns .= "$dot $arrayValuesColumns[$i]";
+            }
+        }
+        else {
+            $namesColumns = $arrayNamesColumns;
+            $valuesColumns = $arrayValuesColumns;
+        }
+        $query = "INSERT INTO $table($namesColumns) VALUES($valuesColumns)";
         echo $query.'<br/>';
         $link = $this->ConnectDB();
         
         //$result = mysqli_query($link, $query);
-                 $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         return $result;
@@ -189,22 +216,9 @@ class DAL
      * $this->CloseConnectDB($link);
      * return $result;
      * }
-     *
-     * private function QueryUpdateOne($tabel, $nameTabelRow, $valueTabelRow, $id)
-     * {
-     * $query = "UPDATE $tabel SET $nameTabelRow = '$valueTabelRow' WHERE id=$id";
-     * $link = $this->ConnectDB();
-     *
-     * $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-     *
-     * $this->CloseConnectDB($link);
-     * return $result;
-     * }
      */
     private function QueryUpdate($tabel, $arrayNamesTabelRows, $arrayValuesTabelRows, $id)
     {
-        //          $strNamesTabelRows = GetStrNames($arrayNamesTabelRows);
-        //          $strValuesTabelRows = GetStrValues($arrayValuesTabelRows);
         $set = '';
         echo is_array($arrayNamesTabelRows).'<br/>';
         echo count($arrayNamesTabelRows).'<br/>';
@@ -509,7 +523,10 @@ class DAL
                 }
             }
         }
-        return array($dayWork, $startTimeWork, $endTimeWork);
+        return array(
+            'day' => $dayWork, 
+            'startTime' => $startTimeWork, 
+            'endTime' => $endTimeWork);
     }
     
     private function GetDayWork($id) {
@@ -716,6 +733,9 @@ class DAL
         $arrayNamesColumns = "phone, summary_table_fk";
         $arrayValuesColumns = "$phone, $organizationId";
         return $this->QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns);        
+    }
+    public function InsertTimeWork($value, $start = null, $end = null){
+        //TODO Закончить сохранение времени работы
     }
     ///////////////Сохранение данных/////////конец//////////////
 }

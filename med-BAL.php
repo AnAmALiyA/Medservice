@@ -116,76 +116,86 @@ class BAL
                     'name' => $resultHome['numberHome']
                 )
             );
+            $phoneData = $this->GetPhones($organizationId);
+            $daysTimesWork = $this->GetDaysTimesWork($resultOrganizationData['dayWork']);
             
             $arrayOrganizationData['arrayLocation'] = array(
                 $actualLocationData,
                 $locationData,
                 $districtRegionData,
                 $regionData,
-                $homeData
+                $homeData,
+                $phoneData,//тут может отсутствовать значение
+                $daysTimesWork
             );
             return $arrayOrganizationData;
         }
-        return null;
+        else {
+            //TODO тут проверить что вернуть в ответ пользователю когда он первый раз заходит в кабинет
+            return null;
+        }
     }
     // Тип учереждения
-    public function GetTypeInstitutions()
+    private function GetTypeInstitutions()
     {
         return  $this->dal->GetTypeInstitutions();
     }
     // сервис
-    public function GetNamesServices()
+    private function GetNamesServices()
     {
         return $this->dal->GetNamesServices();
     }
     // страховая компания
-    public function GetNamesInsuranceCompanes()
+    private function GetNamesInsuranceCompanes()
     {
         return $this->dal->GetNamesInsuranceCompanes();
     }
     // Область
-    public function GetRegiones()
+    private function GetRegiones()
     {
         return $this->dal->GetRegionsArray();
     }
     // район области TODO може измениться
-    public function GetDistrictRegionByRegion($id){
+    private function GetDistrictRegionByRegion($id){
         return $this->dal->GetDistrictRegionArrayByRegion($id);
     }
     //город
-    public function GetCitesByDistrictRegion($id){
+    private function GetCitesByDistrictRegion($id){
         return $this->dal->GetCitesArrayByDistrictRegion($id);
     }
     // район
     // улица
-    public function GetActualLocationByCity($id){
+    private function GetActualLocationByCity($id){
         return $this->dal->GetActualLocationArrayByCity($id);
     }
     // дом (т.е. конкретный)
-    public function GetHomeById($id){
+    private function GetHomeById($id){
         return $this->dal->GetHomeById($id);
     }
     //телефоны
-    public function GetPhones() {
-        $id = $_SESSION['user_id'];
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
-        if ($organizationId != null) {
+//     public function GetPhones() {
+    private function GetPhones($organizationId) {
+//         $id = $_SESSION['user_id'];
+//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
+//         if ($organizationId != null) {
             return $this->dal->GetPhonesOrganizationId($organizationId);
-        }
-        return array(-1);
+//         }
+//         return array(-1);
     }
     //дни время работы
-    public function GetDaysTimesWork(){
-        $id = $_SESSION['user_id'];
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
-        if ($organizationId != null) {
-            $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
-            return $this->dal->GetDaysTimeWork($resultOrganizationData['dayWork']);
-        }
-        return array(-1);
+//     public function GetDaysTimesWork(){
+    private function GetDaysTimesWork($idDayWork){
+//         $id = $_SESSION['user_id'];
+//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
+//         if ($organizationId != null) {
+//             $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+//             return $this->dal->GetDaysTimeWork($resultOrganizationData['dayWork']);
+        return $this->dal->GetDaysTimeWork($idDayWork);
+//         }
+//         return array(-1);
     }
     //TODO логотип в BAL
-    public function GetLogo(){}
+    private function GetLogo(){}
     ///////// получить данные организации// конец /////////
     ///////// сохранить данные организации// старт /////////
     public function Save()
@@ -231,8 +241,8 @@ class BAL
         }
         
         // id улица из суммарной таблицы
-        $actualLocationIdWhithSummary = $resultOrganizationData['actualLocation'];
-        if ($actualLocationIdWhithSummary == null) { // написать если равен null
+        $actualLocationId = $resultOrganizationData['actualLocation'];
+        if ($actualLocationId == null) { // написать если равен null
                                                      
             // дом
             $homeId = $this->dal->GetHomeIdByNumber($_POST['home']['name']);
@@ -262,15 +272,14 @@ class BAL
             // телефоны $_POST['arrayPhones']; //если существует тут прийдет 2 array( is => array(1 => tel, 2 => tel, 3 => tel), new => array(null-4 => tel)); - новосозданные);
             if ($arrayPhones != null) {
                 //найти id телефона из существующих
-                foreach ($_POST['arrayPhones']['new'] as $key => $value) {
+                foreach ($_POST['arrayPhones']['new'] as $value) {
                     $this->dal->InsertPhone($value, $organizationId);                    
                 }
-                
-                //прверить совпадающие значения
-                //добавить новый
             }
-            
             // дни часы$_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
+            $_POST['arrayDayTimeWork']['day'];
+            $_POST['arrayDayTimeWork']['startTime'];
+            $_POST['arrayDayTimeWork']['endTime'];
         }
 //         else { // если нет таблицы actualLocation
 //             $actualLocationData = null; // / чтобы потом от сюда взять данные
