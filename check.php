@@ -16,7 +16,7 @@ require_once 'med-BAL.php';
  $dal = new DAL();
 //  $dal = new BAL();
 
- $m = $dal->InsertDay(array(1,3,1,3,1,3,3));
+ $m = $dal->GetPhonesOrganizationId(2);
 //  echo "[$m]-результатt<br/>";
   var_dump($m);
 // echo '<br/>-----------foreach ----------------<br/>';

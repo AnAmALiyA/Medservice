@@ -189,7 +189,7 @@ class BAL
 //         if ($organizationId != null) {
 //             $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
 //             return $this->dal->GetDaysTimeWork($resultOrganizationData['dayWork']);
-        return $this->dal->GetDaysTimeWork($idDayWork);
+        return $this->dal->GetDaysTimeWorkById($idDayWork);
 //         }
 //         return array(-1);
     }
@@ -199,7 +199,7 @@ class BAL
     ///////// сохранить данные организации// старт /////////
     public function Save()
     {
-            // id пользователя
+        // id пользователя
         $id = $_SESSION['user_id'];
         // id организации
         $organizationSummaryId = $this->dal->GetOrganizationIdByUser($id);
@@ -237,19 +237,18 @@ class BAL
             return - 1; // не тот id - попытка взлома
         }
         
-/////////// id улица из суммарной таблицы
+        // ///////// id улица из суммарной таблицы
         $actualLocationId = $resultOrganizationData['actualLocation'];
-        if ($actualLocationId == null) { //если 1 раз сохраняються //начало метода
-                                                     
+        if ($actualLocationId == null) { // если 1 раз сохраняються //начало метода
+                                         
             // дом
             $homeId = $this->dal->GetHomeIdByNumber($_POST['home']['name']);
             if ($idHome == null) {
                 $this->dal->InsertHome($string);
                 $idHome = $this->dal->GetHomeIdByNumber($_POST['home']['name']);
-
             }
             // город(данные) / проверить id из таблици и проверить по названию города
-            //TODO я не буду добовлять проверку на район / область - это нужно внести до использования формы, а не на форме.
+            // TODO я не буду добовлять проверку на район / область - это нужно внести до использования формы, а не на форме.
             $cityId = $_POST['town']['id'];
             $cityData = $this->dal->GetLocationById($cityId);
             if ($cityData != null) {
@@ -266,116 +265,177 @@ class BAL
             if ($actualLocationId == null) {
                 return - 1; // ненайдена таблица
             }
+            
+            //для сокращения кода
+            $actualLocationId = null; // 'actual_location_fk',
+            $nameCompanyId = null; // 'organization_fk',
+            // 'type_works_fk',тип работ
+            $idTypeCompany = null; // 'type_institution_fk',тип учереждения
+            $dayTimneWorkId = null; // 'day_work_fk',
+            $insuranceCompanesId = null; // 'insurance_companies_fk',страховые
+            $serviceId = null;
+            
             // телефоны $_POST['arrayPhones']; //если существует тут прийдет 2 array( is => array(1 => tel, 2 => tel, 3 => tel), new => array(null-4 => tel)); - новосозданные);
             if ($arrayPhones != null) {
-                //найти id телефона из существующих
+                // найти id телефона из существующих
                 foreach ($_POST['arrayPhones']['new'] as $value) {
-                    $this->dal->InsertPhone($value, $organizationId);                    
+                    $this->dal->InsertPhone($value, $organizationSummaryId);
                 }
             }
             // дни часы$_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
             $arrayTimeWorkId = array();
-            //$_POST['arrayDayTimeWork']['day'];
+            // $_POST['arrayDayTimeWork']['day'];
             foreach ($_POST['arrayDayTimeWork']['day'] as $key => $value) {
                 $timeWorkId = '';
-                $start = '';
-                $end = '';
-//                 $arrayTimeWorkId = array();//проверить  $arrayTimeWorkId[] = $timeWorkId;
+//                 $start = '';
+//                 $end = '';
+                // $arrayTimeWorkId = array();//проверить $arrayTimeWorkId[] = $timeWorkId;
                 if (!$value) {
                     $start = $_POST['arrayDayTimeWork']['startTime'][$key];
                     $end = $_POST['arrayDayTimeWork']['endTime'][$key];
-                    //найти id
+                    // найти id
                     $timeWorkId = $this->dal->FindIdTimeWork($value, $start, $end);
-                    if ($timeWorkId == -1) {//если его нет то сохранить
+                    if ($timeWorkId == - 1) { // если его нет то сохранить
                         $this->dal->InsertTimeWork($value, $start, $end);
                         $timeWorkId = $this->dal->FindIdTimeWork($value, $start, $end);
                     }
-                }
-                else
-                {
+                } else {
                     $timeWorkId = $this->dal->FindIdTimeWork($value);
                 }
                 $arrayTimeWorkId[] = $timeWorkId;
-//                 array_push($arrayTimeWorkId, $timeWorkId);//проверить  $arrayTimeWorkId[] = $timeWorkId;
+                // array_push($arrayTimeWorkId, $timeWorkId);//проверить $arrayTimeWorkId[] = $timeWorkId;
             }
-            //найти id схожего дня
+            // найти id схожего дня
             $dayTimneWorkId = $this->dal->FindDayId($arrayTimeWorkId);
-            if ($dayTimneWorkId == -1) {
+            if ($dayTimneWorkId == - 1) {
                 $this->dal->InsertDay($arrayTimeWorkId);
                 $dayTimneWorkId = $this->dal->FindDayId($arrayTimeWorkId);
             }
             
-            $arrayOrganizationData = array(
-                $actualLocationId,//'actual_location_fk',
-                $nameCompanyId,//'organization_fk',
-                //'type_works_fk',тип работ
-                $idTypeCompany,//'type_institution_fk',тип учереждения
-                $dayTimneWorkId,//'day_work_fk',
-                $insuranceCompanesId,//'insurance_companies_fk',страховые
-                $serviceId,//'services_fk',
-                $_POST['state']//'state'
-            );
-            //обновляю, потому, что сумарная таблица должна бы создана и привязана к пользователю до 1 сохранения
-            $this->dal->UpdateOrganizationData($organizationId, $arrayOrganizationData);
-        }//если 1 раз сохраняються //конец метода
-        else //////////////////////////////////////////////////////////////////////////////////////
-        { //update data //начало метода
+//             $arrayOrganizationData = array(
+//                 $actualLocationId, // 'actual_location_fk',
+//                 $nameCompanyId, // 'organization_fk',
+//                                 // 'type_works_fk',тип работ
+//                 $idTypeCompany, // 'type_institution_fk',тип учереждения
+//                 $dayTimneWorkId, // 'day_work_fk',
+//                 $insuranceCompanesId, // 'insurance_companies_fk',страховые
+//                 $serviceId, // 'services_fk',
+//                 $_POST['state'] // 'state'
+//             );
+//             // обновляю, потому, что сумарная таблица должна бы создана и привязана к пользователю до 1 сохранения
+//             $this->dal->UpdateOrganizationData($organizationSummaryId, $arrayOrganizationData);
+        } // если 1 раз сохраняються //конец метода
+        else { // update data //начало метода
             $actualLocationData = $this->dal->GetActualLocation($actualLocationId);
-            if ($actualLocationData['actualLocation'] != $_POST['street']['name']) {//если не одинаковое
-               //проверяю город
-                if ($actualLocationData['locality'] == $_POST['city']['id']){
-                    $this->dal->UpdateActualLocation();
+            // проверяю город
+            $homeId = null;
+            if ($actualLocationData['home'] != null && $_POST['home']['name']) {
+                $homeId = $this->dal->GetHomeIdByNumber($_POST['home']['name']); // вернуть id
+                if ($homeId == - 1) {
+                    $this->dal->InsertHome($_POST['home']['name']);
+                    $homeId = $this->dal->GetHomeIdByNumber($_POST['home']['name']);
+                }
+            }
+            // проверяю совпадения по улице
+            if ($actualLocationData['actualLocation'] != $_POST['street']['name'] 
+                | $actualLocationData['locality'] != $_POST['city']['id'] 
+                | $actualLocationData['home'] != $homeId) 
+            // если изменился
+            {
+                $this->dal->UpdateActualLocation($actualLocationData['id'], $_POST['street']['name'], $_POST['city']['id'], $homeId);
+            }
+            // проверяю телефоны / получаю ассоциативный массив
+            $arrayPhones = $this->dal->GetPhonesOrganizationId($organizationSummaryId);
+            if ($arrayPhones != null) {
+                // найти id телефона из существующих
+                if ($_POST['arrayPhones']['exist'] != null) {
+                    
+                    foreach ($_POST['arrayPhones']['exist'] as $key => $value) {
+                        for ($i = 0; $i < count($arrayPhones['id']); $i ++) {
+                            if ($key == $arrayPhones['id'][$i]) {
+                                if ($arrayPhones['name'][$i] != $value) {
+                                    $this->dal->UpdatePhone($key, $value);
+                                }
+                            }
+                        }
+                    }
+                }
+                if ($_POST['arrayPhones']['new'] != null) {
+                    foreach ($_POST['arrayPhones']['new'] as $key => $value) {
+                        $this->dal->InsertPhone($value, $organizationSummaryId);
+                    }
+                }
+            }
+            // дни часы $_POST['arrayDayTimeWork']; //array( ['dayWork']=>array('mondey' => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
+            $dayTimneWorkId = $resultOrganizationData['dayWork'];
+            $dayWorkData = $this->dal->GetDaysTimeWorkById($dayTimneWorkId);
+            
+            $dayWorkDataPost = $_POST['arrayDayTimeWork']['dayWork'];
+            $startWorkDataPost = $_POST['arrayDayTimeWork']['startWork'];
+            $endWorkDataPost = $_POST['arrayDayTimeWork']['endWork'];
+            
+            $notChanged = true;
+            foreach ($dayWorkDataPost as $key => $value) {
+                if($dayWorkData['day'][$key] != $value 
+                    || $startWorkDataPost[$key] != $dayWorkData['startTime'][$key] 
+                    || $endWorkDataPost[$key] != $dayWorkData['endTime'][$key]){ // если хоть кто-то будет е совпадать
+                   $notChanged = false;
+                   break;
                 }
             }
             
-            
-//             $actualLocationData = null; // / чтобы потом от сюда взять данные
-//             if ($_POST['street']['id'] != null) {
-//                 $actualLocationData = $this->dal->FindActualLocationDataById($_POST['street']['id']);
-//                 if ($actualLocationIdWhithSummary != $actualLocationData['id']) {} else { // если id улиц совпадают
-//                     if ($actualLocationData['actualLocation'] != $_POST['street']['name']) { // если были изменения
-//                     }
-//                     // если изменений не было мне не нужно проверять область / город / район
-//                     $_POST['town'];
-//                     $_POST['region'];
-//                     $_POST['district'];
-
-//                 }
-//             } // если есть таблица actualLocation
-              
-//             // проверить дом / строка данных из БД TODO была изменена таблица home и actualLocation
-//             $idHome = null;
-//             if ($actualLocationData['home'] != null) {
-//                 $homeData = $this->dal->GetHomeById($actualLocationData['home']);
+            if (!$notChanged) {
+                $arrayTimeWorkId = array();
                 
-//                 if ($_POST['home']['id'] != $homeData['id']) {
-//                     return - 1; // не тот id - попытка взлома
-//                 } else {
-//                     $idHome = $homeData['id'];
-//                     if ($_POST['home']['name'] != $homeData['name']) { // если не совпадабт то обновить
-//                         $this->dal->UpdateHome($homeData['id'], $_POST['home']['name']);
-//                     }
-//                 }
-//             } else {
-//                 $this->dal->InsertHome($_POST['home']['name']);
-//                 $idHome = $this->dal->GetHomeByNumber($_POST['home']['name']);
-//             }
-// //телефоны
-//         if ($arrayPhones != null) {
-//             //найти id телефона из существующих
-//             foreach ($_POST['arrayPhones']['exist'] as $key => $value) {
-//                 $phone = $this->dal->GetPhoneById($key);//проверить организацию после получения массива данных телефона
-//                 if ($phone != null) {
-//                     if ($phone['phone'] != $value) {
-//                         $this->dal->UpdatePhone($phone['id'], $phone['phone'], );
-//                     }
-//                 }
-//                 else {
-//                     return -1;
-//                 }
-//             }
+                foreach ($dayWorkDataPost as $key => $value) {
+                    if (!$value) {
+                    $start = $startWorkDataPost[$key];
+                    $end = $endWorkDataPost[$key];
+                    // найти id
+                    $timeWorkId = $this->dal->FindIdTimeWork($value, $start, $end);
+                    if ($timeWorkId == - 1) { // если его нет то сохранить
+                        $this->dal->InsertTimeWork($value, $start, $end);
+                        $timeWorkId = $this->dal->FindIdTimeWork($value, $start, $end);
+                    }
+                    }
+                    else{
+                        $timeWorkId = $this->dal->FindIdTimeWork($value);
+                    }
+                    $arrayTimeWorkId[] = $timeWorkId;//на 7 дней у меня тут только id таблиц med_time_work
+                }
+                
+                $dayTimneWorkId = $this->dal->FindDayId($arrayTimeWorkId);                
+                if ($foundDayWorkId != -1) {
+                    $this->dal->InsertDay($arrayTimeWorkId);
+                    $dayTimneWorkId = $this->dal->FindDayId($arrayTimeWorkId);
+                }
+            }
+               // сохранить организацию
+//             $arrayOrganizationData = array(
+//                 $actualLocationId, // 'actual_location_fk',
+//                 $nameCompanyId, // 'organization_fk',
+//                 // 'type_works_fk',тип работ
+//                 $idTypeCompany, // 'type_institution_fk',тип учереждения
+//                 $dayTimneWorkId, // 'day_work_fk',
+//                 $insuranceCompanesId, // 'insurance_companies_fk',страховые
+//                 $serviceId, // 'services_fk',
+//                 $_POST['state'] // 'state'
+//             );
+//             // обновляю, потому, что сумарная таблица должна бы создана и привязана к пользователю до 1 сохранения
+//             $this->dal->UpdateOrganizationData($organizationSummaryId, $arrayOrganizationData);
         }
-
+        $arrayOrganizationData = array(
+            $actualLocationId, // 'actual_location_fk',
+            $nameCompanyId, // 'organization_fk',
+            // 'type_works_fk',тип работ
+            $idTypeCompany, // 'type_institution_fk',тип учереждения
+            $dayTimneWorkId, // 'day_work_fk',
+            $insuranceCompanesId, // 'insurance_companies_fk',страховые
+            $serviceId, // 'services_fk',
+            $_POST['state'] // 'state'
+        );
+        // обновляю, потому, что сумарная таблица должна бы создана и привязана к пользователю до 1 сохранения
+        $this->dal->UpdateOrganizationData($organizationSummaryId, $arrayOrganizationData);
     }
 ///////// сохранить данные организации// конец /////////
 ////////Методы для перенаправления // начало////////
