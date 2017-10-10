@@ -230,6 +230,7 @@ class BAL
             return - 1; // не тот id - попытка взлома
         }
         
+<<<<<<< HEAD
         // id улица из суммарной таблицы
         $actualLocationIdWhithSummary = $resultOrganizationData['actualLocation'];
         if ($actualLocationIdWhithSummary == null) { // написать если равен null
@@ -239,6 +240,53 @@ class BAL
             if ($idHome == null) {
                 $this->dal->InsertHome($string);
                 $idHome = $this->dal->GetHomeIdByNumber($_POST['home']['name']);
+=======
+//         $arrayServicesId = $_POST['arrayServicesId'];
+//         for ($i = 0; $i < count($arrayServicesId); $i++) {
+//             if (empty($this->dal->$arrayServicesId[$i])) {
+//                 return false;
+//             }
+//         }
+//     }
+    
+    // начать сохранение --- для рефакторинга разбить метод на 2 действия - GetIdInsert
+    public function Save($post)
+    {
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+        if ($organizationId == null || $resultOrganizationSummaryData['actualLocation'] == null) {
+            $this->InsertData($post);
+        }
+        else {
+            $this->UpdateData($post);
+        }
+    }
+    
+    public function InsertData($post){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+        
+    }
+    
+    public function UpdateData($post){
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+    }
+    function test($param) {
+        
+    
+        if ($organizationId != null && $this->IsExistData($post)) {
+//             $_POST['typeCompanyId']; //тип учереждения
+            
+//             $_POST['arrayServices']; // тут прийдет ассоциативный массив
+            $serviceId = $this->dal->FindServiceId($_POST['arrayServices']);
+            if ($serviceId == -1) {
+                $this->dal->InsertService($_POST['arrayServices']);//если не нахожу то создаю
+                $serviceId = $this->dal->FindLastServiceId();//получить id
+>>>>>>> b236ecebc117595246ba02a2308208dcae267e99
             }
             // город(данные) / проверить id из таблици и проверить по названию города
             //TODO я не буду добовлять проверку на район / область - это нужно внести до использования формы, а не на форме.
@@ -269,6 +317,7 @@ class BAL
                 //добавить новый
             }
             
+<<<<<<< HEAD
             // дни часы$_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
         }
 //         else { // если нет таблицы actualLocation
@@ -282,6 +331,26 @@ class BAL
 //                     $_POST['town'];
 //                     $_POST['region'];
 //                     $_POST['district'];
+=======
+            //1
+            $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
+            $actualLocationId = $resultOrganizationData['actualLocation'];//улица id - $resultOrganizationData['actualLocation'];
+            
+            //поднимаю данные об улице из юзера
+                //если у пользователя нет улици, то создаю новую //привязываю город, район, область, дом 
+            //найти улицуи её id
+            $streetId = $this->FindActualLocationId($_POST['street']);
+            if ($streetId == null) {
+                
+                $streetId = 
+            }
+            if ($actualLocationId != $streetId) { //если равно, то продолжаем работу
+//                 //2
+//                 $resultActualLocationData = $this->dal->GetActualLocation($actualLocationId);
+//                 $townId = $resultActualLocationData['locality'];
+//                 if ($resultActualLocationData['locality'] != $_POST['town']) {//город id - $resultActualLocationData['locality']
+                    
+>>>>>>> b236ecebc117595246ba02a2308208dcae267e99
 //                 }
 //             } // если есть таблица actualLocation
               
@@ -316,7 +385,158 @@ class BAL
 //                     return -1;
 //                 }
 //             }
+<<<<<<< HEAD
 //         }
+=======
+            
+//             if ($this->dal->FindActualLocationId($actualLocationId)) {
+//                 ;
+            }
+            //проверить дом
+            
+            $_POST['town'];
+            
+            
+            $_POST['home']; //если существует
+            $_POST['arrayPhones']; //если существует тут прийдет array(1 => tel, 2 => tel, 3 => tel);
+            $_POST['arrayDayTimeWork']; //array( ['dayWork']=>array(1 => false), ['startWork']=>array(1 => 7), ['endWork']=>array(1 => 19))
+        }
+            
+            
+//+             id
+//             actual_location_fk
+//             organization_fk
+//+             type_works_fk
+//             type_institution_fk
+//             day_work_fk
+//             insurance_companies_fk
+//             services_fk
+//             state
+
+            
+        
+        // организации(Название)
+        $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompanyId']);
+        // область
+        $idRegion = $this->dal->GetIdInsertGetRegion($post['region']);
+        // город
+        $idTown = $this->dal->GetIdInsertGetDistrictCity($post['town'], $idRegion);
+        // район области
+        $idDistrictRegion = $this->dal->GetIdInsertGetDistrictRegion($post['districtCity'], $idTown);
+        // улица
+        $idStreet = $this->dal->GetIdInsertActualLocation($post['street'], $idTown);
+        
+        $idHome = null;
+        if (! isset($post['home']) || ! empty($post['home'])) {
+            // дом
+            $idHome = $this->dal->GetIdInsertHome($post['home'], $idStreet);
+        }
+        
+        $idPhone = null;
+        if (GetStrPhones() != null) {
+            // телефон
+            $idPhone = $this->dal->GetIdInsertPhone($this->GetStrPhones());
+        }
+        // типу учереждение
+        $idTypeCompany = $this->dal->GetIdInsertTypeInstitution($post['typeCompany']);
+        // страховаые компании - тут непонятки т.к. тут чекбоксы из 1 таблицы
+        $idInsuranceCompany = $this->dal->GetIdInsertInsuranceCompany($this->GetArrayInsuranceCompany());
+        
+        // дни работы(определить рабочие дни)
+        $arrWeekEndDay = $this->GetArrayWeekEnd();
+        $arrayNameDays = $this->GetArrayNameDays();
+        $idDayWork = $this->dal->GetIdInsertDayWork($this->GetStringWorkDay($arrWeekEndDay, $arrayNameDays));
+        
+        // время работы(определить дни работы)
+        $arrTimeWorkStart = $this->GetArrayTimeWorkStart();
+        $arrTimeWorkEnd = $this->GetArrayTimeWorkEnd();
+        $idTimeWork = $this->dal->GetIdInsertTimeWork($this->GetArrayTimeWork($arrWeekEndDay, $arrayNameDays, $arrTimeWorkStart, $arrTimeWorkEnd));
+        // Направления/услуги
+        $idServices = $this->dal->GetIdInsertServices($this->GetArrayServices($arrayNamesServices));
+        
+        $arraySaveError = array(
+            $idOrganization,
+            $idRegion,
+            $idTown,
+            $idDistrictRegion,
+            $idStreet,
+            $idHome,
+            $idPhone,
+            $idTypeCompany,
+            $idInsuranceCompany,
+            $idDayWork,
+            $idTimeWork,
+            $idServices
+        );
+        if ($this->SaveError($arrayParam)) {
+            echo 'Error save.';
+        }
+        // сохранить все в одной таблие
+        $idSummaryTable = $this->dal->GetIdInsertSummaryTable();
+        return $idSummaryTable;
+    }
+    //TODO Обновление данных
+    public function Update($post){
+        // проверить существование организации(Название)
+        $idOrganization = $this->dal->GetIdInsertOrganization($post['nameCompanyId']);
+        // область
+        $idRegion = $this->dal->GetIdInsertGetRegion($post['region']);
+        // город
+        $idTown = $this->dal->GetIdInsertGetDistrictCity($post['town'], $idRegion);
+        // район области
+        $idDistrictRegion = $this->dal->GetIdInsertGetDistrictRegion($post['districtCity'], $idTown);
+        // улица
+        $idStreet = $this->dal->GetIdInsertActualLocation($post['street'], $idTown);
+        
+        $idHome = null;
+        if (! isset($post['home']) || ! empty($post['home'])) {
+            // дом
+            $idHome = $this->dal->GetIdInsertHome($post['home'], $idStreet);
+        }
+        
+        $idPhone = null;
+        if (GetStrPhones() != null) {
+            // телефон
+            $idPhone = $this->dal->GetIdInsertPhone($this->GetStrPhones());
+        }
+        // типу учереждение
+        $idTypeCompany = $this->dal->GetIdInsertTypeInstitution($post['typeCompany']);
+        // страховаые компании - тут непонятки т.к. тут чекбоксы из 1 таблицы
+        $idInsuranceCompany = $this->dal->GetIdInsertInsuranceCompany($this->GetArrayInsuranceCompany());
+        
+        // дни работы(определить рабочие дни)
+        $arrWeekEndDay = $this->GetArrayWeekEnd();
+        $arrayNameDays = $this->GetArrayNameDays();
+        $idDayWork = $this->dal->GetIdInsertDayWork($this->GetStringWorkDay($arrWeekEndDay, $arrayNameDays));
+        
+        // время работы(определить дни работы)
+        $arrTimeWorkStart = $this->GetArrayTimeWorkStart();
+        $arrTimeWorkEnd = $this->GetArrayTimeWorkEnd();
+        $idTimeWork = $this->dal->GetIdInsertTimeWork($this->GetArrayTimeWork($arrWeekEndDay, $arrayNameDays, $arrTimeWorkStart, $arrTimeWorkEnd));
+        // Направления/услуги
+        $idServices = $this->dal->GetIdInsertServices($this->GetArrayServices($arrayNamesServices));
+        
+        $arraySaveError = array(
+            $idOrganization,
+            $idRegion,
+            $idTown,
+            $idDistrictRegion,
+            $idStreet,
+            $idHome,
+            $idPhone,
+            $idTypeCompany,
+            $idInsuranceCompany,
+            $idDayWork,
+            $idTimeWork,
+            $idServices
+        );
+        if ($this->SaveError($arrayParam)) {
+            echo 'Error save.';
+        }
+        // сохранить все в одной таблие
+        $idSummaryTable = $this->dal->GetIdInsertSummaryTable();
+        return $idSummaryTable;
+>>>>>>> b236ecebc117595246ba02a2308208dcae267e99
     }
 ///////// сохранить данные организации// конец /////////
 ////////Методы для перенаправления // начало////////
