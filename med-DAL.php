@@ -104,9 +104,28 @@ class MedDB
          * $strNamesTabelRows = GetStrNames($arrayNamesTabelRows);
          * $strValuesTabelRows = GetStrValues($arrayValuesTabelRows);
          */
-        $query = "INSERT INTO $table($arrayNamesColumns) VALUES ($arrayValuesColumns)";
-        $link = ConnectDB();
+        $namesColumns = '';
+        $valuesColumns = '';
+        var_dump($arrayNamesColumns);
+        var_dump($arrayValuesColumns);
+        echo count($arrayNamesColumns).'<br/>';
+        if(is_array($arrayNamesColumns)){
+            for ($i = 0; $i < count($arrayValuesColumns); $i++) {
+                $dot = $i != 0 ? ', ' : '';
+                $namesColumns .= "$dot $arrayNamesColumns[$i]";
+                $valuesColumns .= "$dot $arrayValuesColumns[$i]";
+            }
+        }
+        else {
+            $namesColumns = $arrayNamesColumns;
+            $valuesColumns = $arrayValuesColumns;
+        }
+        echo "<br> column ".$namesColumns."<br> values ".$valuesColumns ;
+        $query = "INSERT INTO $table($namesColumns) VALUES($valuesColumns)";
+        echo $query.'<br/>';
+        $link = $this->ConnectDB();
         
+        //$result = mysqli_query($link, $query);
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
@@ -1111,7 +1130,7 @@ class MedDB
         $arrayValuesTabelRows = array(
             $id,
             $news_id,
-            $name
+            "'$name'"
         );
         $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
         if ($getResult) {
@@ -1244,6 +1263,7 @@ class MedDB
            'news_data');
   
        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+       return $result;
        
    }
    
@@ -1275,9 +1295,9 @@ class MedDB
        $link = $this->ConnectDB();
        
        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-       
+      // $id = mysqli_insert_id($link);
         $this->CloseConnectDB($link);
-        return $result;
+        return $id;
    }
    
 }

@@ -353,7 +353,7 @@ img.wp-smiley, img.emoji {
 			<div class="right-col">
 
 				<form name="formMulti" action="newsSaveTest.php" method="POST"
-					class="dwnld form-news-list">
+					class="dwnld form-news-list"  enctype="multipart/form-data">
 
 					<div class="news-list">
 					<?php 
@@ -379,7 +379,7 @@ img.wp-smiley, img.emoji {
 									файл</label> 
 									<input type="file"
 									id="add-news-img-<?php echo $i ?>"
-									name="news_img_<?php echo $i ?>"/>
+									name="news_img_[]"/>
 							</div>
 							<div class="right-form">
 								<input type="hidden" name="id_news[]"

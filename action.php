@@ -535,8 +535,8 @@ class HandlingData
 //             return $this->Redirect();
 //         }
 //     }
-//TODO: checkboxes are omitted yet
-    public function SaveNewsArray($data)
+
+    public function SaveNewsArray($data, $pictures)
     {
       //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
                $_SESSION['id'];
@@ -545,12 +545,13 @@ class HandlingData
             for ($i = 0; count($data['name']) > $i; $i ++) {
                 echo $data['name'][$i]."<br>";  //TODO: unwrite text
              echo   $data['id_news'][$i] ;
-                //TODO: finding id from hidden form
+                
              $date_show = false;
              $date_news = null;
+             //if hidden id of DB entry is found
                   if(isset($data['id_news'][$i])){
                    if(isset($data["check"][$i])) $date_show = true; 
-                   echo $date_show."<br>";
+                   echo  "is date showing".$date_show."<br>";
                   
                  if($date_show){
                      $date_news  = date('Y-m-d');}
@@ -558,19 +559,21 @@ class HandlingData
                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
                    $result = $this->controller->UpdateNews($title, $id_user, $description, $data['id_news'][$i] , $date_show , $date_news );
-               
-                   
-                   if (isset($data["news_img_[$i]"])) {
-                       
-                       $result_pic = $this->SavePicNews($news_id = $result);
+                   $news_id = $result;
+                  
+                   if (!empty($pictures["news_img_"]["name"][$i])) {
+                    //   echo "<br> catcha ";echo  $data["news_img_"][$i];
+                       echo basename($pictures["news_img_"]['name'][0]);
+                       echo $pic;
+                       $result_pic = $this->SavePicNews($news_id ,$i,$pictures);
                        return true;
                    }
                }
-               //try this way
-               else/* if (!isset($_POST['id_news'])) */ {
+              //new entry into DB
+               else {
                    
                    if(isset($data["check"][$p])) $date_show = true;
-                   echo $date_show."<br>";
+                  
                     if($date_show){
                         $date_news  = date('Y-m-d');
                     }
@@ -578,10 +581,12 @@ class HandlingData
                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
                    $result = $this->controller->SaveNews($title, $id_user,$description , $date_show , $date_news );
-                   
-                   if (isset($data["news_img_[$i]"])) {
+                
+              
+                 if (!empty($pictures["news_img_"]["name"][$i])) {
+                       
                        $news_id = $result;
-                       $result_pic = $this->SavePicNews($news_id);
+                       $result_pic = $this->SavePicNews($news_id,$i,$pictures);
                        return true;
                    }
                $p++;
@@ -594,31 +599,65 @@ class HandlingData
 
     public function SavePromoArray()
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        $_SESSION['id'];
+        $id_user = 1;//TODO: must be in SESSION
+        $p =  20;
+        for ($i = 0; count($data['name']) > $i; $i ++) {
+            echo $data['name'][$i]."<br>";  //TODO: unwrite text
+            echo   $data['id_promo'][$i] ;
             
-            for ($i = 0; count($_POST['title']) > $i; $i ++) {
+            $date_show = false;
+            $date_news = null;
+            //if hidden id of DB entry is found
+            if(isset($data['id_promo'][$i])){
+                if(isset($data["check"][$i])) $date_show = true;
+                echo  "is date showing".$date_show."<br>";
                 
-                /*
-                 * $child[]=array(
-                 * 'med_user_fk' => $_SESSION['id'],
-                 * 'promo_title' => $this->validateData->FilterStringOnHtmlSql( $_POST['name'][$i] ),
-                 * 'promo_descripion' => $this->validateData->FilterStringOnHtmlSql( $_POST['description'][$i] )
-                 * );
-                 */
-                
-                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
-                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
-                $result = $this->controller->SavePromo($title, $description, $_SESSION['id']);
-                
-                if (isset($_POST["promo_img_[$i]"])) {
+                if($date_show){
+                    $date_news  = date('Y-m-d');}
                     
-                    $result_pic = $this->SavePicPromo($promo_id = $result);
+                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                    $result = $this->controller->UpdatePromo($title, $id_user, $description, $data['id_promo'][$i] , $date_show , $date_news );
+                    $news_id = $result;
+                    
+                    if (!empty($pictures["promo_img_"]["name"][$i])) {
+                        //   echo "<br> catcha ";echo  $data["news_img_"][$i];
+                        echo basename($pictures["promo_img_"]['name'][0]);
+                        echo $pic;
+                        $result_pic = $this->SavePicPromo($news_id ,$i,$pictures);
+                        return true;
+                    }
+            }
+            //new entry into DB
+            else {
+                
+                if(isset($data["check"][$p])) $date_show = true;
+                
+                if($date_show){
+                    $date_news  = date('Y-m-d');
+                }
+                
+                $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                $result = $this->controller->SavePromo($title, $id_user,$description , $date_show , $date_news );
+                
+                
+                if (!empty($pictures["news_img_"]["name"][$i])) {
+                    
+                    $news_id = $result;
+                    $result_pic = $this->SavePicPromo($news_id,$i,$pictures);
                     return true;
                 }
+                $p++;
             }
         }
-        return $this->Redirect();
+        // }
+        //for times when user isn`t authorized
+        // return $this->Redirect();
     }
+    
 
     public function SaveSpecialArray()
     {
@@ -652,30 +691,34 @@ class HandlingData
         return $this->Redirect();
     }
 
-    public function SavePicNews($news_id)
+    public function SavePicNews($news_id, $i, $pictures)
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        //TODO: must be activated at the finish
+       // if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
             
             // checking and approving img
-            if ($_FILES['file']['size'] > (5 * 1024 * 1024))
+        echo ($pictures["news_img_"]['name'][$i]);
+        if ($pictures["news_img_"]['size'][$i] > (5 * 1024 * 1024))
                 die('Размер файла не должен превышать 5Мб');
-            $imageinfo = getimagesize($_FILES['file']['tmp_name']);
-            $arr = array(
-                'image/jpeg',
-                'image/gif',
-                'image/png'
-            );
-            if (! array_search($imageinfo['mime'], $arr))
-                echo ('Картинка должна быть формата JPG, GIF или PNG');
-            else {
+                $imageinfo = getimagesize($pictures["news_img_"]['tmp_name'][$i]);
+//           
                 $id = $_SESSION['id'];
-                $upload_dir = 'upload/'; // имя папки с картинками
+                //TODO: temporary unvailable
+                $id = 1;
+                $upload_dir = '/upload/'; // имя папки с картинками
                 $id_dir = $id . '/';
                 $news_dir = 'news/';
                 
-                $name = $upload_dir . $id_dir . basename($_FILES['file']['name']);
-                
-                $mov = move_uploaded_file($_FILES['file']['tmp_name'], $name);
+               
+                $name = $_SERVER["DOCUMENT_ROOT"].$upload_dir . $id_dir .$news_dir;
+                if (file_exists($name)) {
+                    echo "Uploading...";
+                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $name. basename($pictures["news_img_"]['name'][$i]));
+                } else {
+                    mkdir($name, 0700, true);
+                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $name. basename($pictures["news_img_"]['name'][$i]));
+                }
+               
                 
                 if ($mov) {
                     // здесь коннект к БД
@@ -689,12 +732,13 @@ class HandlingData
                         return false;
                 }
             }
-        }
-    }
+        
+   // }
 
     public function SavePicPromo($promo_id)
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        //TODO: must be activated at the finish
+        //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
             
             // checking and approving img
             if ($_FILES['file']['size'] > (5 * 1024 * 1024))
@@ -731,7 +775,7 @@ class HandlingData
                 }
             }
         }
-    }
+   // }
 
     private function SavePics()
     {

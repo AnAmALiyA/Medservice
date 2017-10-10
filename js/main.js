@@ -45,7 +45,7 @@ function addFormMarkup (marker) {
 								'<i class="fa fa-times" aria-hidden="true"></i>' +
 							'</div>' +
 							'<label class="file-label" for="add-' + marker + '-img">Загрузить файл</label>' +
-							'<input type="file" id="add-' + marker + '-img" name="' + marker + '_img">' +
+							'<input type="file" id="add-' + marker + '-img" name="'+ marker+'_img_[]">' +
 						'</div>' +
 						'<div class="right-form">' +
 							'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
