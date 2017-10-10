@@ -481,5 +481,10 @@ class BAL
         return $this->dal->SaveUser($login, $password, $hash, $user_category);
     }
     //////Методы по авторизации // конец
+    //////Методы удаления // начало
+    public function DeletePhone($id){
+        $this->dal->DeletePhone($id);
+    }
+    //////Методы удаления // конец
 }
 ?>

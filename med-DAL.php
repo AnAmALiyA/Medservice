@@ -136,19 +136,19 @@ class DAL
         return $result;
     }
     
-    private function FindId($table, $arrayNamesTabelRows, $arrayValuesTabelRows)
+    private function FindId($table, $arrayNamesTableRows, $arrayValuesTableRows)
     {
         $set = '';
-        if(is_array($arrayNamesTabelRows)){
-            for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+        if(is_array($arrayNamesTableRows)){
+            for ($i = 0; $i < count($arrayNamesTableRows); $i++) {
                 $dot = $i == 0 ? '' : ' AND ';
-                $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
+                $set .= "$dot $arrayNamesTableRows[$i] = '$arrayValuesTableRows[$i]'";
             }
         }
         else {
-            echo $arrayNamesTabelRows;
-            echo $arrayValuesTabelRows;
-            $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
+            echo $arrayNamesTableRows;
+            echo $arrayValuesTableRows;
+            $set .= "$arrayNamesTableRows = '$arrayValuesTableRows'";
         }
         $query = "SELECT id FROM $table WHERE $set";
         
@@ -226,9 +226,9 @@ class DAL
     }
     /*
      * дополнительные методы
-     * private function QueryDelete($tabel, $id)
+     * private function QueryDelete($Table, $id)
      * {
-     * $query = "DELETE FROM $tabel WHERE id=$id";
+     * $query = "DELETE FROM $Table WHERE id=$id";
      * $link = ConnectDB();
      *
      * $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -237,23 +237,23 @@ class DAL
      * return $result;
      * }
      */
-    private function QueryUpdate($tabel, $arrayNamesTabelRows, $arrayValuesTabelRows, $id)
+    private function QueryUpdate($Table, $arrayNamesTableRows, $arrayValuesTableRows, $id)
     {
         $set = '';
-        echo is_array($arrayNamesTabelRows).'<br/>';
-        echo count($arrayNamesTabelRows).'<br/>';
-        if(is_array($arrayNamesTabelRows)){
-            for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+        echo is_array($arrayNamesTableRows).'<br/>';
+        echo count($arrayNamesTableRows).'<br/>';
+        if(is_array($arrayNamesTableRows)){
+            for ($i = 0; $i < count($arrayNamesTableRows); $i++) {
                 $dot = $i != 0 ? ', ' : '';
-                $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
+                $set .= "$dot $arrayNamesTableRows[$i] = '$arrayValuesTableRows[$i]'";
             }
         }
         else {
-            $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
+            $set .= "$arrayNamesTableRows = '$arrayValuesTableRows'";
         }
         
-        $query = "UPDATE $tabel SET $set WHERE id=$id";
-        //          $query = "UPDATE $tabel SET $nameTabelRow = '$valueTabelRow' WHERE id=$id";
+        $query = "UPDATE $Table SET $set WHERE id=$id";
+        //          $query = "UPDATE $Table SET $nameTableRow = '$valueTableRow' WHERE id=$id";
         echo $query;
         $link = $this->ConnectDB();
         
@@ -278,26 +278,26 @@ class DAL
     
     public function GetIdByLoginPassword($login, $passwordmd5)
     {
-        $arrayNamesTabelRows = array('login', 'password');
-        $arrayValuesTabelRows = array("'$login'", "'$passwordmd5'");
-        return $this->FindId($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $arrayNamesTableRows = array('login', 'password');
+        $arrayValuesTableRows = array("'$login'", "'$passwordmd5'");
+        return $this->FindId($table, $arrayNamesTableRows, $arrayValuesTableRows);
     }
     
     public function SaveUser($login, $password, $hash, $user_category)
     {
-        $arrayNamesTabelRows = array(
+        $arrayNamesTableRows = array(
             'login',
             'password',
             'hash',
             'user_category'
         );
-        $arrayValuesTabelRows = array(
+        $arrayValuesTableRows = array(
             "'$login'",
             "'$password'",
             "'$hash'",
             $user_category
         );
-        $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $getResult = $this->QueryInsert('med_users', $arrayNamesTableRows, $arrayValuesTableRows);
         return $getResult; // вернуть результат сохранения
     }
 // ///////////////////// методы авторизации // конец //////////////////////////
@@ -694,9 +694,9 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
     }
     
     public function GetActualLocationIdByStreetHomeCity($street, $homeId, $cityId){
-        $arrayNamesTabelRows = array('actual_location', 'locality_fk', 'home_fk');
-        $arrayValuesTabelRows = array($street, $homeId, $cityId);
-        $result = $this->FindId($this->tableActualLocation, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $arrayNamesTableRows = array('actual_location', 'locality_fk', 'home_fk');
+        $arrayValuesTableRows = array($street, $homeId, $cityId);
+        $result = $this->FindId($this->tableActualLocation, $arrayNamesTableRows, $arrayValuesTableRows);
         return $result;
     }
     // телефон
@@ -730,13 +730,13 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
             return $this->FindId($this->tableTimeWork, 'weekend', $value);
         }
         else {
-            $arrayNamesTabelRows = array('start_work', 'end_work', 'weekend');
+            $arrayNamesTableRows = array('start_work', 'end_work', 'weekend');
             
             $startStr = "1970-01-01 $start:0:0";
             $endStr = "1970-01-01 $end:0:0";            
-            $arrayValuesTabelRows = array($startStr, $endStr, $value);//вэлуэ не выходной
+            $arrayValuesTableRows = array($startStr, $endStr, $value);//вэлуэ не выходной
             
-            return $this->FindId($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+            return $this->FindId($table, $arrayNamesTableRows, $arrayValuesTableRows);
         }
     }
     
@@ -751,31 +751,31 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
     }
     
     public function FindDayId($arrayTimeWorkId){
-        $arrayNamesTabelRows = array();
+        $arrayNamesTableRows = array();
         foreach ($this->arrayDay as $key => $value) {
-            $arrayNamesTabelRows[] = $key;
+            $arrayNamesTableRows[] = $key;
         }
-        $arrayValuesTabelRows = array();
+        $arrayValuesTableRows = array();
         for ($i = 0; $i < count($arrayTimeWorkId); $i++) {
-            $arrayValuesTabelRows[] = $arrayTimeWorkId[$i];
+            $arrayValuesTableRows[] = $arrayTimeWorkId[$i];
         }
-        return $this->FindId($this->tableDayWork, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        return $this->FindId($this->tableDayWork, $arrayNamesTableRows, $arrayValuesTableRows);
     }
     
     public function InsertDay($arrayTimeWorkId){
-        $arrayNamesTabelRows = array();
+        $arrayNamesTableRows = array();
         foreach ($this->arrayDay as $key => $value) {
-            $arrayNamesTabelRows[] = $key;
+            $arrayNamesTableRows[] = $key;
         }
-        $arrayValuesTabelRows = array();
+        $arrayValuesTableRows = array();
         for ($i = 0; $i < count($arrayTimeWorkId); $i++) {
-            $arrayValuesTabelRows[] = $arrayTimeWorkId[$i];
+            $arrayValuesTableRows[] = $arrayTimeWorkId[$i];
         }
-        return $this->QueryInsert($this->tableDayWork, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        return $this->QueryInsert($this->tableDayWork, $arrayNamesTableRows, $arrayValuesTableRows);
     }
     
     public function UpdateOrganizationData($organizationId, $arrayOrganizationData) {
-        $arrayNamesTabelRows = array(
+        $arrayNamesTableRows = array(
             'actual_location_fk',
             'organization_fk',
 //             'type_works_fk',
@@ -785,26 +785,31 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
             'services_fk',
             'state'
         );
-        $arrayValuesTabelRows = array($organizationId);
+        $arrayValuesTableRows = array($organizationId);
         for ($i = 0; $i < count($arrayOrganizationData); $i++) {
-            $arrayValuesTabelRows[] = $arrayOrganizationData[$i];
+            $arrayValuesTableRows[] = $arrayOrganizationData[$i];
         }
-        return $this->QueryUpdate($this->tableSummaryTable, $arrayNamesTabelRows, $arrayValuesTabelRows, $organizationId);
+        return $this->QueryUpdate($this->tableSummaryTable, $arrayNamesTableRows, $arrayValuesTableRows, $organizationId);
     }
     //обновить улицу
     public function UpdateActualLocation($id, $nameStreet, $cityId, $homeId){
-        $arrayNamesTabelRows = array(
+        $arrayNamesTableRows = array(
             'actual_location',
             'locality_fk',
             'home_fk'
         );
-        $arrayValuesTabelRows = array(
+        $arrayValuesTableRows = array(
             "'$nameStreet'", 
             $cityId, 
             $homeId
         );
-        return $this->QueryUpdate($this->tableActualLocation, $arrayNamesTabelRows, $arrayValuesTabelRows, $id);
+        return $this->QueryUpdate($this->tableActualLocation, $arrayNamesTableRows, $arrayValuesTableRows, $id);
     }
     ///////////////Сохранение данных/////////конец//////////////
+    ///////////////Удаление данных/////////начало//////////////
+    public function DeletePhone($id){
+        
+    }
+    ///////////////Удаление данных/////////конец//////////////
 }
 ?>

@@ -48,5 +48,13 @@ if (isset($_POST['ajax_form_main']) && empty($_POST['ajax_form_main'])){
     }
 }
 
+if (isset($_POST['ajax_form_main_delete_phon']) && empty($_POST['ajax_form_main_delete_phon'])) {
+    //TODO удалить телефон
+    $bal->DeletePhone($id);
+}
+
+if (isset($_POST['ajax_form_main_delete_phon']) && empty($_POST['ajax_form_main_delete_phon'])) {
+    //TODO удалить картинук
+}
 
 ?>
