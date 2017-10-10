@@ -1,5 +1,4 @@
 <?php
-
 class DAL
 {
     // офицыальный сайт медсервиса
@@ -13,7 +12,6 @@ class DAL
     private $user = 'root';
     private $password = '';
     private $database = 'uh347272_med24';
-
     // webspectrum
     // private $host='localhost';
     // private $user='andrew19_med';
@@ -23,7 +21,6 @@ class DAL
     private $arrayNamesServices;
     private $arrayNamesInsuranceCompany;
     private $arrayDay;
-
     public function __construct()
     {
         $this->arrayNamesServices = array(
@@ -62,7 +59,7 @@ class DAL
             'timpanometry' => 'Тімпанометрія'
         );
         $this->arrayNamesInsuranceCompany = array(
-            'usk' =>'УСК', 
+            'usk' =>'УСК',
             'aska' =>'АСКА'
         );
         $this->arrayDay = array(
@@ -81,27 +78,37 @@ class DAL
         $link = mysqli_connect($this->host, $this->user, $this->password, $this->database) or die("Ошибка " . mysqli_error($link));
         return $link;
     }
-
     private function CloseConnectDB($link)
     {
         mysqli_close($link);
     }
-
     private function QuerySelectAll($table, $select = "*")
     {
         $query = "SELECT $select FROM $table";
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query);
-//         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        //         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         return $result;
     }
-
     private function QuerySelectById($table, $selectId)
     {
         $query = "SELECT * FROM $table WHERE id = $selectId";
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query);
+        //         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        return $result;
+    }
+    
+    private function QuerySelectWhere($table, $stringSelect, $select, $selectCol = '*')
+    {
+        $query = "SELECT $selectCol FROM $table WHERE $stringSelect = '$select'";
+        echo $query.'<br/>';
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query);
@@ -111,30 +118,30 @@ class DAL
         return $result;
     }
     
-    private function QuerySelectWhere($table, $stringSelect, $select, $selectCol = '*')
+    private function FindId($table, $arrayNamesTabelRows, $arrayValuesTabelRows)
     {
-        $query = "SELECT $selectCol FROM $table WHERE $stringSelect = $select";
-        
-        $link = $this->ConnectDB();
-        
-        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-        
-        $this->CloseConnectDB($link);
-        return $result;
-    }
-
-    private function FindId($table, $nameRow, $select)
-    {
-        $query = "SELECT 'id' FROM $table WHERE $nameRow = $select";
+        $set = '';
+        if(is_array($arrayNamesTabelRows)){
+            for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+                $dot = $i == 0 ? '' : ' AND ';
+                $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
+            }
+        }
+        else {
+            $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
+        }
+        $query = "SELECT id FROM $table WHERE $set";
+        //         $query = "SELECT id FROM med_actual_location WHERE actual_location = 'вул. петропавлівська' AND locality_fk = 3 AND home_fk = 2";
+        //         echo  $query.'<br/>';
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query);
-//         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        //         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         
-        // вернуть 1 результат массива
         $resultObj = mysqli_fetch_assoc($result);
+        
         if (count($resultObj) == 1) {
             return $resultObj['id'];
         }
@@ -147,7 +154,7 @@ class DAL
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query);
-//         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        //         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         
@@ -161,16 +168,16 @@ class DAL
     private function QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns)
     {
         $query = "INSERT INTO $table($arrayNamesColumns) VALUES($arrayValuesColumns)";
+        echo $query.'<br/>';
         $link = $this->ConnectDB();
         
-        $result = mysqli_query($link, $query);
-//         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        //$result = mysqli_query($link, $query);
+                 $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         return $result;
     }
-
-        /*
+    /*
      * дополнительные методы
      * private function QueryDelete($tabel, $id)
      * {
@@ -194,44 +201,41 @@ class DAL
      * return $result;
      * }
      */
-     private function QueryUpdate($tabel, $arrayNamesTabelRows, $arrayValuesTabelRows, $id)
-     {
-//          $strNamesTabelRows = GetStrNames($arrayNamesTabelRows);
-//          $strValuesTabelRows = GetStrValues($arrayValuesTabelRows);
-         $set = '';
-         echo is_array($arrayNamesTabelRows).'<br/>';
-         echo count($arrayNamesTabelRows).'<br/>';
-         if(is_array($arrayNamesTabelRows)){
-             for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
-                 $dot = $i != 0 ? ', ' : '';
-                 $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
-             }
-         }
-         else {
-             $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
-         }
-         
-         $query = "UPDATE $tabel SET $set WHERE id=$id";
-//          $query = "UPDATE $tabel SET $nameTabelRow = '$valueTabelRow' WHERE id=$id";
-         echo $query;
-         $link = $this->ConnectDB();
-         
-         $result = mysqli_query($link, $query);
-//          $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-         
-         $this->CloseConnectDB($link);
-         return $result;
-     }
-     
+    private function QueryUpdate($tabel, $arrayNamesTabelRows, $arrayValuesTabelRows, $id)
+    {
+        //          $strNamesTabelRows = GetStrNames($arrayNamesTabelRows);
+        //          $strValuesTabelRows = GetStrValues($arrayValuesTabelRows);
+        $set = '';
+        echo is_array($arrayNamesTabelRows).'<br/>';
+        echo count($arrayNamesTabelRows).'<br/>';
+        if(is_array($arrayNamesTabelRows)){
+            for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+                $dot = $i != 0 ? ', ' : '';
+                $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
+            }
+        }
+        else {
+            $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
+        }
         
+        $query = "UPDATE $tabel SET $set WHERE id=$id";
+        //          $query = "UPDATE $tabel SET $nameTabelRow = '$valueTabelRow' WHERE id=$id";
+        echo $query;
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query);
+        //          $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        return $result;
+    }
     // /////////////////// методы запросов до БД // конец //////////////////////////
-        // /////////////////// методы авторизации // начало //////////////////////////
+    // /////////////////// методы авторизации // начало //////////////////////////
     private function GetUserById($id)
     {
         $table = 'med_users';
         return $this->SelectById($table, $id);
     }
-
     public function FindIdByLogin($login)
     {
         return $this->FindId('med_users', 'login', $login);
@@ -243,12 +247,12 @@ class DAL
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query);
-//         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        //         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
         
         $this->CloseConnectDB($link);
         return $result;
     }
-    
+    //TODO проверить $id = null, он не должен быть тут указан DAL
     public function SaveUser($id, $login, $password, $hash, $user_category)
     {
         $arrayNamesTabelRows = array(
@@ -259,18 +263,17 @@ class DAL
             'user_category'
         );
         $arrayValuesTabelRows = array(
-            $id,
-            $login,
-            $password,
-            $hash,
-            $user_category
+            "'$id'",
+            "'$login'",
+            "'$password'",
+            "'$hash'",
+            "'$user_category'"
         );
         $getResult = $this->QueryInsert('med_users', $arrayNamesTabelRows, $arrayValuesTabelRows);
         return $getResult; // вернуть результат сохранения
     }
-
-    // ///////////////////// методы авторизации // конец //////////////////////////
-    // ///////////// методы получения данных в форму // начало ///////////////////
+// ///////////////////// методы авторизации // конец //////////////////////////
+// ///////////// методы получения данных в форму // начало ///////////////////
     private function SelectById($table, $id)
     {
         $result = $this->QuerySelectById($table, $id);
@@ -278,7 +281,6 @@ class DAL
             return $value;
         }
     }
-
     private function SelectByIdWhere($table, $stringSelect, $id, $selectCol = '*')
     {
         $result = $this->QuerySelectWhere($table, $stringSelect, $id, $selectCol);
@@ -363,7 +365,7 @@ class DAL
         return $arrayServices;
     }
     // получить данные связанные с организацией
-    public function GetOrganizationData($id)
+    public function GetOrganizationSummaryData($id)
     {
         $table = 'med_summary_table';
         $result = $this->SelectById($table, $id);
@@ -402,7 +404,6 @@ class DAL
         $result = $this->QuerySelectAll($table);
         return $this->GenerateArrayWhithObj($result);
     }
-
     public function GetRegion($id) {
         $table = 'med_region';
         $result = $this->SelectById($table, $id);
@@ -414,12 +415,12 @@ class DAL
     //улица
     public function GetActualLocation($id)
     {
-        $table = 'actual_location_fk';
+        $table = 'med_actual_location';
         $result = $this->SelectById($table, $id);
         return array(
-          'id' => $result['id'],            
-          'actualLocation' => $result['actual_location'],
-          'locality' => $result['locality_fk']
+            'id' => $result['id'],
+            'actualLocation' => $result['actual_location'],
+            'locality' => $result['locality_fk']
         );
     }
     
@@ -437,7 +438,7 @@ class DAL
         return $this->SelectByIdWhere($table, $stringSelect, $id, $selectCol);
     }
     
-    public function GetLocation($id){
+    public function GetLocationById($id){
         $table = 'med_locality';
         $result = $this->SelectById($table, $id);
         return array(
@@ -464,7 +465,7 @@ class DAL
         return $this->SelectByIdWhere($table, $stringSelect, $id, $selectCol);
     }
     //дом
-    public function GetHome($id) {
+    public function GetHomeById($id) {
         $table = 'med_home';
         $stringSelect = 'actual_location_fk';
         $result = $this->QuerySelectWhere($table, $stringSelect, $id);
@@ -474,13 +475,12 @@ class DAL
         );
     }
     //телефоны
-    public function GetPhones($organizationId) {
+    public function GetPhonesOrganizationId($organizationId) {
         $table = 'med_phone';
         $selectCol = 'id, phone';
         $stringSelect = 'summary_table_fk';
         return $this->SelectByIdWhere($table, $stringSelect, $organizationId, $selectCol);
     }
-
     // выходные дни
     public function GetDaysTimeWork($id)
     {
@@ -503,9 +503,9 @@ class DAL
                     
                     $endTime = new DateTime($resultTimeWork['end_work']);
                     $endTimeWork[$this->arrayDay[$key]] = $endTime->format('H');
-//                     $date = new DateTime($value);
-//                     echo $date->format('H-i').'-----<br/>';
-//                     echo "Формат: $format; " . $date->format('Y-m-d H:i:s') . "\n";
+                    //                     $date = new DateTime($value);
+                    //                     echo $date->format('H-i').'-----<br/>';
+                    //                     echo "Формат: $format; " . $date->format('Y-m-d H:i:s') . "\n";
                 }
             }
         }
@@ -521,8 +521,8 @@ class DAL
         $table = 'med_time_work';
         return $this->SelectById($table, $id);
     }
-
-        // TODO логотип DAL
+// ///////////// методы получения данных в форму // конец ///////////////////
+    // TODO логотип DAL
 //////////////Сохранение данных/////////начало//////////////
     private function GenerateNamesService($arrayData){
         $arrayKey = array();
@@ -569,52 +569,16 @@ class DAL
         foreach ($this->arrayNamesServices as $key => $value) {
             $arrayNamesColumns .= ', '.$key;
         }
-//         $arrayNamesColumns = 
-//             'id,
-//             dentistry,
-//             childrens_dentistry,
-//             therapeutic_dentistry,
-//             aesthetic_dentistry,
-//             orthodontics,
-//             dental_othopedics,
-//             dental_surgery,
-//             dental_implantology,
-//             periodontology,
-//             dental_prophylaxis,
-//             dentistry_pregnant_women,
-//             tooth_whitening,
-//             gnathology,
-//             dental_bone_plastics,
-//             dentistry_at_home,
-//             allergy,
-//             alcoholism,
-//             gastroenterology,
-//             childrens_consultation,
-//             ecg,
-//             ct,
-//             mammography,
-//             mri,
-//             oncology,
-//             wounded,
-//             otorhinolaryngology,
-//             radiology,
-//             sports_medicine,
-//             surgery,
-//             ultrasound_diagnosis,
-//             call_doctor_home,
-//             family_medicine,
-//             timpanometry';
         $arrayValuesColumns = 'null';
         foreach ($arrayNamesColumns as $key => $value) { //перебираю массив пришедших данных
             if ($arrayKey[$key] == null) {
                 $arrayValuesColumns .= ', null';
             }
             $arrayValuesColumns .= ', true';
-//             $arrayValuesColumns .= ', 1'; // поэксперементировать
+            //             $arrayValuesColumns .= ', 1'; // поэксперементировать
         }
         $this->QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns);
     }
-
     public function FindLastServiceId() {
         $table = 'med_services';
         return $this->FindLastId($table);
@@ -661,13 +625,13 @@ class DAL
         return $this->SelectById($table, $id);
     }
     
-    public function CheckForAmatchCompanyDateId($id){        
-        $result = $this->SelectByIdFindCompanyById($id);
+    public function CheckForAmatchCompanyDateId($id){
+        $result = $this->FindCompanyById($id);
         return $result['id'];
     }
     
     public function CheckForAmatchCompanyDate($name){
-        $result = $this->SelectByIdFindCompanyById($id);
+        $result = $this->FindCompanyById($id);
         if ($result['name'] == $name) {
             return true;
         }
@@ -676,670 +640,83 @@ class DAL
     
     public function UpdateCompanyName($id, $name){
         $table = 'med_organization';
-//         $nameCol = array('short_name', 'name');
         $nameCol = 'name';
-        $this->QueryUpdate($table, $nameCol, $name, $id);
+        return $this->QueryUpdate($table, $nameCol, $name, $id);//return поставил проверить
     }
-///////////////Сохранение данных/////////конец//////////////
-////////////////////////////////////////////////////////////    
-//     private function FindLastId($query)
-//     {
-//         $lastId = '';
-//         while ($result = mysqli_fetch_assoc($query)) {
-            
-//             $lastId = $result['id'];
-//         }
-//         return $lastId;
-//     }
-
-    private function GetIdByData($query, $data, $nameTable)
-    {
-        while ($result = mysqli_fetch_assoc($query)) {
-            if ($data == $result[$nameTable]) {
-                return $result['id'];
-            }
-        }
-        return - 1;
-    }
-
-    private function GetDataById($table, $selectId)
-    {
-        $result = $this->QuerySelectAll($table, $selectId);
-        return mysqli_fetch_assoc($result);
-    }
-
-    private function GetIdByDataArray($query, $arrayData, $arrayNameTable)
-    {
-        $flag = true;
-        while ($result = mysqli_fetch_assoc($query)) {
-            $flag = true;
-            for ($i = 1; $i < count($nameTableArray); $i ++) {
-                if ($result[$nameTableArray[$i]] != $arrayData[$i]) {
-                    return false;
-                }
-            }
-            if ($flag) {
-                
-                return $result['id'];
-            }
-        }
-        return - 1;
-    }
-
-    private function ComparisonData($query, $data, $nameTable)
-    { // запрос искомые данные имя таблицы
-        while ($result = mysqli_fetch_assoc($query)) {
-            if ($data == $result[$nameTable]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function ComparisonDataArray($query, $arrayData, $nameTableArray)
-    { // запрос искомые данные имя таблицы
-        $flag = true;
-        while ($result = mysqli_fetch_assoc($query)) {
-            $flag = true;
-            for ($i = 1; $i < count($nameTableArray); $i ++) {
-                if ($result[$nameTableArray[$i]] != $arrayData[$i]) {
-                    return false;
-                }
-            }
-            if ($flag) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function ComparisonManyData($table, $selectId, $arrayNames, $arrayDatas)
-    {
-        $result = $this->GetDataById($table, $selectId);
-        $flag = true;
-        
-        for ($i = 1; $i <= count($arrayNames); $i ++) {
-            if ($result[$arrayNames[$i]] != $arrayDatas[$i]) {
-                $flag = false;
-            }
-        }
-        return $flag;
-    }
-
-    // ----для рефакторинга разбить метод на 2 действия---
-    // получить id
-    // вставить данные
-    
-    // вставка Название(Компания)
-    public function GetIdInsertOrganization($company)
-    {
-        $table = 'med_organization';
-        $nameTable = 'name';
-        $arrayNamesTabelRows = array(
-            'id',
-            'short_name',
-            'type_ownership_fk',
-            $nameTable,
-            'edrpou_code'
-        );
-        $ownership = 1;
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($query, $company, $nameTable);
-        if ($isExist) {
-            $idOrganization = $this->GetIdByData($result, $company, $nameTable);
-            return $idOrganization;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                '',
-                $ownership,
-                $company,
-                ''
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
-    }
-
-    public function GetIdInsertInsuranceCompany($arrayInsuranceCompany)
-    {
-        $table = 'med_insurance_companies';
-        $nameTables = array(
-            'usk',
-            'aska'
-        );
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        // узнаю уществует ли
-        $isExist = $this->ComparisonDataArray($result, $arrayInsuranceCompany, $nameTables);
-        if ($isExist) { // если да
-                        // нахожу id
-            $idInsuranceCompany = $this->GetIdByDataArray($result, $arrayInsuranceCompany, $nameTables);
-            return $idInsuranceCompany;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $arrayInsuranceCompany
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
-    }
-
-    // вставка области - тут либо делаю вставку или нахожу существующую и возвращаю id области
-    public function GetIdInsertGetRegion($region)
-    {
-        $table = 'med_region';
-        $nameTable = 'region';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($result, $region, $nameTable);
-        if ($isExist) {
-            $idRegion = $this->GetIdByData($result, $region, $nameTable);
-            return $idRegion;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $region
-            );
-            
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
-    }
-
-    // вставка город
-    public function GetIdInsertLocality($town, $DistrictRegionId)
-    {
-        $table = 'med_locality';
-        $nameTable = 'locality';
-        $typeLocalityFk = 'type_locality_fk';
-        $districtRegionFk = 'district_region_fk';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable,
-            $typeLocalityFk,
-            $districtRegionFk
-        );
-        $typeLocalityFkData = 1;
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($result, $town, $nameTable); // существует
-        if ($isExist) { // если город существует то ищу район
-            $idTown = $this->GetIdByData($result, $town, $nameTable); // получаю сущ id
-            
-            $arrayNames = array(
-                $nameTable,
-                $districtRegionFk
-            );
-            $arrayDatas = array(
-                $town,
-                $DistrictRegionId
-            );
-            
-            $isCoincides = $this->ComparisonManyData($table, $idTown, $arrayNames, $arrayDatas);
-            if ($isCoincides) { // если совпали данные, то возвращаю текущий id
-                return $idTown;
-            }
-        }
-        // если не совпали, то добовляю
-        $lastId = $this->FindLastId($result);
-        $lastId ++;
-        
-        $arrayValuesTabelRows = array(
-            $lastId,
-            $town,
-            $typeLocalityFkData,
-            $DistrictRegionId
-        );
-        
-        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-        if ($getResult) {
-            return $lastId;
-        } else {
-            return - 1;
-        }
-    }
-
-    // вставка региона город
-    public function GetIdInsertGetDistrictCity($districtCity, $localityId)
-    {
-        $localityId = 'med_district_region';
-        $nameTable = 'district';
-        $localityFk = 'region_fk';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable,
-            $localityId
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($result, $districtCity, $nameTable); // существует
-        if ($isExist) {
-            $idDistrictCity = $this->GetIdByData($result, $districtCity, $nameTable); // получаю сущ id
-            
-            $arrayNames = array(
-                $nameTable,
-                $localityFk
-            );
-            $arrayDatas = array(
-                $districtCity,
-                $localityId
-            );
-            
-            $isCoincides = $this->ComparisonManyData($table, $idDistrictCity, $arrayNames, $arrayDatas);
-            if ($isCoincides) { // если совпали данные, то возвращаю текущий id
-                return $idDistrictCity;
-            }
-        }
-        // если не совпали, то добовляю
-        $lastId = $this->FindLastId($result);
-        $lastId ++;
-        
-        $arrayValuesTabelRows = array(
-            $lastId,
-            $districtCity,
-            $localityId
-        );
-        
-        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-        if ($getResult) {
-            return $lastId;
-        } else {
-            return - 1;
-        }
-    }
-
-    // улица
-    public function GetIdInsertActualLocation($actualLocation, $townId)
-    {
+    public function FindActualLocationDataById($id){
         $table = 'med_actual_location';
-        $nameTable = 'actual_location';
-        $localityFk = 'locality_fk';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable,
-            $localityFk
+        $result = $this->SelectById($table, $id);
+        return array(
+            'id' => $result['id'],
+            'actualLocation' => $result['actual_location'],
+            'locality' => $result['locality_fk'],
+            'home' => $result['home_fk']
         );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($result, $actualLocation, $nameTable); // существует
-        if ($isExist) { // если город существует то ищу район
-            $idActualLocation = $this->GetIdByData($result, $actualLocation, $nameTable); // получаю сущ id
-            
-            $arrayNames = array(
-                $nameTable,
-                $localityFk
-            );
-            $arrayDatas = array(
-                $actualLocation,
-                $townId
-            );
-            
-            $isCoincides = $this->ComparisonManyData($table, $idActualLocation, $arrayNames, $arrayDatas);
-            if ($isCoincides) { // если совпали данные, то возвращаю текущий id
-                return $idActualLocation;
-            }
-        }
-        // если не совпали, то добовляю
-        $lastId = $this->FindLastId($result);
-        $lastId ++;
-        
-        $arrayValuesTabelRows = array(
-            $lastId,
-            $actualLocation,
-            $townId
-        );
-        
-        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-        if ($getResult) {
-            return $lastId;
-        } else {
-            return - 1;
-        }
     }
-
-    // дом
-    public function GetIdInsertHome($home, $actualLocationId)
-    {
+    public function FindActualLocationId($select){
+        $table = 'med_actual_location';
+        $stringSelect = 'actual_location';
+        $selectCol = 'id';
+        $result = $this->QuerySelectWhere($table, $stringSelect, $select, $selectCol);
+        $cast = mysqli_fetch_assoc($result);
+        return $cast['id'];
+    }
+    //дом
+    public function GetHomeIdByNumber($number){
         $table = 'med_home';
-        $nameTable = 'number_home';
-        $actualLocationFk = 'actual_location_fk';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable,
-            $actualLocationFk
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($result, $home, $nameTable); // существует
-        if ($isExist) { // если город существует то ищу район
-            $idHome = $this->GetIdByData($result, $home, $nameTable); // получаю сущ id
-            
-            $arrayNames = array(
-                $nameTable,
-                $actualLocationFk
-            );
-            $arrayDatas = array(
-                $home,
-                $actualLocationId
-            );
-            
-            $isCoincides = $this->ComparisonManyData($table, $idHome, $arrayNames, $arrayDatas);
-            if ($isCoincides) { // если совпали данные, то возвращаю текущий id
-                return $idHome;
-            }
-        }
-        // если не совпали, то добовляю
-        $lastId = $this->FindLastId($result);
-        $lastId ++;
-        
-        $arrayValuesTabelRows = array(
-            $lastId,
-            $home,
-            $actualLocationId
-        );
-        
-        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-        if ($getResult) {
-            return $lastId;
-        } else {
-            return - 1;
-        }
+        $stringSelect = 'number_home';
+        $selectCol = 'id';
+        //$dd = $this->QuerySelectWhere($table, $stringSelect, $number, $selectCol);
+        $result = $this->SelectByIdWhere($table, $stringSelect, $number, $selectCol);
+        return $result['id'][0];
     }
-
-    // телефон
-    public function GetIdInsertPhone($phone)
-    {
+    public function UpdateHome($id, $string) {
+        $table = 'med_home';
+        $nameCol = 'number_home';
+        return $this->QueryUpdate($tabel, $nameCol, $string, $id);//return поставил проверить
+    }
+    public function InsertHome($string) {
+        $table = 'med_home';
+        $namesColumn = 'number_home';
+        $valuesColumn = "'$string'";
+        return $this->QueryInsert($table, $namesColumn, $valuesColumn);
+    }
+    //улица
+    public function InsertActualLocation($streetStr, $homeId, $cityId){
+        $table = 'med_actual_location';
+        $namesColumns = 'actual_location, locality_fk, home_fk';
+        $valuesColumns = "'$streetStr', $homeId, $cityId";
+        return $this->QueryInsert($table, $namesColumns, $valuesColumns);
+    }
+    public function GetActualLocationByStreetHomeCity($street, $homeId, $cityId){
+        $table = 'med_actual_location';
+        $arrayNamesTabelRows = array('actual_location', 'locality_fk', 'home_fk');
+        $arrayValuesTabelRows = array($street, $homeId, $cityId);
+        $result = $this->FindId($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        return $result;
+    }
+    //телефон
+    public function GetPhoneById($id){
         $table = 'med_phone';
-        $nameTable = 'phone';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
+        $result = $this->QuerySelectById($table, $id);
+        $cast = mysqli_fetch_assoc($result);
+        return array(
+            'id' => $cast['id'],
+            'phone' => $cast['phone'],
+            'summaryTable' => $cast['summary_table_fk']
         );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        $isExist = $this->ComparisonData($result, $phone, $nameTable);
-        if ($isExist) {
-            $idPhone = $this->GetIdByData($result, $phone, $nameTable);
-            return $idPhone;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $phone
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
     }
-
-    // тип учереждение
-    public function GetIdInsertTypeInstitution($typeCompany)
-    {
-        $table = 'med_type_institution';
-        $nameTable = 'type_description';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        // узнаю уществует ли
-        $isExist = $this->ComparisonData($result, $typeCompany, $nameTable);
-        if ($isExist) { // если да
-                        // нахожу id
-            $idTypeDescription = $this->GetIdByData($result, $typeCompany, $nameTable);
-            return $idTypeDescription;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $typeCompany
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
+    public function UpdatePhone($id, $phone){
+        $table = 'med_phone';
+        $nameCol = 'phone';
+        return $this->QueryUpdate($tabel, $nameCol, $phone, $id);
     }
-
-    // сервисы
-    public function GetIdInsertServices($arrayServices)
-    {
-        $table = 'med_services';
-        $nameTables = array(
-            'dentistry',
-            'childrens_dentistry',
-            'therapeutic_dentistry',
-            'aesthetic_dentistry',
-            'orthodontics',
-            'dental _othopedics',
-            'dental_surgery',
-            'dental_Implantology',
-            'periodontology',
-            'dental_prophylaxis',
-            'dentistry_pregnant_women',
-            'tooth_whitening',
-            'gnathology',
-            'dental_bone_plastics',
-            'dentistry_at_home',
-            'allergy',
-            'alcoholism',
-            'gastroenterology',
-            'childrens_consultation',
-            'ecg',
-            'ct',
-            'mammography',
-            'mri',
-            'oncology',
-            'wounded',
-            'otorhinolaryngology',
-            'radiology',
-            'sports_medicine',
-            'surgery',
-            'ultrasound_diagnosis',
-            'call_doctor_home',
-            'family_medicine',
-            'timpanometry'
-        );
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        // узнаю уществует ли
-        $isExist = $this->ComparisonDataArray($result, $arrayServices, $nameTables);
-        if ($isExist) { // если да
-                        // нахожу id
-            $idServices = $this->GetIdByDataArray($result, $arrayServices, $nameTables);
-            return $idServices;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $arrayServices
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
+    public function InsertPhone($phone, $organizationId) {
+        $table = 'med_phone';
+        $arrayNamesColumns = "phone, summary_table_fk";
+        $arrayValuesColumns = "$phone, $organizationId";
+        return $this->QueryInsert($table, $arrayNamesColumns, $arrayValuesColumns);        
     }
-
-    // дени работы
-    public function GetIdInsertDayWork($dayWork)
-    {
-        $table = 'med_day_work';
-        $nameTable = 'day_work';
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        // узнаю уществует ли
-        $isExist = $this->ComparisonData($result, $typeDescription, $nameTable);
-        if ($isExist) { // если да
-                        // нахожу id
-            $idDayWork = $this->GetIdByData($result, $typeDescription, $nameTable);
-            return $idDayWork;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $typeDescription
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
-    }
-
-    // время работы
-    public function GetIdInsertTimeWork($arraDatas)
-    {
-        $table = 'med_time_work';
-        $nameTables = array(
-            'time_work',
-            'time_work_weekend'
-        );
-        // $arraDatas = array($timeWork, $timeWorkWeekend);
-        $arrayNamesTabelRows = array(
-            'id',
-            $workDay,
-            $workWeekend
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        // узнаю уществует ли
-        $isExist = $this->ComparisonDataArray($result, $arraDatas, $nameTables);
-        if ($isExist) { // если да
-                        // нахожу id
-            $idTimeWork = $this->GetIdByDataArray($result, $arraDatas, $nameTables);
-            return $idTimeWork;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $arraDatas
-            ); // array_unshift($lastId, $arraDatas);
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
-    }
-
-    public function GetIdInsertSummaryTable($arraDatas)
-    { // med_summary_table
-        $table = 'med_services';
-        $nameTables = array(
-            'id',
-            'actual_location_fk',
-            'organization_fk',
-            'type_works_fk',
-            'type_institution_fk',
-            'phone_fk',
-            'day_work_kf',
-            'time_work_fk',
-            'insurance_companies_fk',
-            'services_fk'
-        );
-        $arrayNamesTabelRows = array(
-            'id',
-            $nameTable
-        );
-        
-        $result = $this->QuerySelectAll($table);
-        
-        // узнаю уществует ли
-        $isExist = $this->ComparisonDataArray($result, $arraDatas, $nameTables);
-        if ($isExist) { // если да
-                        // нахожу id
-            $idSummaryTable = $this->GetIdByDataArray($result, $arraDatas, $nameTables);
-            return $idSummaryTable;
-        } else {
-            $lastId = $this->FindLastId($result);
-            $lastId ++;
-            
-            $arrayValuesTabelRows = array(
-                $lastId,
-                $arrayServices
-            );
-            $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-            if ($getResult) {
-                return $lastId;
-            } else {
-                return - 1;
-            }
-        }
-    }
+    ///////////////Сохранение данных/////////конец//////////////
 }
 ?>

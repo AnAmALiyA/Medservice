@@ -15,9 +15,9 @@ require_once 'med-BAL.php';
 
  $dal = new DAL();
 //  $dal = new BAL();
- $m = $dal->UpdateCompanyName(46, array('работает', 'работает'));
-
-//  var_dump($m);
+ $m = $dal->InsertPhone('873465834', 3);
+//  echo "[$m]-результатt<br/>";
+ var_dump($m);
 // echo '<br/>-----------foreach ----------------<br/>';
 // echo '<br/>';
 // foreach ($m as $key => $value) {
