@@ -995,19 +995,23 @@ class MedDB
         return $this->GetArrayAllCol($table);
     }
 
-    public function SaveNews($news_title, $med_user_fk, $news_descripion)
+    public function SaveNews($news_title, $med_user_fk, $news_descripion ,$date_show , $date_news )
     {
         $arrayNamesTabelRows = array(
             'news_title',
             'med_user_fk',
-            'news_descripion'
+            'news_descripion',
+            'news_show_date',
+            'news_data'
         );
         $arrayValuesTabelRows = array(
             $news_title,
             $med_user_fk,
-            $news_descripion
+            $news_descripion,
+            $date_show , 
+            $date_news
         );
-        $getResult = $this->QueryInsertGetId('med_news', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $getResult = $this->QueryInsertNPGetId('med_news', $arrayNamesTabelRows, $arrayValuesTabelRows);
         if ($getResult) {
             return $getResult;
         } else {
@@ -1021,7 +1025,7 @@ class MedDB
         return $this->GetArrayAllCol($table);
     }
 
-    public function SavePromo($promo_title, $med_user_fk, $promo_descripion)
+    public function SavePromo($promo_title, $med_user_fk, $promo_descripion ,$date_show , $date_news )
     {
         $arrayNamesTabelRows = array(
             'promo_title',
@@ -1161,10 +1165,26 @@ class MedDB
     }
 
     // findout your expected id
-    private function QueryInsertGetId($table, $arrayNamesColumns, $arrayValuesColumns)
+    //TODO: need refactor call toha
+    private function QueryInsertNPGetId($table, $arrayNamesColumns, $arrayValuesColumns)
     {
-        $query = "INSERT INTO $table ($arrayNamesColumns[0],$arrayNamesColumns[1],$arrayNamesColumns[2]) VALUES ('$arrayValuesColumns[0]' , '$arrayValuesColumns[1]' , '$arrayValuesColumns[2]')";
-        echo $query." <br>";
+        $namesColumns = '';
+        $valuesColumns = '';
+        echo is_array($arrayNamesColumns).'<br/>';
+        echo count($arrayNamesColumns).'<br/>';
+        if(is_array($arrayNamesColumns)){
+            for ($i = 0; $i < count($arrayNamesColumns); $i++) {
+                $dot = $i != 0 ? ', ' : '';
+                $namesColumns .= "$dot $arrayNamesColumns[$i]";
+                $valuesColumns .= "$dot '$arrayValuesColumns[$i]'";
+            }
+        }
+        else {
+            $namesColumns = $arrayNamesColumns;
+            $valuesColumns = $arrayValuesColumns;
+        }
+        $query = "INSERT INTO $table($namesColumns) VALUES($valuesColumns)";
+        echo $query.'<br/>';
         $link = $this->ConnectDB();
         
         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
@@ -1175,74 +1195,53 @@ class MedDB
         return $id;
     }
     
+    //for other stuff like medturism
+    // findout your expected id
+//     private function QueryInsertGetId($table, $arrayNamesColumns, $arrayValuesColumns)
+//     {
+//         $query = "INSERT INTO $table ($arrayNamesColumns[0],$arrayNamesColumns[1],$arrayNamesColumns[2]) VALUES ('$arrayValuesColumns[0]' , '$arrayValuesColumns[1]' , '$arrayValuesColumns[2]')";
+//         echo $query." <br>";
+//         $link = $this->ConnectDB();
+        
+//         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+//         $id = mysqli_insert_id($link);
+        
+//         $this->CloseConnectDB($link);
+//         return $id;
+//     }
+    
     //testcase seems to be completed
-   private function FindExistedGetID($table, $indexDB , $indexCheck){
-       echo 'error here';
-       $query = "SELECT id FROM $table WHERE $indexDB = '$indexCheck'";
-       echo $query."<br/>"; //TODO: unwrite text
-       $link = $this->ConnectDB();
- //      var_dump(mysqli_query($link, $query) );
- //      echo "<br/>";
-       $result = mysqli_query($link, $query) /*nah nenuzhon  or die("Ошибка " . mysqli_error($link)) */;
-     //  echo $result." vivod  <br>";
-       $this->CloseConnectDB($link);
+//    private function FindExistedGetID($table, $indexDB , $indexCheck){
+//        echo 'error here';
+//        $query = "SELECT id FROM $table WHERE $indexDB = '$indexCheck'";
+//        echo $query."<br/>"; //TODO: unwrite text
+//        $link = $this->ConnectDB();
+//  //      var_dump(mysqli_query($link, $query) );
+//  //      echo "<br/>";
+//        $result = mysqli_query($link, $query) /*nah nenuzhon  or die("Ошибка " . mysqli_error($link)) */;
+//      //  echo $result." vivod  <br>";
+//        $this->CloseConnectDB($link);
       
-       if($result != null){
-           //cal of sql result
-           $row = $result->fetch_array(MYSQLI_ASSOC);
-           echo $row." <br>";
-           echo $row['id']." <br>";
-           return $row['id'];
+//        if($result != null){
+//            //cal of sql result
+//            $row = $result->fetch_array(MYSQLI_ASSOC);
+//            echo $row." <br>";
+//            echo $row['id']." <br>";
+//            return $row['id'];
          
        
-       }
-      else return false;
-   }
+//        }
+//       else return false;
+//    }
    
-   
-   public  function FindExistedNews($indexChek){
-       
-       $table = 'med_news';
-       $indexDB = 'news_title';
-       
-       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
-       return $result;
-       
-   }
-   
-   public  function FindExistedPromo($indexChek){
-       
-       $table = 'med_promo';
-       $indexDB = 'promo_title';
-       
-       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
-       return $result;
-       
-   }
-   public  function FindExistedSpecial($indexChek){
-       
-       $table = 'med_special';
-       $indexDB = 'special_title';
-       
-       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
-       return $result;
-       
-   }
-   public  function FindExistedMedturism($indexChek){
-       
-       $table = 'med_medturism';
-       $indexDB = 'medturism_title';
-       
-       $result = $this->FindExistedGetID($table, $indexDB, $indexChek);
-       return $result;
-       
-   }
-   
+      
    //TODO: in progress of macking individual funct for each category
    public function UpdateNews($arrayUpdatedData, $id_post){
        $table = 'med_news';
-       //TODO: constant place
-       $arrayDBCollums = array('news_title', 'med_user_fk', 'news_descripion');
+       // constant place
+       $arrayDBCollums = array('news_title', 'med_user_fk', 'news_descripion', 'news_show_date',
+           'news_data');
   
        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
        
@@ -1256,9 +1255,23 @@ class MedDB
    
    
    // $id is row`s id of the particular table
-   private function UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id){
-       $query = "UPDATE $table SET $arrayDBCollums[0] = '$arrayUpdatedData[0]', $arrayDBCollums[1] = $arrayUpdatedData[1], $arrayDBCollums[2] = '$arrayUpdatedData[2]' WHERE id = $id";
-       
+   private function UpdateTable($table, $arrayNamesTabelRows , $arrayValuesTabelRows, $id){
+       $set = '';
+      
+       if(is_array($arrayNamesTabelRows)){
+           for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+               $dot = $i != 0 ? ', ' : '';
+            
+               $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
+           }
+       }
+       else {
+           $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
+       }
+     //  $query = "UPDATE med_news SET news_title = 'blabala', med_user_fk = '1', news_descripion = '11 bla', news_show_date = true, news_data ='1970-10-10' WHERE id=34 ";
+       $query = "UPDATE $table SET $set WHERE id=$id";
+      // $query = "UPDATE $table SET $arrayDBCollums[0] = '$arrayUpdatedData[0]', $arrayDBCollums[1] = $arrayUpdatedData[1], $arrayDBCollums[2] = '$arrayUpdatedData[2]' WHERE id = $id";
+       echo $query;
        $link = $this->ConnectDB();
        
        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));

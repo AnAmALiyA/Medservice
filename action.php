@@ -541,22 +541,23 @@ class HandlingData
       //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
                $_SESSION['id'];
                $id_user = 1;//TODO: must be in SESSION
-               $date_show = false;
+               $p =  20;
             for ($i = 0; count($data['name']) > $i; $i ++) {
                 echo $data['name'][$i]."<br>";  //TODO: unwrite text
              echo   $data['id_news'][$i] ;
                 //TODO: finding id from hidden form
-           //     $find_id = $this->controller->FindExistedNews($data['name'][$i]);
-           //     echo $find_id." id"; //TODO: unwrite text
-              
-               //TODO: confirm rightness
-               if(isset($data['id_news'][$i])){
-                   if(isset($data["check[$i]"])) $date_show = true;
-                   echo $find_id." <br>";
-                   echo $date_show;
+             $date_show = false;
+             $date_news = null;
+                  if(isset($data['id_news'][$i])){
+                   if(isset($data["check"][$i])) $date_show = true; 
+                   echo $date_show."<br>";
+                  
+                 if($date_show){
+                     $date_news  = date('Y-m-d');}
+                                     
                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                   $result = $this->controller->UpdateNews($title, $id_user, $description, $data['id_news'][$i] /*, $date_show */);
+                   $result = $this->controller->UpdateNews($title, $id_user, $description, $data['id_news'][$i] , $date_show , $date_news );
                
                    
                    if (isset($data["news_img_[$i]"])) {
@@ -567,17 +568,20 @@ class HandlingData
                }
                //try this way
                else/* if (!isset($_POST['id_news'])) */ {
-                   $p =  20;
-                   if(isset($data["check[$p]"])) $date_show = true;
-                    echo "<br>vivo".$date_show."dd<br>";
                    
+                   if(isset($data["check"][$p])) $date_show = true;
+                   echo $date_show."<br>";
+                    if($date_show){
+                        $date_news  = date('Y-m-d');
+                    }
+                        
                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                   $result = $this->controller->SaveNews($title, $id_user,$description /* , $date_show */);
+                   $result = $this->controller->SaveNews($title, $id_user,$description , $date_show , $date_news );
                    
                    if (isset($data["news_img_[$i]"])) {
-                       
-                       $result_pic = $this->SavePicNews($news_id = $result);
+                       $news_id = $result;
+                       $result_pic = $this->SavePicNews($news_id);
                        return true;
                    }
                $p++;

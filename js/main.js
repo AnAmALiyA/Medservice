@@ -53,7 +53,7 @@ function addFormMarkup (marker) {
 							'<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
 							'<textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>' +
 							'<span>' +
-								'<input  type="checkbox" name="check[' + cifra +']"  id="check[' + cifra +']" value="1">' +
+								'<input  type="checkbox" name="check[' + cifra +']"  id="check[' + cifra +']" value="true"/>' +
 								'<label for="check[' + cifra +']">Вывести дату</label>' +
 							'</span>' +
 						'</div>' +

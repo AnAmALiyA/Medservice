@@ -694,15 +694,15 @@ class Controller
         return $this->medDB->GetPromoAllCol();
     }
     
-    public function SaveNews($title, $user, $description){
+    public function SaveNews($title, $user, $description,$date_show , $date_news ){
         
-        $result =    $this->medDB->SaveNews($title,$user, $description);
+        $result =    $this->medDB->SaveNews($title,$user, $description,$date_show , $date_news );
         return $result;
     } 
     
-    public  function  SavePromo($title, $description, $user){
+    public  function  SavePromo($title, $description, $user ,$date_show , $date_news ){
         
-      $result =  $this->medDB->SavePromo($title, $description, $user);
+        $result =  $this->medDB->SavePromo($title, $description, $user ,$date_show , $date_news );
       return $result;
     }
     
@@ -746,45 +746,12 @@ class Controller
         else return false;
     }
     
-    //find content section
-    public  function FindExistedNews($indexChek){
-        
-      
-        
-        $result = $this->medDB->FindExistedNews( $indexChek);
-        return $result;
-        
-    }
-    
-    public  function FindExistedPromo($indexChek){
-        
-       
-        
-        $result = $this->medDB->FindExistedPromo($indexChek);
-        return $result;
-        
-    }
-    public  function FindExistedSpecial($indexChek){
-        
-     
-        $result = $this->medDB->FindExistedSpecial($indexChek);
-        return $result;
-        
-    }
-    public  function FindExistedMedturism($indexChek){
-        
-       
-        
-        $result = $this->medDB->FindExistedMedturism($indexChek);
-        return $result;
-        
-    }
-    //end of  find content section
+  
     //TODO: make bal Update func
-    public  function UpdateNews($title, $id_user, $description, $find_id) {
+    public  function UpdateNews($title, $id_user, $description, $find_id ,$date_show , $date_news ) {
         
-        $arrayUpdatedData = array($title,  $id_user, $description) ;
-        $result = $this->medDB->UpdateNews($arrayUpdatedData,  $find_id);
+        $arrayUpdatedData = array($title,  $id_user, $description,$date_show , $date_news) ;
+        $result = $this->medDB->UpdateNews($arrayUpdatedData,  $find_id  );
         return $result;
     }
 }

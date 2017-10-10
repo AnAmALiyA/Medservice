@@ -392,7 +392,7 @@ img.wp-smiley, img.emoji {
 								<textarea class="form-control" required="required" rows="5"
 									name="comment[]"><?php echo $value['news_descripion']; ?></textarea>
 								<span> <input  type="checkbox" id="check[<?php echo $i ?>]"
-									name="check[]" > 
+									name="check[<?php echo $i ?>]" value="true" <?php if(!empty($value['news_show_date'])) echo 'checked' ?> /> 
 									<label for="check[<?php echo $i ?>]">Вывести
 										дату</label>
 								</span>
@@ -425,7 +425,7 @@ img.wp-smiley, img.emoji {
 									required="required" rows="5"  name="comment[]"
 									placeholder="Описание"></textarea>
 								<span> 
-								<input  type= "checkbox" id="check[1]"	name="check[]"  /> 
+								<input  type= "checkbox" id="check[1]"	name="check[]" value="true" /> 
 								<label for="check[1]">Вывести дату</label>
 								</span>
 							</div>
