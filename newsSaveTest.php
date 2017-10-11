@@ -8,10 +8,8 @@ require 'action.php';
 $HandlingData = new HandlingData();
 
 $HandlingData->SaveNewsArray($_POST, $_FILES);
-echo "<br> ^^^||^^^";
-echo basename($_FILES["news_img_"]['name'][0]);
-echo $_FILES['news_img_']['size'][0];
-echo $_FILES['news_img_']['tmp_name'][0];
+echo "<br> Данные сохранены успешно.";
+
 
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');

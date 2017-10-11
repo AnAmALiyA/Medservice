@@ -33,6 +33,23 @@ jQuery(document).ready(function($){
 	$('body').on('click', '.remove_imeg_js', function() {		
 		$(this).closest('.icon-holder').prev('.imeg_js').attr('src', 'img/empty-img.jpg');		
 	});
+	
+	$('body').on('click', '.remove_news_js', function() {
+        var id =$(this).attr('news_id');
+        $.ajax({
+         type: "POST",
+ //path to delete php page
+        url:"deleteNews.php",
+        data: "id="+id,
+        success:function(result){
+
+          //here is your success action
+          //for refreshing page use this  
+            $("#result1").html(result);
+        }
+        });
+        });
+	
 });
 
 function addFormMarkup (marker) {
@@ -83,11 +100,11 @@ function addFormSpecialMarkup (marker) {
 	var formMarkup = '<div class="download-holder clearfix">' +
         				'<div class="dwnld">' +
 							'<div class="form-holder">' +
-									'<input type="text" required="required" class="form-control" id="name<?php echo $i ?>" name="name<?php echo $i ?>" placeholder="Заголовок"/>' +
+									'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
         
 							        '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
 							        '<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
-							        '<textarea class="form-control" required="required" rows="5" id="comment<?php echo $i ?>" name="comment<?php echo $i ?>" placeholder="Описание"></textarea>' +
+							        '<textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>' +
 				        	'</div>'+
 			        	'</div>'+
 	        		'</div>';
@@ -99,11 +116,11 @@ function addFormMedturMarkup (marker) {
 	var formMarkup = '<div class="download-holder clearfix">' +
         				'<div class="dwnld">' +
 							'<div class="form-holder">' +
-									'<input type="text" required="required" class="form-control" id="name<?php echo $i ?>" name="name<?php echo $i ?>" placeholder="Заголовок"/>' +
+									'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
         
 							        '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
 							        '<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
-							        '<textarea class="form-control" required="required" rows="5" id="comment<?php echo $i ?>" name="comment<?php echo $i ?>" placeholder="Описание"></textarea>' +
+							        '<textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>' +
 				        	'</div>'+
 			        	'</div>'+
 	        		'</div>';
@@ -119,42 +136,42 @@ function addFormFotoMarkup (marker) {
             '<img src="img/empty-img.jpg" alt="empty">'+
             '<div class="icon-holder">'+
                 '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
-                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times remove_imeg_js" aria-hidden="true">'+'</i>'+
             '</div>'+
         '</div>'+
         '<div class="photo-holder">'+
             '<img src="img/empty-img.jpg" alt="empty">'+
             '<div class="icon-holder">'+
                 '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
-                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times remove_imeg_js" aria-hidden="true">'+'</i>'+
             '</div>'+
         '</div>'+
         '<div class="photo-holder">'+
             '<img src="img/empty-img.jpg" alt="empty">'+
             '<div class="icon-holder">'+
                 '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
-                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times remove_imeg_js" aria-hidden="true">'+'</i>'+
             '</div>'+
         '</div>'+
         '<div class="photo-holder">'+
             '<img src="img/empty-img.jpg" alt="empty">'+
             '<div class="icon-holder">'+
                 '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
-                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times remove_imeg_js" aria-hidden="true">'+'</i>'+
             '</div>'+
         '</div>'+
         '<div class="photo-holder">'+
             '<img src="img/empty-img.jpg" alt="empty">'+
             '<div class="icon-holder">'+
                 '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
-                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times remove_imeg_js" aria-hidden="true">'+'</i>'+
             '</div>'+
         '</div>'+
         '<div class="photo-holder">'+
             '<img src="img/empty-img.jpg" alt="empty">'+
             '<div class="icon-holder">'+
                 '<i class="fa fa-pencil-square-o" aria-hidden="true">'+'</i>'+
-                '<i class="fa fa-times" aria-hidden="true">'+'</i>'+
+                '<i class="fa fa-times remove_imeg_js" aria-hidden="true">'+'</i>'+
             '</div>'+
         '</div>'+
     '</div>';

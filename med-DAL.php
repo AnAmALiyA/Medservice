@@ -1044,19 +1044,23 @@ class MedDB
         return $this->GetArrayAllCol($table);
     }
 
-    public function SavePromo($promo_title, $med_user_fk, $promo_descripion ,$date_show , $date_news )
+    public function SavePromo($promo_title, $med_user_fk, $promo_descripion ,$date_show , $date_promo )
     {
         $arrayNamesTabelRows = array(
             'promo_title',
             'med_user_fk',
-            'promo_descripion'
+            'promo_description',
+            'promo_show_date',
+            'promo_data'
         );
         $arrayValuesTabelRows = array(
             $promo_title,
             $med_user_fk,
-            $promo_descripion
+            $promo_descripion,
+            $date_show ,
+            $date_promo
         );
-        $getResult = $this->QueryInsertGetId('med_promo', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $getResult = $this->QueryInsertNPGetId('med_promo', $arrayNamesTabelRows, $arrayValuesTabelRows);
         if (isset($getResult)) {
             return $getResult;
         } else {
@@ -1070,19 +1074,23 @@ class MedDB
         return $this->GetArrayAllCol($table);
     }
 
-    public function SaveSpecial($special_title, $med_user_fk, $special_descripion)
+    public function SaveSpecial($special_title, $special_descripion, $med_user_fk)
     {
         $arrayNamesTabelRows = array(
+            
             'special_title',
-            'med_user_fk',
-            'special_descripion'
+            
+            'special_description',
+            'med_user_fk'
         );
         $arrayValuesTabelRows = array(
-            $special_title,
-            $med_user_fk,
-            $special_descripion
+           
+             $special_title,
+           $special_descripion, 
+            $med_user_fk 
+          
         );
-        $getResult = $this->QueryInsert('med_special', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $getResult = $this->QueryInsertNPGetId('med_special', $arrayNamesTabelRows, $arrayValuesTabelRows);
         if ($getResult) {
             return true;
         } else {
@@ -1096,19 +1104,19 @@ class MedDB
         return $this->GetArrayAllCol($table);
     }
 
-    public function SaveMedturism($medturism_title, $med_user_fk, $medturism_descripion)
+    public function SaveMedturism($medturism_title, $medturism_descripion, $med_user_fk)
     {
         $arrayNamesTabelRows = array(
             'medturism_title',
             'med_user_fk',
-            'medturism_descripion'
+            'medturism_description'
         );
         $arrayValuesTabelRows = array(
             $medturism_title,
             $med_user_fk,
             $medturism_descripion
         );
-        $getResult = $this->QueryInsert('med_medturism', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        $getResult = $this->QueryInsertNPGetId('med_medturism', $arrayNamesTabelRows, $arrayValuesTabelRows);
         if ($getResult) {
             return true;
         } else {
@@ -1152,7 +1160,7 @@ class MedDB
         $arrayValuesTabelRows = array(
             $id,
             $promo_id,
-            $name
+            "'$name'"
         );
         $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
         if ($getResult) {
@@ -1266,6 +1274,34 @@ class MedDB
        return $result;
        
    }
+   public function UpdatePromo($arrayUpdatedData, $id_post){
+       $table = 'med_promo';
+       // constant place
+       $arrayDBCollums = array('promo_title', 'med_user_fk', 'promo_description', 'promo_show_date',
+           'promo_data');
+       
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+       return $result;
+       
+   }
+   public function UpdateSpecial($arrayUpdatedData, $id_post){
+       $table = 'med_special';
+       // constant place
+       $arrayDBCollums = array('med_user_fk',	'special_title',	'special_description');
+       
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+       return $result;
+       
+   }
+   public function UpdateMedturism($arrayUpdatedData, $id_post){
+       $table = 'med_medturism';
+       // constant place
+       $arrayDBCollums = array('med_user_fk',	'medturism_title',	'medturism_description');
+       
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+       return $result;
+       
+   }
    
    //TODO: make it multipurpose  
    //sql example 
@@ -1298,6 +1334,37 @@ class MedDB
       // $id = mysqli_insert_id($link);
         $this->CloseConnectDB($link);
         return $id;
+   }
+   
+   public function GetPicsPromo(){
+       $column = "med_promo_fk";
+       return $this->GetArrayAllPics($column);
+   }
+   
+   private function GetArrayAllPics($column){
+       $table = "med_image";
+       $query = "SELECT $column FROM $table";
+       
+       
+       
+      
+       $link = $this->ConnectDB();
+       
+       $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+       
+       $this->CloseConnectDB($link);
+       $arr = array();
+       $i = 1;
+       while ($obj = mysqli_fetch_assoc($result)) {
+           $arrTemp = array();
+           foreach ($obj as $key => $value) {
+               $arrTemp[$key] = $value;
+           }
+           $arr[$i] = $arrTemp;
+           $i ++;
+       }
+       return $arr;
+      
    }
    
 }

@@ -248,30 +248,56 @@
                         <span class="allert-block">Закрыто на ремонт</span>
                     </div>
                 </div>
-                <div class="right-col">
+                <form name="formMulti" action="medturismSave.php" method="POST"
+					class="dwnld form-news-list"  enctype="multipart/form-data">
+
+					<div class="medturism-list">
+					<?php 
+					require_once 'med-BAL.php';
+					$select = new Controller();
+					$result = $select->GetMedturismAll(); 
+					 $i=0; //  for($i = 0; $i < 2; $i++) { 
+					 if($result){ ?>
+					    
+					<?php foreach ($result as $key => $value){ ?>
+               
                     <div class="download-holder clearfix">
-                        <form action="#" class="dwnld">
+                        <div class="dwnld">
+                        <input type="hidden" name="id_special[]" value="<?php echo $value['id']; ?> " />
                             <div class="form-holder">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
+                                <input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок" value ="<?php echo $value['special_title'];  ?>"/>
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
+                                <i class="fa fa-times remove_item_js" aria-hidden="true"></i>
+                                <textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"> <?php echo $value['special_description'];  ?></textarea>
                             </div>
-                        </form>
+                      
                     </div>
+            	</div>
+							<?php } ?>
+					
+					<?php } 
+					 
+				 	else{ ?>
+					 
                     <div class="download-holder clearfix">
-                        <form action="#" class="dwnld">
+                        <div class="dwnld">
                             <div class="form-holder">
-                                <input type="text" required="required" class="form-control" id="name" name="name" placeholder="Заголовок"/>
+                                <input type="text" required="required" class="form-control" name="name[]" placeholder="Заголовок"/>
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5" id="comment" name="comment" placeholder="Описание"></textarea>
+                                <i class="fa fa-times remove_item_js" aria-hidden="true"></i>
+                                <textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>
                             </div>
-                        </form>
+                        
+                  
+                    </div>
+                    </div>
+                    <?php }?>
                     </div>
                     <div class="add">
+                    <div class="button-add add_special_js">
                         <span>Добавить</span>
                         <i class="fa fa-plus" aria-hidden="true"></i>
+                    </div>
                     </div>
                     <div class="button-save">
                         <button>Сохранить</button>

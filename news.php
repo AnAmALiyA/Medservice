@@ -365,8 +365,8 @@ img.wp-smiley, img.emoji {
 					foreach ($result as $key => $value){ ?>
 							
 						<?php 
-						foreach ($value as $key => $val){
-						}
+// 						foreach ($value as $key => $val){
+// 						}
 						?>		
 								<div class="download-holder clearfix">
 							<div class="left-form">
@@ -391,8 +391,9 @@ img.wp-smiley, img.emoji {
 									aria-hidden="true"></i>
 								<textarea class="form-control" required="required" rows="5"
 									name="comment[]"><?php echo $value['news_descripion']; ?></textarea>
-								<span> <input  type="checkbox" id="check[<?php echo $i ?>]"
-									name="check[<?php echo $i ?>]" value="true" <?php if(!empty($value['news_show_date'])) echo 'checked' ?> /> 
+								<span> 
+								<input  type="checkbox" id="check[<?php echo $i ?>]" 
+								name="check[<?php echo $i ?>]" value="true" <?php if(!empty($value['news_show_date'])) echo 'checked' ?> /> 
 									<label for="check[<?php echo $i ?>]">Вывести
 										дату</label>
 								</span>
@@ -421,12 +422,12 @@ img.wp-smiley, img.emoji {
 									placeholder="Заголовок" /> <i class="fa fa-pencil-square-o"
 									aria-hidden="true"></i> <i class="fa fa-times remove_item_js"
 									aria-hidden="true"></i>
-								<textarea form="formMulti" class="form-control"
+								<textarea  class="form-control"
 									required="required" rows="5"  name="comment[]"
 									placeholder="Описание"></textarea>
 								<span> 
-								<input  type= "checkbox" id="check[1]"	name="check[]" value="true" /> 
-								<label for="check[1]">Вывести дату</label>
+								<input  type= "checkbox" 	name="check[0]" value="true" /> 
+								<label for="check[0]">Вывести дату</label>
 								</span>
 							</div>
 						

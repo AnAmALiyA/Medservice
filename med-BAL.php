@@ -693,16 +693,21 @@ class Controller
     public function GetPromoAll(){
         return $this->medDB->GetPromoAllCol();
     }
-    
+    public function GetSpecialAll(){
+        return $this->medDB->GetSpecialAllCol();
+    }
+    public function GetMedturismAll(){
+        return $this->medDB->GetMedturismAllCol();
+    }
     public function SaveNews($title, $user, $description,$date_show , $date_news ){
         
         $result =    $this->medDB->SaveNews($title,$user, $description,$date_show , $date_news );
         return $result;
     } 
     
-    public  function  SavePromo($title, $description, $user ,$date_show , $date_news ){
+    public  function  SavePromo($title, $description, $user ,$date_show , $date_promo ){
         
-        $result =  $this->medDB->SavePromo($title, $description, $user ,$date_show , $date_news );
+        $result =  $this->medDB->SavePromo($title, $description, $user ,$date_show , $date_promo );
       return $result;
     }
     
@@ -747,12 +752,36 @@ class Controller
     }
     
   
-    //TODO: make bal Update func
+    //works updating
     public  function UpdateNews($title, $id_user, $description, $find_id ,$date_show , $date_news ) {
         
         $arrayUpdatedData = array($title,  $id_user, $description,$date_show , $date_news) ;
         $result = $this->medDB->UpdateNews($arrayUpdatedData,  $find_id  );
         return $result;
+    }
+    public  function UpdatePromo($title, $id_user, $description, $find_id ,$date_show , $date_promo ) {
+        
+        $arrayUpdatedData = array($title,  $id_user, $description, $date_show , $date_promo );
+        $result = $this->medDB->UpdatePromo($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    
+    public  function UpdateSpecial($title, $id_user, $description, $find_id  ) {
+        
+        $arrayUpdatedData = array($title, $description,  $id_user );
+        $result = $this->medDB->UpdateSpecial($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    public  function UpdateMedturism($title, $id_user, $description, $find_id  ) {
+        
+        $arrayUpdatedData = array($title, $description ,  $id_user);
+        $result = $this->medDB->UpdateMedturism($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    public function GetPicsPromo(){
+        
+        return $this->medDB->GetPicsPromo();
+        
     }
 }
 ?>

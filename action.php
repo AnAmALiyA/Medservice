@@ -597,57 +597,55 @@ class HandlingData
        // return $this->Redirect();
     }
 
-    public function SavePromoArray()
+    public function SavePromoArray($data, $pictures)
     {
+        
         //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
         $_SESSION['id'];
         $id_user = 1;//TODO: must be in SESSION
         $p =  20;
         for ($i = 0; count($data['name']) > $i; $i ++) {
-            echo $data['name'][$i]."<br>";  //TODO: unwrite text
-            echo   $data['id_promo'][$i] ;
+            
             
             $date_show = false;
-            $date_news = null;
+            $date_promo = null;
             //if hidden id of DB entry is found
             if(isset($data['id_promo'][$i])){
                 if(isset($data["check"][$i])) $date_show = true;
-                echo  "is date showing".$date_show."<br>";
+              
                 
                 if($date_show){
-                    $date_news  = date('Y-m-d');}
-                    
+                    $date_promo  = date('Y-m-d');}
+                    echo $date_promo;
                     $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                     $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                    $result = $this->controller->UpdatePromo($title, $id_user, $description, $data['id_promo'][$i] , $date_show , $date_news );
-                    $news_id = $result;
-                    
+                    $result = $this->controller->UpdatePromo($title, $id_user, $description, $data['id_promo'][$i] , $date_show , $date_promo );
+                    $promo_id = $result;
+                    echo "<br>descript content ".$description;
                     if (!empty($pictures["promo_img_"]["name"][$i])) {
-                        //   echo "<br> catcha ";echo  $data["news_img_"][$i];
-                        echo basename($pictures["promo_img_"]['name'][0]);
-                        echo $pic;
-                        $result_pic = $this->SavePicPromo($news_id ,$i,$pictures);
+                        
+                        $result_pic = $this->SavePicPromo($promo_id ,$i,$pictures);
                         return true;
                     }
             }
             //new entry into DB
             else {
-                
+                if(isset($data["check"][0])) $date_show = true;
                 if(isset($data["check"][$p])) $date_show = true;
                 
                 if($date_show){
-                    $date_news  = date('Y-m-d');
+                    $date_promo  = date('Y-m-d');
                 }
-                
+               echo $date_promo;
                 $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                 $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                $result = $this->controller->SavePromo($title, $id_user,$description , $date_show , $date_news );
+                $result = $this->controller->SavePromo($title, $id_user,$description , $date_show , $date_promo );
                 
                 
-                if (!empty($pictures["news_img_"]["name"][$i])) {
+                if (!empty($pictures["promo_img_"]["name"][$i])) {
                     
-                    $news_id = $result;
-                    $result_pic = $this->SavePicPromo($news_id,$i,$pictures);
+                    $promo_id = $result;
+                    $result_pic = $this->SavePicPromo($promo_id,$i,$pictures);
                     return true;
                 }
                 $p++;
@@ -659,36 +657,55 @@ class HandlingData
     }
     
 
-    public function SaveSpecialArray()
+    public function SaveSpecialArray($data)
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
-            
-            for ($i = 0; count($_POST['title']) > $i; $i ++) {
-                
-                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
-                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
-                $result = $this->controller->SaveSpecial($title, $description, $_SESSION['id']);
+       // if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+       // $_SESSION['id']
+       $user_id = 1;
+      
+            for ($i = 0; count($data['name']) > $i; $i ++) {
+              echo  $data['name'][$i];
+                if(isset($data['id_special'][$i])){
+                $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                $result = $this->controller->UpdateSpecial($title, $description, $user_id, $data['id_special'][$i]);
                 
                 return true;
             }
-        }
-        return $this->Redirect();
+       
+       else{
+           $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+           $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+           $result = $this->controller->SaveSpecial($title, $description, $user_id);
+       }
+       // }
+      //  return $this->Redirect();
     }
-
-    public function SaveMedturismArray()
+    }
+    public function SaveMedturismArray($data)
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        // if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+            // $_SESSION['id']
+            $user_id = 1;
             
-            for ($i = 0; count($_POST['title']) > $i; $i ++) {
+            for ($i = 0; count($data['name']) > $i; $i ++) {
+                if(isset($data['id_special'][$i])){
+                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                    $result = $this->controller->UpdateSpecial($title, $description, $user_id, $data['id_special'][$i]);
+                    
+                    return true;
+                }
                 
-                $title = $this->validateData->FilterStringOnHtmlSql($_POST['title'][$i]);
-                $description = $this->validateData->FilterStringOnHtmlSql($_POST['description'][$i]);
-                $result = $this->controller->SaveMedturism($title, $description, $_SESSION['id']);
-                
-                return true;
-            }
-        }
-        return $this->Redirect();
+                else{
+                    $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
+                    $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
+                    $result = $this->controller->SaveMedturism($title, $description, $user_id);
+                }
+                // }
+                //  return $this->Redirect();
+    }
+    
     }
 
     public function SavePicNews($news_id, $i, $pictures)
@@ -735,91 +752,95 @@ class HandlingData
         
    // }
 
-    public function SavePicPromo($promo_id)
+            public function SavePicPromo($promo_id ,$i, $pictures)
     {
         //TODO: must be activated at the finish
         //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
             
             // checking and approving img
-            if ($_FILES['file']['size'] > (5 * 1024 * 1024))
-                die('Размер файла не должен превышать 5Мб');
-            $imageinfo = getimagesize($_FILES['file']['tmp_name']);
-            $arr = array(
-                'image/jpeg',
-                'image/gif',
-                'image/png'
-            );
-            if (! array_search($imageinfo['mime'], $arr))
-                echo ('Картинка должна быть формата JPG, GIF или PNG');
-            else {
-                $id = $_SESSION['id'];
-                $upload_dir = 'upload/'; // имя папки с картинками
-                $id_dir = $id . '/';
-                $promo_dir = 'promo/';
-                
-                $name = $upload_dir . $id_dir . $promo_dir . basename($_FILES['file']['name']);
-                
-                $mov = move_uploaded_file($_FILES['file']['tmp_name'], $name);
-                
-                if ($mov) {
-                    // здесь коннект к БД
-                    $name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
-                    
-                    if (! empty($promo_id))
-                        $result = $this->controller->SavePicsProo($id, $promo_id, $name);
+        echo ($pictures["promo_img_"]['name'][$i]);
+        if ($pictures["promo_img_"]['size'][$i] > (5 * 1024 * 1024))
+            die('Размер файла не должен превышать 5Мб');
+            $imageinfo = getimagesize($pictures["promo_img_"]['tmp_name'][$i]);
+            //
+            $id = $_SESSION['id'];
+            //TODO: temporary unvailable
+            $id = 1;
+            $upload_dir = '/upload/'; // имя папки с картинками
+            $id_dir = $id . '/';
+            $promo_dir = 'promo/';
+            
+            
+            $name = $_SERVER["DOCUMENT_ROOT"].$upload_dir . $id_dir .$promo_dir;
+            if (file_exists($name)) {
+                echo "Uploading...";
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+            } else {
+                mkdir($name, 0700, true);
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+            }
+            
+            
+            if ($mov) {
+                // здесь коннект к БД
+                $name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
+                if (! empty($promo_id))
+                    $result = $this->controller->SavePicsPromo($id, $promo_id, $name);
                     
                     if ($result) {
                         return true;
                     } else
                         return false;
-                }
             }
-        }
+    }
    // }
 
-    private function SavePics()
+    private function SavePics($pictures)
     {
-        if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        //TODO: must be activated at the finish
+        //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
+        
+        // checking and approving img
+        echo ($pictures["promo_img_"]['name'][$i]);
+        if ($pictures["promo_img_"]['size'][$i] > (5 * 1024 * 1024))
+            die('Размер файла не должен превышать 5Мб');
+            $imageinfo = getimagesize($pictures["promo_img_"]['tmp_name'][$i]);
+            //
+            $id = $_SESSION['id'];
+            //TODO: temporary unvailable
+            $id = 1;
+            $upload_dir = '/upload/'; // имя папки с картинками
+            $id_dir = $id . '/';
+            $promo_dir = 'other/';
             
-            for ($i = 0; count($_POST['title']) > $i; $i ++) {
-                if (isset($_POST["img_[$i]"])) {
-                    
-                    if ($_FILES['file'][$i]['size'] > (5 * 1024 * 1024))
-                        die('Размер файла не должен превышать 5Мб');
-                    $imageinfo = getimagesize($_FILES['file'][$i]['tmp_name']);
-                    $arr = array(
-                        'image/jpeg',
-                        'image/gif',
-                        'image/png'
-                    );
-                    if (! array_search($imageinfo['mime'], $arr))
-                        echo ('Картинка должна быть формата JPG, GIF или PNG');
-                    else {
-                        $id = $_SESSION['id'];
-                        $upload_dir = 'upload/'; // имя папки с картинками
-                        $id_dir = $id . '/';
-                        
-                        $name = $upload_dir . $id_dir . basename($_FILES['file'][$i]['name']);
-                        
-                        $mov = move_uploaded_file($_FILES['file'][$i]['tmp_name'], $name);
-                        
-                        if ($mov) {
-                            // здесь коннект к БД
-                            $name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
-                            
-                            if (! empty($promo_id))
-                                $result = $this->controller->SavePics($id, $name);
-                            
-                            if ($result) {
-                                return true;
-                            } else
-                                return false;
-                        }
-                    }
-                }
+            
+            $name = $_SERVER["DOCUMENT_ROOT"].$upload_dir . $id_dir .$promo_dir;
+            if (file_exists($name)) {
+                echo "Uploading...";
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+            } else {
+                mkdir($name, 0700, true);
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
             }
-        }
+            
+            
+            if ($mov) {
+                // здесь коннект к БД
+                $name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
+                if (! empty($promo_id))
+                    $result = $this->controller->SavePicsPromo($id, $promo_id, $name);
+                    
+                    if ($result) {
+                        return true;
+                    } else
+                        return false;
+            }
+    //} for authorize check
     }
+    
+    
+ 
+    
 }
 
 ?>

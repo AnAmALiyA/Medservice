@@ -249,49 +249,96 @@
 					</div>
 				</div>
 				<div class="right-col">
-					<form action="#" class="dwnld form-promo-list" name="form_promo_list">
-						<div class="promo-list">
+				<form action="promoSave.php" class="dwnld form-promo-list"
+					name="form_promo_list" method="POST" enctype="multipart/form-data">
+					<div class="promo-list">
 
-							<?php for($i = 0; $i < 2; $i++) { ?>
-
+							<?php 
+							require_once 'med-BAL.php';
+					$select = new Controller();
+					$result = $select->GetPromoAll(); 
+					 $pics= $select->GetPicsPromo();
+					 $i=0; //  for($i = 0; $i < 2; $i++) { 
+					if($result){
+					foreach ($result as $key => $value){ ?>
+					    
+						
+								
 							<!-- <div class="download-holder clearfix" data-id="<?php echo $promo['id'] ?>"> -->
-							<div class="download-holder clearfix">
-								<div class="left-form">
-									<img class="imeg_js" src="img/empty-img.jpg" alt="empty">
-									<div class="icon-holder">
-										<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-										<i class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
-									</div>
-									<label class="file-label" for="add-promo-img-<?php echo $i ?>">Загрузить файл</label>
-									<input type="file" id="add-promo-img-<?php echo $i ?>" name="promo_img_<?php echo $i ?>">
+						<div class="download-holder clearfix">
+							<div class="left-form">
+								<img class="imeg_js" src="img/empty-img.jpg" alt="img/empty-img.jpg">
+								<div class="icon-holder">
+									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
+										class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
 								</div>
-								<div class="right-form">
-									<input type="text" required="required" class="form-control" id="name_promo<?php echo $i ?>" name="name_promo<?php echo $i ?>" placeholder="Заголовок"/>
-									<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-									<i class="fa fa-times remove_item_js" aria-hidden="true"></i>
-									<textarea class="form-control" required="required" rows="5" id="comment_promo<?php echo $i ?>" name="comment_promo<?php echo $i ?>" placeholder="Описание"></textarea>
-									<span>
-										<input id="check_promo<?php echo $i ?>" type="checkbox" name="check_promo<?php echo $i ?>" value="check-<?php echo $i ?>">
-										<label for="check_promo<?php echo $i ?>">Вывести дату</label>
-									</span>
-								</div>
+								<label class="file-label" for="add-promo-img-<?php echo $i ?>">Загрузить
+									файл</label> <input type="file"
+									id="add-promo-img-<?php echo $i ?>" name="promo_img_[]">
 							</div>
+							<div class="right-form">
+								<input type="hidden" name="id_promo[]"
+									value="<?php echo $value['id']; ?> " /> <input type="text"
+									required="required" class="form-control" name="name[]"
+									value="<?php echo $value['promo_title'];  ?>"
+									placeholder="Заголовок" /> <i class="fa fa-pencil-square-o"
+									aria-hidden="true"></i> <i class="fa fa-times remove_item_js"
+									aria-hidden="true"></i>
+								<textarea class="form-control" required="required" rows="5" type="text"
+									 name="comment[]"	placeholder="Описание"><?php echo $value['promo_description'];  ?></textarea>
+								<span> 
+								<input  type="checkbox"		id="check[<?php echo $i ?>]" name="check[<?php echo $i ?>]" value="true" 
+								<?php if(!empty($value['promo_show_date'])) echo 'checked' ?> /> <label
+									for="check[<?php echo $i ?>]">Вывести дату</label>
+								</span>
+							</div>
+						</div>
 
+							<?php $i++; ?>
 							<?php } ?>
-
-						</div>
-
-						<div class="add">
-							<div class="button-add add_promo_js">
-								<span>Добавить</span>
-								<i class="fa fa-plus" aria-hidden="true"></i>
+							
+					<?php }  else{ ?>
+					
+						<div class="download-holder clearfix">
+							<div class="left-form">
+								<img src="img/empty-img.jpg" alt="empty">
+								<div class="icon-holder">
+									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
+										class="fa fa-times" aria-hidden="true"></i>
+								</div>
+								<label class="file-label" for="add-promo-img-[]">Загрузить файл</label>
+								<input type="file" id="add-promo-img-[]" name="promo_img_[]>" />
 							</div>
+							<div class="right-form">
+								<input hidden name="title" /> <input type="text"
+									required="required" class="form-control" name="name[]"
+									placeholder="Заголовок" /> <i class="fa fa-pencil-square-o"
+									aria-hidden="true"></i> <i class="fa fa-times remove_item_js"
+									aria-hidden="true"></i>
+								<textarea  type="text" class="form-control"
+									required="required" rows="5" name="comment[]"
+									placeholder="Описание"></textarea>
+								<span> <input type="checkbox" id="check[0]" name="check[0]"
+									value="true" /> <label for="check[0]">Вывести дату</label>
+								</span>
+							</div>
+
 						</div>
-						<div class="button-save">
-							<button>Сохранить</button>
+
+						<?php 	}?>
+
 						</div>
-					</form>
-				</div>
+
+					<div class="add">
+						<div class="button-add add_promo_js">
+							<span>Добавить</span> <i class="fa fa-plus" aria-hidden="true"></i>
+						</div>
+					</div>
+					<div class="button-save">
+						<button>Сохранить</button>
+					</div>
+				</form>
+			</div>
 			</div>
 		</section>
 	</main>
