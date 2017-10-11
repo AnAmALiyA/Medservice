@@ -1,5 +1,9 @@
 jQuery(document).ready(function($){
 	itemPromoNews = 0;
+	//установка формы
+	let formMain = $('body.main_js form.right-col');
+	// console.log(formMain);
+	formMain != null ? setFormMain(formMain) : '';
 
 //	addFormMarkup('promo');
 //	addFormMarkup('promo');
@@ -75,17 +79,9 @@ jQuery(document).ready(function($){
 					.find('.tab-content.client').addClass('active').siblings('.organization').removeClass('active');
 	});
 
-	//установка формы
-	let formMain = $('body.main_js form');
-	formMain != null ? setFormMain(formMain) : '';
-
-	//тут может быть нужно отменить маску
-	$('.phone_js').mask('+38 (099) 999-99-99');
-
-	// Отображение загруженного изображения
-		var mfPhoto = document.getElementById('mf-photo');
-
-		mfPhoto.addEventListener('change', function(event) {
+		// Отображение загруженного изображения
+		// var mfPhoto = document.getElementById('mf-photo');
+		$('mf-photo').on('change', 'mf-photo', function(event) {
 			var inputFiles = this.files;
 	    if(inputFiles == undefined || inputFiles.length == 0) return;
 
@@ -438,25 +434,30 @@ function setFormMain(formM) {
       dataType: 'json', // what type of data do we expect back from the server
       encode: true
     })
-    // .done(function(response, textStatus, jqXHR) {
-    .done(function(response) {
+    .done(function(response, textStatus, jqXHR) {
+    //.done(function(response) {
       console.log(response);
-			let arrayOrganizationData = response.arrayOrganizationData;
-			if (arrayOrganizationData != null) {
-				//достать данные
-					//'arrayTypeCompanes'
-	        //'arrayServices'
-	        //'arrayInsuranceCompanes'
-					//'arrayLocation'
-			}
-      let arrayTypeCompanes = response.arrayTypeCompanes;
-      let arrayServices = response.arrayServices;
-      let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
-      let arrayLocation = response.arrayLocation;
-      let arrayPhone = response.arrayPhone;
-      let arrayError = response.arrayError;
-
-      let form = addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError);
-      formM.html(form);
+			console.log('-------');
+			console.log(textStatus);
+			console.log('-------');
+			console.log(jqXHR);
+			// let arrayOrganizationData = response.arrayOrganizationData;
+			// if (arrayOrganizationData != null) {
+			// 	//достать данные
+			// 		//'arrayTypeCompanes'
+	    //     //'arrayServices'
+	    //     //'arrayInsuranceCompanes'
+			// 		//'arrayLocation'
+			// }
+      // let arrayTypeCompanes = response.arrayTypeCompanes;
+      // let arrayServices = response.arrayServices;
+      // let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
+      // let arrayLocation = response.arrayLocation;
+      // let arrayPhone = response.arrayPhone;
+      // let arrayError = response.arrayError;
+			//
+      // let form = addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError);
+      //  formM.html(form);
+			formM.html(""+response);
     });
 }

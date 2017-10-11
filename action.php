@@ -101,7 +101,7 @@ class HandlingData
     private function IsValidFild()
     {
         // Тип учереждения
-        if (!$validateData->ValidInteger($_POST['typeCompanyId']) {
+        if (!$validateData->ValidInteger($_POST['typeCompanyId'])) {
                 $this->SetError('Не валидное поле.');
                 $bal->RedirectBack();
             }
@@ -114,7 +114,7 @@ class HandlingData
         }
         // Страховые компании - чекбоксы //тут прийдет array(1,2,3)
         $arrayInsuranceCompanesId = $_POST['arrayInsuranceCompanes'];
-        for ($i = 0; $i < count($arrayInsuranceCompanesId)){
+        for ($i = 0; $i < count($arrayInsuranceCompanesId); $i++){
             if (!$validateData->ValidInteger($arrayInsuranceCompanesId[$i])) {
                 $this->SetError('Не валидное поле.');
                 $bal->RedirectBack();
@@ -197,7 +197,7 @@ class HandlingData
 
 if ($auth->IsAuthorized('organization')) {
     //методы для организации
-    isset($_POST['save_form_main']) && empty($_POST['save_form_main']) {
+    if (isset($_POST['save_form_main']) && empty($_POST['save_form_main'])) {
         $handling->SaveDataForm();
         $bal->RedirectBack();
     }

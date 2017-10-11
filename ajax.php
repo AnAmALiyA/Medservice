@@ -6,11 +6,11 @@ require_once 'med-BAL.php';
 $returnArrayData = array();
 $auth = new Authorization();
 $bal = new BAL();
-
-if (isset($_POST['ajax_form_main']) && empty($_POST['ajax_form_main'])){
-    if($auth->IsAuthorized('organization')){
-        
-        $returnArrayData['arrayOrganizationData'] = $bal->GetOrganizationData();
+//     $array[] = 'isset _POST = '.isset($_POST['ajax_form_main']);
+if (isset($_POST['ajax_form_main'])){
+    if($auth->IsAuthorized('organization')){      
+        $returnArrayData = $bal->GetOrganizationSummaryData();
+//         $returnArrayData = array('dfgdffff','fffffff');
         //$returnArrayData['arrayOrganizationData']
             //typeCompany.id
             //typeCompany.name
@@ -31,19 +31,18 @@ if (isset($_POST['ajax_form_main']) && empty($_POST['ajax_form_main'])){
                             //name
 
         //получить массив выпадающих списков
-        $returnArrayData['arrayTypeCompanes'] = $bal->GetTypeInstitution();
-        $returnArrayData['arrayServices'] = $bal->GetNamesServices();
-        $returnArrayData['arrayInsuranceCompanes'] = $bal->GetNamesInsuranceCompanes();
-        $returnArrayData['arrayRegiones'] = $bal->GetRegiones();
+//         $returnArrayData['arrayTypeCompanes'] = $bal->GetTypeInstitutions();
+//         $returnArrayData['arrayServices'] = $bal->GetNamesServices();
+//         $returnArrayData['arrayInsuranceCompanes'] = $bal->GetNamesInsuranceCompanes();
+//         $returnArrayData['arrayRegiones'] = $bal->GetRegiones();
             //id
             //name
-        $returnArrayData['arrayPhone'] = $bal->GetPhones();
+//         $returnArrayData['arrayPhone'] = $bal->GetPhones();
             //id
             //name
-        $returnArrayData['arrayDayTimeWork'] = $bal->GetDaysTimesWork();
+//         $returnArrayData['arrayDayTimeWork'] = $bal->GetDaysTimesWork();
 
-        $returnArrayData['logo'] = $bal->GetLogo();
-       
+//         $returnArrayData['logo'] = $bal->GetLogo();
         echo json_encode($returnArrayData);
     }
 }

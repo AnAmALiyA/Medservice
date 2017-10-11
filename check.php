@@ -16,9 +16,21 @@ require_once 'med-BAL.php';
  $dal = new DAL();
 //  $dal = new BAL();
 
- $m = $dal->GetPhonesOrganizationId(2);
+//  $m = $dal->GetInsuranceCompanesData(2);
+ $resultInsuranceCompanesData = $dal->GetInsuranceCompanesData(null);
+
+ $resultInsuranceCompanesId = array();
+ $resultInsuranceCompanesNames = array();
+ for ($i = 0; $i < count($resultInsuranceCompanesData); $i++) {
+     $resultInsuranceCompanesId[] = $i;
+     $resultInsuranceCompanesNames[] = $resultInsuranceCompanesData[$i];
+ }
+ $arrayOrganizationData['arrayInsuranceCompanes'] = array(
+     'id' => $resultInsuranceCompanesId,
+     'name' => $resultInsuranceCompanesNames
+ );
 //  echo "[$m]-результатt<br/>";
-  var_dump($m);
+ var_dump($arrayOrganizationData);
 // echo '<br/>-----------foreach ----------------<br/>';
 // echo '<br/>';
 // foreach ($m as $key => $value) {

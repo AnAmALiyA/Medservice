@@ -32,91 +32,121 @@ class BAL
         if ($organizationId > 0) { // если существует
             $resultOrganizationData = $this->dal->GetOrganizationSummaryData($organizationId);
             
+            $arrayOrganizationData['typeCompany'] = null;
             $typeInstitutionId = $resultOrganizationData['typeInstitution'];
-            $resultInstitution = $this->dal->GetTypeInstitutionById($typeInstitutionId);
-            $arrayOrganizationData['typeCompany'] = array(
-                'id' => $resultInstitution['id'],
-                'name' => $resultInstitution['typeDescription']
-            );
+            if ($typeInstitutionId != null) {
+                $resultInstitution = $this->dal->GetTypeInstitutionById($typeInstitutionId);
+                $arrayOrganizationData['typeCompany'] = array(
+                    'id' => $resultInstitution['id'],
+                    'name' => $resultInstitution['typeDescription']
+                );
+            }
             
+            $arrayOrganizationData['arrayServices'] = null;
             $servicesId = $resultOrganizationData['service'];
-            $resultServicesData = $this->dal->GetServicesData($servicesId);
-            $resultServicesId = array();
-            $resultServicesNames = array();
-            for ($i = 0; $i < count($resultServicesData); $i++) {
-                array_push($resultServices, $i);
-                array_push($resultServicesNames, $resultServicesData[$i]);
+            if ($servicesId != null) {
+                $resultServicesData = $this->dal->GetServicesData($servicesId);
+                $resultServicesId = array();
+                $resultServicesNames = array();
+                for ($i = 0; $i < count($resultServicesData); $i++) {
+                    $resultServicesId[] = $i;
+                    $resultServicesNames = $resultServicesData[$i];
+                }
+                $arrayOrganizationData['arrayServices'] = array(
+                    'id' => $resultServicesId,
+                    'name' => $resultServicesNames
+                );
             }
-            $arrayOrganizationData['arrayServices'] = array(
-                'id' => $resultServicesId,
-                'name' => $resultServicesNames
-            );
             
+            $arrayOrganizationData['arrayInsuranceCompanes'] = null;
             $insuranceCompanesId = $resultOrganizationData['insuranceCompanie'];
-            $resultInsuranceCompanesData = $this->dal->GetInsuranceCompanesData($insuranceCompanesId);
-            $resultInsuranceCompanesId = array();
-            $resultInsuranceCompanesNames = array();
-            for ($i = 0; $i < count($resultServicesData); $i++) {
-                array_push($resultInsuranceCompanesId, $i);
-                array_push($resultInsuranceCompanesNames, $resultServicesData[$i]);
+            if ($insuranceCompanesId != null) {
+                $resultInsuranceCompanesData = $this->dal->GetInsuranceCompanesData($insuranceCompanesId);
+                $resultInsuranceCompanesId = array();
+                $resultInsuranceCompanesNames = array();
+                for ($i = 0; $i < count($resultInsuranceCompanesData); $i++) {
+                    $resultInsuranceCompanesId[] = $i;
+                    $resultInsuranceCompanesNames[] = $resultInsuranceCompanesData[$i];
+                }
+                $arrayOrganizationData['arrayInsuranceCompanes'] = array(
+                    'id' => $resultInsuranceCompanesId,
+                    'name' => $resultInsuranceCompanesNames
+                );
             }
-            $arrayOrganizationData['arrayInsuranceCompanes'] = array(
-                'id' => $resultInsuranceCompanesId,
-                'name' => $resultInsuranceCompanesNames
-            );
-            // имя организации и id
-            $companyId = $arrayOrganizationData['organization'];
-            $resultCompany = $this->dal->GetOrganization($companyId);
-            $arrayOrganizationData['nameCompany'] = array( //наименование
-                'id' => $resultInstitution['id'],
-                'name' => $resultInstitution['name']
-            );
+//             имя организации и id
+            $arrayOrganizationData['nameCompany'] = null;
+            $companyId = $resultOrganizationData['organization'];
+            if ($companyId != null) {
+                $resultCompany = $this->dal->GetOrganization($companyId);
+                $arrayOrganizationData['nameCompany'] = array( //наименование
+                    'id' => $resultInstitution['id'],
+                    'name' => $resultInstitution['name']
+                );
+            }
             
-            $actualLocationId = $resultOrganizationData['actualLocation'];
-            $resultActualLocation = $this->dal->GetActualLocation($actualLocationId);
-            $actualLocationData = array(
-                ['street'] => array(
-                    'id' => $resultActualLocation['id'],
-                    'name' => $resultActualLocation['actualLocation']
-                )
-            );
+//             $actualLocationData = null;
+//             $actualLocationId = $resultOrganizationData['actualLocation'];
+//             if ($actualLocationId != null) {                
+//                 $resultActualLocation = $this->dal->GetActualLocation($actualLocationId);
+//                 $actualLocationData = array(
+//                     ['street'] => array(
+//                         'id' => $resultActualLocation['id'],
+//                         'name' => $resultActualLocation['actualLocation']
+//                     )
+//                 );
+//             }
             
-            $localityId = $resultActualLocation['locality'];
-            $resultLocation = $this->dal->GetLocationById($localityId);
-            $locationData = array(
-                ['city'] => array(
-                    'id' => $resultLocation['id'],
-                    'name' => $resultLocation['locality']
-                )
-            );
+//             $locationData = null;
+//             $localityId = $resultActualLocation['locality'];
+//             if ($localityId != null) {
+//                 $resultLocation = $this->dal->GetLocationById($localityId);
+//                 $locationData = array(
+//                     ['city'] => array(
+//                         'id' => $resultLocation['id'],
+//                         'name' => $resultLocation['locality']
+//                     )
+//                 );
+//             }
             
-            $districtRegionId = $resultLocation['districtRegion'];
-            $resultDistrictRegion = $this->dal->GetDistrictRegion($districtRegionId);
-            $districtRegionData = array(
-                ['district'] => array(
-                    'id' => $resultDistrictRegion['id'],
-                    'name' => $resultDistrictRegion['district']
-                )
-            );
+//             $districtRegionData = null;
+//             $districtRegionId = $resultLocation['districtRegion'];
+//             if ($districtRegionId != null) {
+//                 $resultDistrictRegion = $this->dal->GetDistrictRegion($districtRegionId);
+//                 $districtRegionData = array(
+//                     ['district'] => array(
+//                         'id' => $resultDistrictRegion['id'],
+//                         'name' => $resultDistrictRegion['district']
+//                     )
+//                 );
+//             }
             
-            $regionId = $resultDistrictRegion['region'];
-            $resultRegion = $this->dal->GetRegion($regionId);
-            $regionData = array(
-                ['region'] => array(
-                    'id' => $resultRegion['id'],
-                    'name' => $resultRegion['region']
-                )
-            );
+//             $regionData = null;
+//             $regionId = $resultDistrictRegion['region'];
+//             if ($regionId != null) {
+//                 $resultRegion = $this->dal->GetRegion($regionId);
+//                 $regionData = array(
+//                     ['region'] => array(
+//                         'id' => $resultRegion['id'],
+//                         'name' => $resultRegion['region']
+//                     )
+//                 );
+//             }
             
-            $resultHome = $this->dal->GetHomeById($resultActualLocation['home']);
-            $homeData = array(
-                ['home'] => array(
-                    'id' => $resultHome['id'],
-                    'name' => $resultHome['numberHome']
-                )
-            );
-            $phoneData = $this->GetPhones($organizationId);
-            $daysTimesWork = $this->GetDaysTimesWork($resultOrganizationData['dayWork']);
+//             $homeData = null;
+//             $resultHome = $this->dal->GetHomeById($resultActualLocation['home']);
+//             if ($resultHome != null) {
+//                 $homeData = array(
+//                     ['home'] => array(
+//                         'id' => $resultHome['id'],
+//                         'name' => $resultHome['numberHome']
+//                     )
+//                 );
+//             }
+            
+//             $phoneData = $this->GetPhones($organizationId);
+//             $daysTimesWork = $this->GetDaysTimesWork($resultOrganizationData['dayWork']);
+            
+            $arrayOrganizationData['logo'] = $this->GetLogo();
             
             $arrayOrganizationData['arrayLocation'] = array(
                 $actualLocationData,
@@ -125,13 +155,14 @@ class BAL
                 $regionData,
                 $homeData,
                 $phoneData,//тут может отсутствовать значение
-                $daysTimesWork
+                $daysTimesWork,
+                $logoData
             );
             return $arrayOrganizationData;
         }
         else {
             //TODO тут проверить что вернуть в ответ пользователю когда он первый раз заходит в кабинет
-            return null;
+            return 'проверить на существующие';
         }
     }
     // Тип учереждения
@@ -194,7 +225,9 @@ class BAL
 //         return array(-1);
     }
     //TODO логотип в BAL
-    private function GetLogo(){}
+    private function GetLogo(){
+        return 'save logo';
+    }
     ///////// получить данные организации// конец /////////
     ///////// сохранить данные организации// старт /////////
     public function Save()

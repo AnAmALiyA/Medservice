@@ -35,6 +35,7 @@ class DAL
     private $tableLocality = 'med_locality';
     private $tableRegion = 'med_region';
     private $tableSummaryTable = 'med_summary_table';
+    private $tableUsers = 'med_users';
     
     public function __construct()
     {
@@ -265,10 +266,9 @@ class DAL
     }
     // /////////////////// методы запросов до БД // конец //////////////////////////
     // /////////////////// методы авторизации // начало //////////////////////////
-    private function GetUserById($id)
+    public function GetUserById($id)
     {
-        $table = 'med_users';
-        return $this->SelectById($table, $id);
+        return $this->SelectById($this->tableUsers, $id);
     }
     
     public function FindIdByLogin($login)
@@ -384,7 +384,7 @@ class DAL
         $arrayInsuranceCompanes = array();
         foreach ($result as $key => $value) {
             if ($value != null) {
-                array_push($arrayServices, $this->arrayNamesInsuranceCompany[$key]);
+                $arrayServices[] = $this->arrayNamesInsuranceCompany[$key];
             }
         }
         return $arrayServices;
