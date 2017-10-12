@@ -360,6 +360,7 @@ img.wp-smiley, img.emoji {
 					require_once 'med-BAL.php';
 					$select = new Controller();
 					$result = $select->GetNewsAll(); 
+					$pics= $select->GetPicsNews();
 					 $i=0; //  for($i = 0; $i < 2; $i++) { 
 					if($result){
 					foreach ($result as $key => $value){ ?>
@@ -370,10 +371,10 @@ img.wp-smiley, img.emoji {
 						?>		
 								<div class="download-holder clearfix">
 							<div class="left-form">
-								<img src="img/empty-img.jpg" alt="empty">
+								<img class="imeg_js" src="<?php if(!empty($pics[$key]["image_path"])){ echo $pics[$key]["image_path"];}else{echo 'img/empty-img.jpg';} ?>" alt="img/empty-img.jpg">
 								<div class="icon-holder">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
-										class="fa fa-times" aria-hidden="true"></i>
+										class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
 								</div>
 								<label class="file-label" for="add-news-img-<?php echo $i ?>">Загрузить
 									файл</label> 

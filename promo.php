@@ -262,19 +262,23 @@
 					if($result){
 					foreach ($result as $key => $value){ ?>
 					    
-						
+						<?php 
+						echo $pics[$key]["image_path"];
+						echo "<br>";
+						echo $_SERVER["DOCUMENT_ROOT"];
+						?>
 								
-							<!-- <div class="download-holder clearfix" data-id="<?php echo $promo['id'] ?>"> -->
+							<!-- <div class="download-holder clearfix" data-id=""> -->
 						<div class="download-holder clearfix">
 							<div class="left-form">
-								<img class="imeg_js" src="img/empty-img.jpg" alt="img/empty-img.jpg">
+								<img class="imeg_js" src="<?php if(!empty($pics[$key]["image_path"])){ echo $pics[$key]["image_path"];}else{echo 'img/empty-img.jpg';} ?>" alt="img/empty-img.jpg">
 								<div class="icon-holder">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
 										class="fa fa-times remove_imeg_js" aria-hidden="true"></i>
 								</div>
-								<label class="file-label" for="add-promo-img-<?php echo $i ?>">Загрузить
+								<label class="file-label" for="add-img-<?php echo $i ?>">Загрузить
 									файл</label> <input type="file"
-									id="add-promo-img-<?php echo $i ?>" name="promo_img_[]">
+									id="add-img-<?php echo $i ?>" name="promo_img_[]">
 							</div>
 							<div class="right-form">
 								<input type="hidden" name="id_promo[]"

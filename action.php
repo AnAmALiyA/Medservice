@@ -728,13 +728,13 @@ class HandlingData
                 $news_dir = 'news/';
                 
                
-                $name = $_SERVER["DOCUMENT_ROOT"].$upload_dir . $id_dir .$news_dir;
+                $name = $upload_dir . $id_dir .$news_dir.basename($pictures["news_img_"]['name'][$i]);
                 if (file_exists($name)) {
                     echo "Uploading...";
-                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $name. basename($pictures["news_img_"]['name'][$i]));
+                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name);
                 } else {
                     mkdir($name, 0700, true);
-                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $name. basename($pictures["news_img_"]['name'][$i]));
+                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name);
                 }
                
                 
@@ -772,13 +772,13 @@ class HandlingData
             $promo_dir = 'promo/';
             
             
-            $name = $_SERVER["DOCUMENT_ROOT"].$upload_dir . $id_dir .$promo_dir;
+            $name = $upload_dir . $id_dir .$promo_dir.basename($pictures["promo_img_"]['name'][$i]);
             if (file_exists($name)) {
                 echo "Uploading...";
-                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name);
             } else {
                 mkdir($name, 0700, true);
-                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name);
             }
             
             

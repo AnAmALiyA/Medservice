@@ -56,10 +56,10 @@ function addFormMarkup (marker) {
 	
 	var formMarkup = '<div class="download-holder clearfix">' +
 						'<div class="left-form">' +
-							'<img src="img/empty-img.jpg" alt="empty">' +
+							'<img class="imeg_js" src="img/empty-img.jpg" alt="empty">' +
 							'<div class="icon-holder">' +
 								'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-								'<i class="fa fa-times" aria-hidden="true"></i>' +
+								'<i class="fa fa-times remove_imeg_js" aria-hidden="true"></i>' +
 							'</div>' +
 							'<label class="file-label" for="add-' + marker + '-img">Загрузить файл</label>' +
 							'<input type="file" id="add-' + marker + '-img" name="'+ marker+'_img_[]">' +
@@ -85,7 +85,7 @@ function readURL(input) {
 	    var reader = new FileReader();
 
 	    reader.onload = function(e) {
-	    	var ii = $('#add-promo-img-0').closest('.download-holder');
+	    	var ii = $('#add-img-0').closest('.download-holder');
 	    	var ff = ii.find('img.imeg_js');
 	    	console.log(this);
 	    	console.log(ii);

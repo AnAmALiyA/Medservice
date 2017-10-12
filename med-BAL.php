@@ -783,5 +783,10 @@ class Controller
         return $this->medDB->GetPicsPromo();
         
     }
+    public function GetPicsNews(){
+        
+        return $this->medDB->GetPicsNews();
+        
+    }
 }
 ?>

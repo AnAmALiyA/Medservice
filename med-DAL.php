@@ -1337,10 +1337,13 @@ class MedDB
    }
    
    public function GetPicsPromo(){
-       $column = "med_promo_fk";
+       $column = "image_path";
        return $this->GetArrayAllPics($column);
    }
-   
+   public function GetPicsNews(){
+       $column = "image_path";
+       return $this->GetArrayAllPics($column);
+   }
    private function GetArrayAllPics($column){
        $table = "med_image";
        $query = "SELECT $column FROM $table";
