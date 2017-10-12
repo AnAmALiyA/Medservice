@@ -33,24 +33,22 @@ class BAL
             $resultOrganizationData = $this->dal->GetOrganizationSummaryData($organizationId);
             
             $arrayOrganizationData['typeCompany'] = null;
-            $typeInstitutionId = $resultOrganizationData['typeInstitution'];
-            if ($typeInstitutionId != null) {
-                $resultInstitution = $this->dal->GetTypeInstitutionById($typeInstitutionId);
+            $resultInstitution = $resultOrganizationData['typeInstitution'] != null ? $this->dal->GetTypeInstitutionById($resultOrganizationData['typeInstitution']) : null;
+            if ($resultInstitution != null) {
                 $arrayOrganizationData['typeCompany'] = array(
                     'id' => $resultInstitution['id'],
                     'name' => $resultInstitution['typeDescription']
                 );
             }
-            
+            //TODO null возвращается
             $arrayOrganizationData['arrayServices'] = null;
-            $servicesId = $resultOrganizationData['service'];
+            $resultServicesData = $resultOrganizationData['service'] != null ? $this->dal->GetServicesData($resultOrganizationData['service']) : null;
             if ($servicesId != null) {
-                $resultServicesData = $this->dal->GetServicesData($servicesId);
                 $resultServicesId = array();
                 $resultServicesNames = array();
                 for ($i = 0; $i < count($resultServicesData); $i++) {
                     $resultServicesId[] = $i;
-                    $resultServicesNames = $resultServicesData[$i];
+                    $resultServicesNames[] = $resultServicesData[$i];
                 }
                 $arrayOrganizationData['arrayServices'] = array(
                     'id' => $resultServicesId,
@@ -59,9 +57,8 @@ class BAL
             }
             
             $arrayOrganizationData['arrayInsuranceCompanes'] = null;
-            $insuranceCompanesId = $resultOrganizationData['insuranceCompanie'];
-            if ($insuranceCompanesId != null) {
-                $resultInsuranceCompanesData = $this->dal->GetInsuranceCompanesData($insuranceCompanesId);
+            $resultInsuranceCompanesData = $resultOrganizationData['insuranceCompanie'] != null ? $this->dal->GetInsuranceCompanesData($resultOrganizationData['insuranceCompanie']) : null;
+            if ($resultInsuranceCompanesData != null) {
                 $resultInsuranceCompanesId = array();
                 $resultInsuranceCompanesNames = array();
                 for ($i = 0; $i < count($resultInsuranceCompanesData); $i++) {
@@ -75,88 +72,71 @@ class BAL
             }
 //             имя организации и id
             $arrayOrganizationData['nameCompany'] = null;
-            $companyId = $resultOrganizationData['organization'];
-            if ($companyId != null) {
-                $resultCompany = $this->dal->GetOrganization($companyId);
-                $arrayOrganizationData['nameCompany'] = array( //наименование
-                    'id' => $resultInstitution['id'],
-                    'name' => $resultInstitution['name']
+            $resultCompany =$resultOrganizationData['organization'] != null ? $this->dal->GetOrganization($resultOrganizationData['organization']) : null;
+            if ($resultCompany != null) {
+                $arrayOrganizationData['nameCompany'] = array(
+                    'id' => $resultCompany['id'],
+                    'name' => $resultCompany['name']
                 );
             }
             
-//             $actualLocationData = null;
-//             $actualLocationId = $resultOrganizationData['actualLocation'];
-//             if ($actualLocationId != null) {                
-//                 $resultActualLocation = $this->dal->GetActualLocation($actualLocationId);
-//                 $actualLocationData = array(
-//                     ['street'] => array(
-//                         'id' => $resultActualLocation['id'],
-//                         'name' => $resultActualLocation['actualLocation']
-//                     )
-//                 );
-//             }
+            $actualLocationData = null;
+            $resultActualLocation = $resultOrganizationData['actualLocation'] != null ? $this->dal->GetActualLocation($resultOrganizationData['actualLocation']) : null;
+            if ($resultActualLocation != null) { 
+                $actualLocationData = array(
+                        'id' => $resultActualLocation['id'],
+                        'name' => $resultActualLocation['actualLocation']
+                );
+            }
             
-//             $locationData = null;
-//             $localityId = $resultActualLocation['locality'];
-//             if ($localityId != null) {
-//                 $resultLocation = $this->dal->GetLocationById($localityId);
-//                 $locationData = array(
-//                     ['city'] => array(
-//                         'id' => $resultLocation['id'],
-//                         'name' => $resultLocation['locality']
-//                     )
-//                 );
-//             }
+            $locationData = null;
+            $resultLocation = $resultActualLocation['locality'] != null ? $this->dal->GetLocationById($resultActualLocation['locality']) : null;
+            if ($resultLocation != null) {
+                $locationData = array(
+                    'id' => $resultLocation['id'],
+                    'name' => $resultLocation['locality']
+                );
+            }
             
-//             $districtRegionData = null;
-//             $districtRegionId = $resultLocation['districtRegion'];
-//             if ($districtRegionId != null) {
-//                 $resultDistrictRegion = $this->dal->GetDistrictRegion($districtRegionId);
-//                 $districtRegionData = array(
-//                     ['district'] => array(
-//                         'id' => $resultDistrictRegion['id'],
-//                         'name' => $resultDistrictRegion['district']
-//                     )
-//                 );
-//             }
+            $districtRegionData = null;
+            $resultDistrictRegion = $resultLocation['districtRegion'] != null ? $this->dal->GetDistrictRegion($resultLocation['districtRegion']) : null;
+            if ($resultDistrictRegion != null) {
+                $districtRegionData = array(
+                        'id' => $resultDistrictRegion['id'],
+                        'name' => $resultDistrictRegion['district']
+                );
+            }
             
-//             $regionData = null;
-//             $regionId = $resultDistrictRegion['region'];
-//             if ($regionId != null) {
-//                 $resultRegion = $this->dal->GetRegion($regionId);
-//                 $regionData = array(
-//                     ['region'] => array(
-//                         'id' => $resultRegion['id'],
-//                         'name' => $resultRegion['region']
-//                     )
-//                 );
-//             }
+            $regionData = null;           
+            $resultRegion = $resultDistrictRegion['region'] != null ? $this->dal->GetRegion($resultDistrictRegion['region']) : null;
+            if ($resultRegion != null) {
+                $regionData = array(
+                        'id' => $resultRegion['id'],
+                        'name' => $resultRegion['region']
+                );
+            }
             
-//             $homeData = null;
-//             $resultHome = $this->dal->GetHomeById($resultActualLocation['home']);
-//             if ($resultHome != null) {
-//                 $homeData = array(
-//                     ['home'] => array(
-//                         'id' => $resultHome['id'],
-//                         'name' => $resultHome['numberHome']
-//                     )
-//                 );
-//             }
-            
-//             $phoneData = $this->GetPhones($organizationId);
-//             $daysTimesWork = $this->GetDaysTimesWork($resultOrganizationData['dayWork']);
-            
+            $homeData = null;
+            $resultHome = $resultActualLocation['home'] != null ? $this->dal->GetHomeById($resultActualLocation['home']) : null;
+            if ($resultHome != null) {
+                $homeData = array(
+                        'id' => $resultHome['id'],
+                        'name' => $resultHome['numberHome']
+                );
+            }
+            //не работает и я незнаю почему
+            //$arrayOrganizationData['phone'] = $this->GetPhones($organizationId);
+
+            $arrayOrganizationData['daysTimes'] = $resultOrganizationData['dayWork'] != null ? $this->GetDaysTimesWork($resultOrganizationData['dayWork']) : null;
+
             $arrayOrganizationData['logo'] = $this->GetLogo();
             
             $arrayOrganizationData['arrayLocation'] = array(
-                $actualLocationData,
-                $locationData,
-                $districtRegionData,
-                $regionData,
-                $homeData,
-                $phoneData,//тут может отсутствовать значение
-                $daysTimesWork,
-                $logoData
+                'street' => $actualLocationData,
+                'city' => $locationData,
+                'district' => $districtRegionData,
+                'region' => $regionData,
+                'home' => $homeData
             );
             return $arrayOrganizationData;
         }
@@ -166,12 +146,12 @@ class BAL
         }
     }
     // Тип учереждения
-    private function GetTypeInstitutions()
+    public function GetTypeInstitutions()
     {
         return  $this->dal->GetTypeInstitutions();
     }
     // сервис
-    private function GetNamesServices()
+    public function GetNamesServices()
     {
         return $this->dal->GetNamesServices();
     }
@@ -186,11 +166,11 @@ class BAL
         return $this->dal->GetRegionsArray();
     }
     // район области TODO може измениться
-    private function GetDistrictRegionByRegion($id){
+    public function GetDistrictRegionByRegion($id){
         return $this->dal->GetDistrictRegionArrayByRegion($id);
     }
     //город
-    private function GetCitesByDistrictRegion($id){
+    public function GetCitesByDistrictRegion($id){
         return $this->dal->GetCitesArrayByDistrictRegion($id);
     }
     // район
@@ -203,26 +183,16 @@ class BAL
         return $this->dal->GetHomeById($id);
     }
     //телефоны
-//     public function GetPhones() {
-    private function GetPhones($organizationId) {
-//         $id = $_SESSION['user_id'];
-//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
-//         if ($organizationId != null) {
-            return $this->dal->GetPhonesOrganizationId($organizationId);
-//         }
-//         return array(-1);
+    public function GetPhones() {
+//     public function GetPhones($organizationId) {
+        $id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+        return $this->dal->GetPhonesOrganizationId($organizationId);
     }
     //дни время работы
 //     public function GetDaysTimesWork(){
     private function GetDaysTimesWork($idDayWork){
-//         $id = $_SESSION['user_id'];
-//         $organizationId = $this->dal->GetOrganizationIdByUser($id);
-//         if ($organizationId != null) {
-//             $resultOrganizationSummaryData = $this->dal->GetOrganizationSummaryData($organizationId);
-//             return $this->dal->GetDaysTimeWork($resultOrganizationData['dayWork']);
         return $this->dal->GetDaysTimeWorkById($idDayWork);
-//         }
-//         return array(-1);
     }
     //TODO логотип в BAL
     private function GetLogo(){
@@ -481,6 +451,7 @@ class BAL
             $this->RedirectMain();
         }
     }
+    
     public function RedirectMain()
     {
         header('Location: http://medservice24.webspectrum.top');
@@ -488,6 +459,7 @@ class BAL
         // header("http://medservice24.pirise.com");
         // header('Location: index.html'); exit();
     }
+    
     public function RedirectKabinet()
     {
         header('Location: indexcabinet.php');
@@ -504,6 +476,7 @@ class BAL
     {
         return $this->dal->FindIdByLogin($login);
     }
+    
     public function GetLastLoginId()
     {
         return $this->dal->GetLastLoginId();
@@ -517,6 +490,10 @@ class BAL
     //////Методы удаления // начало
     public function DeletePhone($id){
         $this->dal->DeletePhone($id);
+    }
+    
+    public function DeleteImage($id){
+        $this->dal->DeleteImage($id);
     }
     //////Методы удаления // конец
 }

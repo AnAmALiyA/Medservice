@@ -3,7 +3,10 @@ jQuery(document).ready(function($){
 	//установка формы
 	let formMain = $('body.main_js form.right-col');
 	// console.log(formMain);
-	formMain != null ? setFormMain(formMain) : '';
+	if (formMain != null ) {
+		setFormMain(formMain);
+		setFormMainDrop(formMain);
+	}
 
 //	addFormMarkup('promo');
 //	addFormMarkup('promo');
@@ -434,13 +437,10 @@ function setFormMain(formM) {
       dataType: 'json', // what type of data do we expect back from the server
       encode: true
     })
-    .done(function(response, textStatus, jqXHR) {
+    .done(function(response) {
     //.done(function(response) {
       console.log(response);
-			console.log('-------');
-			console.log(textStatus);
-			console.log('-------');
-			console.log(jqXHR);
+
 			// let arrayOrganizationData = response.arrayOrganizationData;
 			// if (arrayOrganizationData != null) {
 			// 	//достать данные
@@ -459,5 +459,75 @@ function setFormMain(formM) {
       // let form = addFormOrganization(arrayOrganizationData, arrayTypeCompanes, arrayServices, arrayInsuranceCompanes, arrayLocation, arrayPhone, arrayError);
       //  formM.html(form);
 			formM.html(""+response);
+    });
+}
+
+function setFormMainDrop(forM){
+	$.ajax({
+      type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+      url: 'ajax.php', // the url where we want to POST
+      data: 'ajax_form_main_region_service_institution', // our data object
+      dataType: 'json', // what type of data do we expect back from the server
+      encode: true
+    })
+    .done(function(response) {
+      console.log(response);
+			formM.html(response);
+    });
+}
+
+function getDistrictRegion(regionId) {
+	$.ajax({
+      type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+      url: 'ajax.php', // the url where we want to POST
+      data: 'ajax_form_main_districtRegion', // our data object
+      dataType: 'json', // what type of data do we expect back from the server
+      encode: true
+    })
+    .done(function(response) {
+      console.log(response);
+			formM.html(response);
+    });
+}
+
+function getCity(districtRegionId) {
+	$.ajax({
+      type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+      url: 'ajax.php', // the url where we want to POST
+      data: 'ajax_form_main_city', // our data object
+      dataType: 'json', // what type of data do we expect back from the server
+      encode: true
+    })
+    .done(function(response) {
+      console.log(response);
+			formM.html(response);
+    });
+}
+
+function deletePhone(phoneId) {
+	$.ajax({
+      type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+      url: 'ajax.php', // the url where we want to POST
+      data: 'ajax_form_main_delete_phone', // our data object
+      dataType: 'json', // what type of data do we expect back from the server
+      encode: true
+    })
+    .done(function(response) {
+      console.log(response);
+			formM.html(response);
+    });
+}
+
+function deleteImage(imageId) {
+	$.ajax({
+      type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+      url: 'ajax.php', // the url where we want to POST
+      data: 'ajax_form_main_delete_img', // our data object
+      dataType: 'json', // what type of data do we expect back from the server
+      encode: true
+    })
+    .done(function(response) {
+      console.log(response);
+			formM.html(response);
     });
 }

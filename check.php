@@ -13,24 +13,28 @@
 require_once 'med-DAL.php';
 require_once 'med-BAL.php';
 
- $dal = new DAL();
-//  $dal = new BAL();
+// $dal = new DAL();
+ $dal = new BAL();
 
 //  $m = $dal->GetInsuranceCompanesData(2);
- $resultInsuranceCompanesData = $dal->GetInsuranceCompanesData(null);
-
- $resultInsuranceCompanesId = array();
- $resultInsuranceCompanesNames = array();
- for ($i = 0; $i < count($resultInsuranceCompanesData); $i++) {
-     $resultInsuranceCompanesId[] = $i;
-     $resultInsuranceCompanesNames[] = $resultInsuranceCompanesData[$i];
- }
- $arrayOrganizationData['arrayInsuranceCompanes'] = array(
-     'id' => $resultInsuranceCompanesId,
-     'name' => $resultInsuranceCompanesNames
- );
-//  echo "[$m]-результатt<br/>";
- var_dump($arrayOrganizationData);
+//  $actualLocationData = null;
+//  $actualLocationId = 4;
+//  if ($actualLocationId != null) {
+//      $resultActualLocation = $dal->GetActualLocation($actualLocationId);
+//      $actualLocationData = array(
+//          ['street'] => array(
+//              'id' => $resultActualLocation['id'],
+//              'name' => $resultActualLocation['actualLocation']
+//          )
+//      );
+//  }
+// //  echo "[$m]-результатt<br/>";
+//  var_dump($actualLocationData);
+// $ff = $dal->GetOrganizationSummaryData(4);
+echo $ff.'<br/>';
+$resultHome = $dal->GetPhones(4);
+// $tt = $dal->SelectById('med_actual_location', 4);
+var_dump($resultHome);
 // echo '<br/>-----------foreach ----------------<br/>';
 // echo '<br/>';
 // foreach ($m as $key => $value) {

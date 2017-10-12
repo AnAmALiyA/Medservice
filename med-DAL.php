@@ -225,19 +225,20 @@ class DAL
         $this->CloseConnectDB($link);
         return $result;
     }
-    /*
-     * дополнительные методы
-     * private function QueryDelete($Table, $id)
-     * {
-     * $query = "DELETE FROM $Table WHERE id=$id";
-     * $link = ConnectDB();
-     *
-     * $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
-     *
-     * $this->CloseConnectDB($link);
-     * return $result;
-     * }
-     */
+    
+
+     private function QueryDelete($table, $id)
+     {
+         $query = "DELETE FROM $table WHERE id=$id";
+         $link = ConnectDB();
+         
+         $result = mysqli_query($link, $query);
+//          $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+         
+         $this->CloseConnectDB($link);
+         return $result;
+     }
+     
     private function QueryUpdate($Table, $arrayNamesTableRows, $arrayValuesTableRows, $id)
     {
         $set = '';
@@ -426,6 +427,7 @@ class DAL
         $result = $this->QuerySelectAll($this->tableRegion);
         return $this->GenerateArrayWhithObj($result);
     }
+    
     public function GetRegion($id) {
         $result = $this->SelectById($this->tableRegion, $id);
         return array(
@@ -436,7 +438,7 @@ class DAL
     //улица
     public function GetActualLocation($id)
     {
-        $result = $this->SelectById($this->$tableActualLocation, $id);
+        $result = $this->SelectById($this->tableActualLocation, $id);
         return array(
             'id' => $result['id'],
             'actualLocation' => $result['actual_location'],
@@ -459,6 +461,7 @@ class DAL
     public function GetLocationById($id){
         $result = $this->SelectById($this->tableLocality, $id);
         return array(
+            'id' => $result['id'],
             'locality' => $result['locality'],
             'typeLocality' => $result['type_locality_fk'],
             'districtRegion' => $result['district_region_fk']
@@ -481,12 +484,14 @@ class DAL
     }
     //дом
     public function GetHomeById($id) {
-        $stringSelect = 'actual_location_fk';
+        $stringSelect = 'id';
         $result = $this->QuerySelectWhere($this->tableHome, $stringSelect, $id);
-        return array(
-            'id' => $result['id'],
-            'numberHome' => $result['number_home']
-        );
+        foreach ($result as $value) {
+            return array(
+                'id' => $value['id'],
+                'numberHome' => $value['number_home']
+            );
+        }
     }
     //телефоны
     public function GetPhonesOrganizationId($organizationId) {
@@ -808,7 +813,11 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
     ///////////////Сохранение данных/////////конец//////////////
     ///////////////Удаление данных/////////начало//////////////
     public function DeletePhone($id){
-        
+        return $this->QueryDelete($this->tablePhone, $id);
+    }
+    //TODO удаление картинки не написанно
+    public function DeleteImage($id){
+//         return $this->QueryDelete($this->tablePhone, $id);
     }
     ///////////////Удаление данных/////////конец//////////////
 }
