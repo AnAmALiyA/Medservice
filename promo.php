@@ -262,16 +262,19 @@
 					if($result){
 					foreach ($result as $key => $value){ ?>
 					    
-						<?php 
-						echo $pics[$key]["image_path"];
-						echo "<br>";
-						echo $_SERVER["DOCUMENT_ROOT"];
-						?>
+						
 								
 							<!-- <div class="download-holder clearfix" data-id=""> -->
 						<div class="download-holder clearfix">
 							<div class="left-form">
-								<img class="imeg_js" src="<?php if(!empty($pics[$key]["image_path"])){ echo $pics[$key]["image_path"];}else{echo 'img/empty-img.jpg';} ?>" alt="img/empty-img.jpg">
+								<img class="imeg_js" src="<?php
+								$reslt = "img/empty-img.jpg";
+								foreach ($pics as $p){
+								if( $p["med_promo_fk"] == $value['id'] )
+								{ $reslt= $p["image_path"];
+								}
+								 }
+								echo $reslt;?>" alt="img/empty-img.jpg">
 								<div class="icon-holder">
 									<i class="fa fa-pencil-square-o" aria-hidden="true"></i> <i
 										class="fa fa-times remove_imeg_js" aria-hidden="true"></i>

@@ -778,6 +778,24 @@ class Controller
         $result = $this->medDB->UpdateMedturism($arrayUpdatedData,  $find_id  );
         return $result;
     }
+    public  function UpdatePicPromo($id , $promo_id , $name , $pic_id) {
+        
+        $arrayUpdatedData = array($id , $promo_id , $name,  $pic_id )  ;
+        $result = $this->medDB->UpdatePicPromo($arrayUpdatedData,  $pic_id  );
+        return $result;
+    }
+    public  function UpdatePicNews($id , $news_id , $name , $pic_id) {
+        
+        $arrayUpdatedData = array($id , $news_id , $name,  $pic_id )  ;
+        $result = $this->medDB->UpdatePicNews($arrayUpdatedData,  $pic_id  );
+        return $result;
+    }
+    public function FindPicPromo($indexCheck){
+        return $this->medDB->FindPicPromo($indexCheck);
+    }
+    public function FindPicNews($indexCheck){
+        return $this->medDB->FindPicNews($indexCheck);
+    }
     public function GetPicsPromo(){
         
         return $this->medDB->GetPicsPromo();

@@ -1238,29 +1238,39 @@ class MedDB
 //         return $id;
 //     }
     
+    public function FindPicNews($indexCheck){
+        $table= "med_image";
+        $indexDB="med_news_fk";
+        return $this->FindExistedGetID($table, $indexDB , $indexCheck);
+    }
+    public function FindPicPromo($indexCheck){
+        $table= "med_image";
+        $indexDB="med_promo_fk";
+        return $this->FindExistedGetID($table, $indexDB , $indexCheck);
+    }
     //testcase seems to be completed
-//    private function FindExistedGetID($table, $indexDB , $indexCheck){
-//        echo 'error here';
-//        $query = "SELECT id FROM $table WHERE $indexDB = '$indexCheck'";
-//        echo $query."<br/>"; //TODO: unwrite text
-//        $link = $this->ConnectDB();
-//  //      var_dump(mysqli_query($link, $query) );
-//  //      echo "<br/>";
-//        $result = mysqli_query($link, $query) /*nah nenuzhon  or die("Ошибка " . mysqli_error($link)) */;
-//      //  echo $result." vivod  <br>";
-//        $this->CloseConnectDB($link);
+   private function FindExistedGetID($table, $indexDB , $indexCheck){
+     
+       $query = "SELECT id FROM $table WHERE $indexDB = $indexCheck";
+       echo $query."<br/>"; //TODO: unwrite text
+       $link = $this->ConnectDB();
+//       var_dump(mysqli_query($link, $query) );
+//       echo "<br/>";
+       $result = mysqli_query($link, $query) /*nah nenuzhon  or die("Ошибка " . mysqli_error($link)) */;
+//       echo $result." vivod  <br>";
+       $this->CloseConnectDB($link);
       
-//        if($result != null){
-//            //cal of sql result
-//            $row = $result->fetch_array(MYSQLI_ASSOC);
-//            echo $row." <br>";
-//            echo $row['id']." <br>";
-//            return $row['id'];
+       if($result != null){
+           //cal of sql result
+           $row = $result->fetch_array(MYSQLI_ASSOC);
+           echo $row." <br>";
+           echo $row['id']."id for return <br>";
+           return $row['id'];
          
        
-//        }
-//       else return false;
-//    }
+       }
+      else return false;
+   }
    
       
    //TODO: in progress of macking individual funct for each category
@@ -1302,7 +1312,24 @@ class MedDB
        return $result;
        
    }
-   
+   public function UpdatePicPromo($arrayUpdatedData, $id_post){
+       $table = 'med_image';
+       // constant place
+       $arrayDBCollums = array('image_userId',	'med_promo_fk', 'image_path',	'id');
+       
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+       return $result;
+       
+   }
+   public function UpdatePicNews($arrayUpdatedData, $id_post){
+       $table = 'med_image';
+       // constant place
+       $arrayDBCollums = array('image_userId',	'med_news_fk', 'image_path',	'id');
+       
+       $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+       return $result;
+       
+   }
    //TODO: make it multipurpose  
    //sql example 
    // UPDATE Customers
@@ -1337,16 +1364,18 @@ class MedDB
    }
    
    public function GetPicsPromo(){
-       $column = "image_path";
-       return $this->GetArrayAllPics($column);
+       $col = "med_promo_fk";
+       return $this->GetArrayAllPics($col);
    }
    public function GetPicsNews(){
-       $column = "image_path";
-       return $this->GetArrayAllPics($column);
+       $col = "med_news_fk";
+       return $this->GetArrayAllPics($col);
    }
-   private function GetArrayAllPics($column){
+   private function GetArrayAllPics($col){
        $table = "med_image";
-       $query = "SELECT $column FROM $table";
+       $column = "image_path";
+      
+       $query = "SELECT * FROM $table WHERE NOT $col IS NULL";
        
        
        
