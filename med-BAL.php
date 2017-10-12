@@ -766,15 +766,15 @@ class Controller
         return $result;
     }
     
-    public  function UpdateSpecial($title, $id_user, $description, $find_id  ) {
+    public  function UpdateSpecial($title, $description, $id_user, $find_id  ) {
         
-        $arrayUpdatedData = array($title, $description,  $id_user );
+        $arrayUpdatedData = array($id_user, $title, $description   );
         $result = $this->medDB->UpdateSpecial($arrayUpdatedData,  $find_id  );
         return $result;
     }
-    public  function UpdateMedturism($title, $id_user, $description, $find_id  ) {
+    public  function UpdateMedturism($title, $description, $id_user, $find_id  ) {
         
-        $arrayUpdatedData = array($title, $description ,  $id_user);
+        $arrayUpdatedData = array($id_user, $title, $description )  ;
         $result = $this->medDB->UpdateMedturism($arrayUpdatedData,  $find_id  );
         return $result;
     }

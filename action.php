@@ -669,8 +669,8 @@ class HandlingData
                 $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                 $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
                 $result = $this->controller->UpdateSpecial($title, $description, $user_id, $data['id_special'][$i]);
-                
-                return true;
+                echo $title;
+              
             }
        
        else{
@@ -689,23 +689,24 @@ class HandlingData
             $user_id = 1;
             
             for ($i = 0; count($data['name']) > $i; $i ++) {
-                if(isset($data['id_special'][$i])){
+                if(isset($data['id_medturism'][$i])){
                     $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                     $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
-                    $result = $this->controller->UpdateSpecial($title, $description, $user_id, $data['id_special'][$i]);
+                    $result = $this->controller->UpdateMedturism($title, $description, $user_id, $data['id_medturism'][$i]);
                     
-                    return true;
+                    
                 }
                 
                 else{
+                    echo "catcha<br>";
                     $title = $this->validateData->FilterStringOnHtmlSql($data['name'][$i]);
                     $description = $this->validateData->FilterStringOnHtmlSql($data['comment'][$i]);
                     $result = $this->controller->SaveMedturism($title, $description, $user_id);
                 }
-                // }
-                //  return $this->Redirect();
+                
     }
-    
+    // }
+                //  return $this->Redirect();
     }
 
     public function SavePicNews($news_id, $i, $pictures)

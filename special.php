@@ -370,7 +370,7 @@ img.wp-smiley, img.emoji {
                                 <input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок" value ="<?php echo $value['special_title'];  ?>"/>
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                 <i class="fa fa-times remove_item_js" aria-hidden="true"></i>
-                                <textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"> <?php echo $value['special_description'];  ?></textarea>
+                                <textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"><?php echo $value['special_description'];  ?></textarea>
                             </div>
                       
                     </div>
