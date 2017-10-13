@@ -85,7 +85,7 @@ function readURL(input) {
 	    var reader = new FileReader();
 
 	    reader.onload = function(e) {
-	    	var ii = $('#add-img-0').closest('.download-holder');
+	    	var ii = $(this).closest('.download-holder');
 	    	var ff = ii.find('img.imeg_js');
 	    	console.log(this);
 	    	console.log(ii);

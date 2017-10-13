@@ -806,5 +806,10 @@ class Controller
         return $this->medDB->GetPicsNews();
         
     }
+    public function GetPics(){
+        
+        return $this->medDB->GetPics();
+        
+    }
 }
 ?>

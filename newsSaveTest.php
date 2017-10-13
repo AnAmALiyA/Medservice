@@ -8,13 +8,14 @@ require 'action.php';
 $HandlingData = new HandlingData();
 
 $HandlingData->SaveNewsArray($_POST, $_FILES);
+
+echo"<br> path> > >  ". $_SERVER["DOCUMENT_ROOT"];
+
 echo "<br> Данные сохранены успешно.";
-
-
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 $extra = 'news.php';
-header("location: http://medservice/news.php");
+header("location: $extra");
 exit;
 // var_dump($_POST);
 // echo "<br/>";

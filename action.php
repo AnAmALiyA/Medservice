@@ -749,7 +749,7 @@ class HandlingData
                     echo "Uploading...Saving news";
                     $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i]));
                 } else {
-                    mkdir($name, 0700, true);
+                    mkdir($name, 0755, true);
                     $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i]));
                 }
                
@@ -794,7 +794,7 @@ class HandlingData
                 echo "Uploading...Saving promo";
                 $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["promo_img_"]['name'][$i]));
             } else {
-                mkdir($name, 0700, true);
+                mkdir($name, 0755, true);
                 $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["promo_img_"]['name'][$i]));
             }
             
@@ -837,7 +837,7 @@ class HandlingData
                 echo "Uploading... Updating news";
                 $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i])  );
             } else {
-                mkdir($name, 0700, true);
+                mkdir($name, 0755, true);
                 $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name .basename($pictures["news_img_"]['name'][$i])  );
             }
             
@@ -898,16 +898,17 @@ class HandlingData
             }
     }
     // }
-    private function SavePics($pictures)
+   public function SavePics($pictures)
     {
         //TODO: must be activated at the finish
         //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
         
         // checking and approving img
-        echo ($pictures["promo_img_"]['name'][$i]);
-        if ($pictures["promo_img_"]['size'][$i] > (5 * 1024 * 1024))
+        $i =0;
+        echo ($pictures["img_"]['name'][$i]);
+        if ($pictures["img_"]['size'][$i] > (5 * 1024 * 1024))
             die('Размер файла не должен превышать 5Мб');
-            $imageinfo = getimagesize($pictures["promo_img_"]['tmp_name'][$i]);
+            $imageinfo = getimagesize($pictures["img_"]['tmp_name'][$i]);
             //
             $id = $_SESSION['id'];
             //TODO: temporary unvailable
@@ -916,23 +917,24 @@ class HandlingData
             $id_dir = $id . '/';
             $promo_dir = 'other/';
             
-            
-            $name = $_SERVER["DOCUMENT_ROOT"].$upload_dir . $id_dir .$promo_dir;
+            //TODO: directory is not creating!!
+            $name = $upload_dir . $id_dir .$promo_dir;
             if (file_exists($name)) {
                 echo "Uploading...";
-                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+                $mov = move_uploaded_file($pictures["img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name. basename($pictures["promo_img_"]['name'][$i]));
             } else {
                 mkdir($name, 0700, true);
-                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $name. basename($pictures["promo_img_"]['name'][$i]));
+                $mov = move_uploaded_file($pictures["img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name. basename($pictures["promo_img_"]['name'][$i]));
             }
             
             
             if ($mov) {
                 // здесь коннект к БД
                 $name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
+                $name .= basename($pictures["img_"]['name'][$i]);
                 if (! empty($promo_id))
-                    $result = $this->controller->SavePicsPromo($id, $promo_id, $name);
-                    
+                    $result = $this->controller->SavePics($id,  $name);
+                    echo $result;
                     if ($result) {
                         return true;
                     } else

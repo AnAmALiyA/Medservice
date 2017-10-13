@@ -10,6 +10,10 @@ class MedDB
     private $password = '';
 
     private $database = 'uh347272_med24';
+    // private $host='localhost';
+    // private $user='andrew19_med';
+    // private $password='a6qxcqabymed';
+    // private $database='andrew19_uh347272_med24';
 
     private function ConnectDB()
     {
@@ -1184,6 +1188,7 @@ class MedDB
             $name
         );
         $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        echo $getResult;
         if ($getResult) {
             return true;
         }
@@ -1371,6 +1376,36 @@ class MedDB
        $col = "med_news_fk";
        return $this->GetArrayAllPics($col);
    }
+   public function GetPics(){
+      
+       return $this->GetArrayAllSimplePics();
+   }
+   
+  private function GetArrayAllSimplePics(){
+      $table = "med_image";
+      $col = "med_news_fk";
+      $col2 = "med_promo_fk";
+      $query = "SELECT * FROM $table WHERE  $col IS NULL AND $col2 IS NULL";
+      
+      $link = $this->ConnectDB();
+      
+      $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+      
+      $this->CloseConnectDB($link);
+      $arr = array();
+      $i = 1;
+      while ($obj = mysqli_fetch_assoc($result)) {
+          $arrTemp = array();
+          foreach ($obj as $key => $value) {
+              $arrTemp[$key] = $value;
+          }
+          $arr[$i] = $arrTemp;
+          $i ++;
+      }
+      return $arr;
+      
+  }
+  
    private function GetArrayAllPics($col){
        $table = "med_image";
        $column = "image_path";
