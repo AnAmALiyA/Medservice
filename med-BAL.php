@@ -43,10 +43,10 @@ class BAL
             //TODO null возвращается
             $arrayOrganizationData['arrayServices'] = null;
             $resultServicesData = $resultOrganizationData['service'] != null ? $this->dal->GetServicesData($resultOrganizationData['service']) : null;
-            if ($servicesId != null) {
+            if ($resultServicesData != null) {
                 $resultServicesId = array();
                 $resultServicesNames = array();
-                for ($i = 0; $i < count($resultServicesData); $i++) {
+                for ($i = 1; $i < count($resultServicesData); $i++) {
                     $resultServicesId[] = $i;
                     $resultServicesNames[] = $resultServicesData[$i];
                 }
@@ -61,7 +61,7 @@ class BAL
             if ($resultInsuranceCompanesData != null) {
                 $resultInsuranceCompanesId = array();
                 $resultInsuranceCompanesNames = array();
-                for ($i = 0; $i < count($resultInsuranceCompanesData); $i++) {
+                for ($i = 1; $i < count($resultInsuranceCompanesData); $i++) {
                     $resultInsuranceCompanesId[] = $i;
                     $resultInsuranceCompanesNames[] = $resultInsuranceCompanesData[$i];
                 }

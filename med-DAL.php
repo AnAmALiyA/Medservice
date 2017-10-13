@@ -365,7 +365,7 @@ class DAL
         $arrayServices = array();
         foreach ($result as $key => $value) {
             if ($value != null) {
-                array_push($arrayServices, $this->arrayNamesServices[$key]);
+               $arrayServices[] = $this->arrayNamesServices[$key];
             }
         }
         return $arrayServices;

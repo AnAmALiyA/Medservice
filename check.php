@@ -16,25 +16,26 @@ require_once 'med-BAL.php';
 // $dal = new DAL();
  $dal = new BAL();
 
-//  $m = $dal->GetInsuranceCompanesData(2);
-//  $actualLocationData = null;
-//  $actualLocationId = 4;
-//  if ($actualLocationId != null) {
-//      $resultActualLocation = $dal->GetActualLocation($actualLocationId);
-//      $actualLocationData = array(
-//          ['street'] => array(
-//              'id' => $resultActualLocation['id'],
-//              'name' => $resultActualLocation['actualLocation']
-//          )
-//      );
-//  }
-// //  echo "[$m]-результатt<br/>";
-//  var_dump($actualLocationData);
-// $ff = $dal->GetOrganizationSummaryData(4);
-echo $ff.'<br/>';
-$resultHome = $dal->GetPhones(4);
+ //  $arrayOrganizationData['arrayServices'] = null;
+ $resultServicesData = $resultOrganizationData['service'] != null ? $this->dal->GetServicesData($resultOrganizationData['service']) : null;
+ if ($servicesId != null) {
+     $resultServicesId = array();
+     $resultServicesNames = array();
+     for ($i = 0; $i < count($resultServicesData); $i++) {
+         $resultServicesId[] = $i;
+         $resultServicesNames[] = $resultServicesData[$i];
+     }
+     $arrayOrganizationData['arrayServices'] = array(
+     //                     'id' => $resultServicesId,
+     //                     'name' => $resultServicesNames
+         'dfdfgdfgdf'
+     );
+     //                 $arrayOrganizationData['arrayServices'] = 'тест';//$resultOrganizationData['service'];
+ }
+echo '<br/>';
+// $resultHome = $dal->GetPhones(4);
 // $tt = $dal->SelectById('med_actual_location', 4);
-var_dump($resultHome);
+var_dump($arrayOrganizationData);
 // echo '<br/>-----------foreach ----------------<br/>';
 // echo '<br/>';
 // foreach ($m as $key => $value) {

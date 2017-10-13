@@ -227,7 +227,7 @@ function addFormFotoMarkup (marker) {
 }
 
 function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo) {
-	var formOrganization = '<div class="info-holder">' +
+	let formOrganization = '<div class="info-holder">' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
 		                                '<label for="type">Тип учереждения</label>' +
@@ -235,11 +235,12 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '<div class="col2">' +
 		                                '<select name="typeCompany" class="type" id="typeCompany">' +
 																		//тип учереждения
-																		typeCompany != null ? '<option value="' + typeCompany.id + '" selected>' + typeCompany.name + '</option>' : '<option value="0" selected></option>';
+																		// + (typeCompany != null ? '<option value="' + typeCompany.id + '" selected>' + typeCompany.name + '</option>' : '<option value="0" selected></option>')
+																		'<option value="0" selected></option>' +
 																			// for (let i = 0; i < arrayTypeCompany.id.length; i++) {
 																			// 	+ '<option value="' + arrayTypeCompany.id[i] + '">' + arrayTypeCompany.name[i] + '</option>'
 																			// }
-		                              + '</select>' +
+		                              '</select>' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -248,25 +249,26 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '</div>' +
 		                            '<div class="col2">' +
 		                                '<select name="services" class="services" id="services">' +
-		                                  // '<option value="0" selected></option>'
-																			// for (let i = 0; i < arrayServices.length; i++) {
-																			// 	+ '<option value="' + i + '">' + arrayServices[i] + '</option>'
-																			// }
-		                              + '</select>' +
+		                                  '<option value="0" selected></option>'+
+														// 					// for (let i = 0; i < arrayServices.length; i++) {
+														// 					// 	+ '<option value="' + i + '">' + arrayServices[i] + '</option>'
+														// 					// }
+		                               '</select>' +
 		                                '<button type="button" name="button" class="button_section button_section_js">Выбрать</button>' +
 		                            '</div>' +
-		                            '<div id="servicesCheck">' +
-																generationServices(arrayServices);
-																// if (arrayServices != null) {
-																// 	for (let i = 0; i < arrayServices.name.length; i++) {
-																// 		'<div class="green_button" id="services-'+ arrayServices.id[i] + '">' +
-																// 			'<span>' + arrayServices.name[i] + '</span>' +
-																// 			'<span class="delete_js"></span>' +
-																// 		'</div>'
-																// 	}
-																// }
-																+ '</div>' +
-		                        '</div>' +
+		                        //     // '<div id="servicesCheck">test</div>' +
+														// 		// generationServices(arrayServices);
+														// 		// if (arrayServices != null) {
+														// 		// 	for (let i = 0; i < arrayServices.name.length; i++) {
+														// 		// 		'<div class="green_button" id="services-'+ arrayServices.id[i] + '">' +
+														// 		// 			'<span>' + arrayServices.name[i] + '</span>' +
+														// 		// 			'<span class="delete_js"></span>' +
+														// 		// 		'</div>'
+														// 		// 	}
+														// 		// }
+														'</div>' +
+														'<div class="row for_green_button">'+
+														'</div>' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
 		                                '<label for="company">Страховые компании</label>' +
@@ -277,12 +279,12 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 																				// for (let i = 0; i < arrayInsuranceCompanes.id.length; i++) {
 																				// 	+ '<option value="' + i + '">' + arrayInsuranceCompanes[i] + '</option>'
 																				// }
-		                              + '</select>' +
-		                            '</div>' +
-																'<button type="button" name="button" class="button_section button_section_js">Выбрать</button>' +
+																				'</select>' +
+		 		                                '<button type="button" name="button" class="button_section button_section_js">Выбрать</button>' +
+		 		                            '</div>' +
 		                        '</div>' +
-														'<div id="arrayInsuranceCompanesCheck">' +
-														generationInsuranceCompanes(arrayInsuranceCompanes);
+														'<div id="arrayInsuranceCompanesCheck">'+
+														//generationInsuranceCompanes(arrayInsuranceCompanes);
 														// if (arrayInsuranceCompanes != null) {
 														// 	for (let i = 0; i < arrayInsuranceCompanes.name.length; i++) {
 														// 		'<div class="green_button" id="insuranceCompanes-'+ arrayInsuranceCompanes.id[i] + '">' +
@@ -291,13 +293,13 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 														// 		'</div>'
 														// 	}
 														// }
-														+ '</div>' +
+														  '</div>' +
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
 		                                '<label for="name">Название</label>' +
 		                            '</div>' +
 		                            '<div class="col2">' +
-		                                '<input type="text" placeholder="" id="nameCompany" name="nameCompany-' + nameCompany != null ? nameCompany.id : 'null'; + '" value="' + nameCompany != null ? nameCompany.name : 'Тест поле компания'; + '">' +
+		                                '<input type="text" placeholder="" id="nameCompany" name="nameCompany-0">' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -311,7 +313,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '</div>' +
 		                            '<div class="col2">' +// тут подгрузить
 															// области
-		                                '<input type="text" placeholder="Введите название области." id="region" name="region-'+ arrayLocation.region != null ? arrayLocation.region.id : 'null'; +'" value="' + arrayLocation.region != null ? arrayLocation.region.name : 'Тест поля улица'; + '">' +
+		                                '<input type="text" placeholder="Введите название области." id="region" name="region-0">' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -320,7 +322,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '</div>' +
 		                            '<div class="col2">' + // тут подгрузить
 															// город
-		                                '<input type="text" placeholder="Введите название города." id="town" name="town-' + arrayLocation.city != null ? arrayLocation.city.id : 'null'; +'" value="' + arrayLocation.city != null ? arrayLocation.city.name : 'Тест поля город'; + '">' +
+		                                '<input type="text" placeholder="Введите название города." id="town" name="town-0">' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -329,7 +331,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '</div>' +
 		                            '<div class="col2">' + // тут подзрузить
 															// район города
-		                                '<input type="text" placeholder="Введите название район." id="district" name="districtCity-'+  arrayLocation.district != null ?  arrayLocation.district.id : 'null'; +'" value="' +  arrayLocation.district != null ? arrayLocation.district.name : 'Тест поля район'; + '">' +
+		                                '<input type="text" placeholder="Введите название район." id="district" name="districtCity-0">' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -338,7 +340,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '</div>' +
 		                            '<div class="col2">' +
 																//улица
-		                                '<input type="text" placeholder="Введите название улици." id="street" name="street-'+ arrayLocation.street != null ? arrayLocation.street.id : 'null'; +'" value="' + arrayLocation.street != null ? arrayLocation.street.name : 'Тест поля улица'; + '">' +
+		                                '<input type="text" placeholder="Введите название улици." id="street" name="street-0">' +
 		                            '</div>' +
 		                        '<div class="row">' +
 														'</div>' +
@@ -347,14 +349,14 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '</div>' +
 		                            '<div class="col2">' +
 																//город
-		                                '<input type="text" placeholder="Введите название дома." id="home" name="home-'+ arrayLocation.home != null ? arrayLocation.home.id : 'null'; +'" value="' + arrayLocation.home != null ? arrayLocation.home.name : 'Тест поля дом'; + '">' +
+		                                '<input type="text" placeholder="Введите название дома." id="home" name="home-0">' +
 		                            '</div>' +
 		                        '</div>' +
 														//телефон
 		                        '<div id="phones" class="row">' +
 		                            '<div class="col1">' +
 		                                '<label for="phone">Телефон</label>' +
-		                            '</div>'
+		                            '</div>' +
 																//проверить на существование и добавить по умолчанию
 																// for (let i = 0; i < arrayPhone.id.length; i++) {
 																// 	'<div class="col2 phone">' +
@@ -379,22 +381,22 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '<div class="col1">' +
 		                                '<label for="time">Время работы</label>' +
 		                            '</div>' +
-																generationDaysTimes(daysTimes);
-													  '</div>' +
-		                      + '<div class="row last">' +
+																//generationDaysTimes(daysTimes);
+													    '</div>' +
+		                        '<div class="row last">' +
 		                            '<div class="col1">' +
 		                                '<label for="holiday">Выходной</label>' +
 		                            '<div class="col2">' +
 																'</div>' +
-		                              '<div class="">' +
-		                                '<a id="mutliSelectHoliday" href="#">' +
-		                                  '<span class="hida">Select</span>' +
-		                                  '<p class="multiSel"></p>' +
-		                                '</a>' +
-		                              '</div>' +
+		                              // '<div class="">' + //незнаю зачем
+		                              //   '<a id="mutliSelectHoliday" href="#">' +
+		                              //     '<span class="hida">Select</span>' +
+		                              //     '<p class="multiSel"></p>' +
+		                              //   '</a>' +
+		                              // '</div>' +
 		                                '<ul class="mutliSelect">' +
-																		generateDaysOfWeekend(daysTimes);
-		                              + '</ul>' +
+																		//generateDaysOfWeekend(daysTimes);
+		                                '</ul>' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<input type="submit" name="submit" value="Сохранить">' +
@@ -409,23 +411,56 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '<i class="fa fa-times" aria-hidden="true"></i>' +
 		                        '</div>' +
 		                        '<span>Загрузить файл</span>' +
-		                    '</div>'
+		                    '</div>';
+	return formOrganization;
+}
+
+function setData(typeCompany, nameCompany, arrayLocation){
+	if (typeCompany != null) {
+		$('#typeCompany option:selected').text(typeCompany.name).attr("value", typeCompany.id);
+	}
+
+	if (nameCompany != null) {
+		$('#nameCompany').val(nameCompany.name).attr("name", "nameCompany-" + nameCompany.id);
+	}
+
+	if (arrayLocation.region) {
+		$('#region').val(arrayLocation.region.name).attr("name", "region-" + arrayLocation.region.id);
+	}
+
+	if (arrayLocation.city) {
+		$('#town').val(arrayLocation.city.name).attr("name", "town-" + arrayLocation.city.id);
+	}
+
+	if (arrayLocation.district) {
+		$('#district').val(arrayLocation.district.name).attr("name", "districtCity-" + arrayLocation.district.id);
+	}
+
+	if (arrayLocation.street) {
+		$('#street').val(arrayLocation.street.name).attr("name", "street-" + arrayLocation.street.id);
+	}
+
+	if (arrayLocation.home) {
+		$('#home').val(arrayLocation.home.name).attr("name", "home-" + arrayLocation.home.id);
+	}
 }
 
 function generationDaysTimes(daysTimes) {
   let arrayDaysOfWeekRU = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
-  var arrayDaysOfWeekUS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+  let arrayDaysOfWeekUS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
   let strDaysOfWeek = '';
+	console.log('дни и время');
+	console.log(daysTimes);
   if (daysTimes != null) {
     for (let i = 0; i < 7; i++) {
       strDaysOfWeek += '<div class="col2">' +
         '<span>' + arrayDaysOfWeekRU[i] + '</span>' +
         '<select name="Start-' + arrayDaysOfWeekUS[i] + '" class="time">' +
-        generationTime(daysTimes.weekend[i] != null ? daysTimes.start_work[i] : 7); +
+        generationTime(daysTimes.day[i] != null ? daysTimes.startWork[i] : 7); +
       '</select>' +
       '<span>до</span>' +
       '<select name="End-' + arrayDaysOfWeekUS[i] + '" class="time">' +
-        generationTime(daysTimes.weekend[i] != null ? daysTimes.start_work[i] : 19); +
+        generationTime(daysTimes.day[i] != null ? daysTimes.endtWork[i] : 19); +
       '</select>' +
       '</div>';
     }
@@ -469,23 +504,28 @@ function generationTime(hour) {
 
 function generateDaysOfWeekend(daysTimes) {
 	let arrayDaysOfWeekend = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресение"];
+	let arrayDaysOfWeekUS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 	let strDaysOfWeekend = '';
 
 	for (let i = 0; i < arrayDaysOfWeekend.length; i++) {
-		strDaysOfWeekend += '<li><input type="checkbox" name="' + arrayDaysOfWeekUS[i] + '" value="' + arrayDaysOfWeekend[i] + '"'+ (daysTimes != null ? (daysTimes.weekend[i] == null ? 'checked': '') : '') +'/>' + arrayDaysOfWeekend[i] + '</li>';
+		strDaysOfWeekend += '<li><input type="checkbox" name="' + arrayDaysOfWeekUS[i] + '" value="' + arrayDaysOfWeekend[i] + '"'+ (daysTimes != null ? (daysTimes.day[i] == null ? 'checked': '') : '') +'/>' + arrayDaysOfWeekend[i] + '</li>';
 	}
 	return strDaysOfWeekend;
 }
 
 function generationServices(arrayServices) {
+	console.log('метод - generationServices/arrayServices');
+	console.log(arrayServices);
 	if (arrayServices != null) {
 		let str = '';
 		for (let i = 0; i < arrayServices.name.length; i++) {
 			str += '<div class="green_button" id="services-'+ arrayServices.id[i] + '">' +
 				'<span>' + arrayServices.name[i] + '</span>' +
-				'<span class="delete_js"></span>' +
+				'<i class="delete_js"></i>' +
 			'</div>'
 		}
+		console.log('метод - generationServices');
+		console.log(str);
 		return str;
 	}
 }
@@ -516,14 +556,13 @@ function setFormMain(formM) {
       dataType: 'json', // what type of data do we expect back from the server
       encode: true,
       success: function(response){
-    	   console.log('success: ');
+    	   console.log('данные с сервера при успешном выполнении');
 		   console.log(response);
 		   let typeCompany = response.typeCompany;//id, name
-		   let arrayServices = response.arrayServices;
+		   let arrayServices = response.arrayServices;//$arrayOrganizationData['arrayServices']
 		   let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
 		   let nameCompany = response.nameCompany;
 		   let arrayLocation = response.arrayLocation;
-			 console.log(response.arrayLocation.home);
 //		   let street = arrayLocation.street;
 //		   let city = arrayLocation.city;
 //		   let district = arrayLocation.district;
@@ -534,6 +573,9 @@ function setFormMain(formM) {
 	   	   //сформировать разметку
 		   let form = addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo);
 		   formM.html(form);
+			 setData(typeCompany, nameCompany, arrayLocation);
+			//  setGenerationData(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo);
+			 //генерация на выпадающем списке
 	},
 	error: function (jqXHR, exception) {
         var msg = '';
