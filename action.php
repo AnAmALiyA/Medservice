@@ -745,13 +745,13 @@ class HandlingData
                 
                
                 $name = $upload_dir . $id_dir .$news_dir;
-                if (file_exists($name)) {
-                    echo "Uploading...Saving news";
+                if (!is_dir($_SERVER["DOCUMENT_ROOT"].$name)) {
+                      mkdir(".".$name, 0777, true);
                     $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i]));
                 } else {
-                    mkdir($name, 0755, true);
-                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i]));
-                }
+                  
+               echo "Uploading...Saving news";
+                    $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i])); }
                
                 
                 if ($mov) {
@@ -790,13 +790,13 @@ class HandlingData
             
             
             $name = $upload_dir . $id_dir .$promo_dir;
-            if (file_exists($name)) {
-                echo "Uploading...Saving promo";
+            if (!is_dir($_SERVER["DOCUMENT_ROOT"].$name)) {
+                 mkdir(".".$name, 0777, true);
                 $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["promo_img_"]['name'][$i]));
             } else {
-                mkdir($name, 0755, true);
-                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["promo_img_"]['name'][$i]));
-            }
+               
+            echo "Uploading...Saving promo";
+                $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["promo_img_"]['name'][$i]));}
             
             
             if ($mov) {
@@ -833,13 +833,13 @@ class HandlingData
             
             
             $name = $upload_dir . $id_user_dir .$news_dir;
-            if (file_exists($name)) {
-                echo "Uploading... Updating news";
+            if (is_dir($_SERVER["DOCUMENT_ROOT"].$name)) {
+               echo "Uploading... Updating news";
                 $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i])  );
             } else {
-                mkdir($name, 0755, true);
-                $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name .basename($pictures["news_img_"]['name'][$i])  );
-            }
+                 mkdir(".".$name, 0777, true);
+            echo "Creating dir ";
+                $mov = move_uploaded_file($pictures["news_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["news_img_"]['name'][$i])  );}
             
             
             if ($mov) {
@@ -875,11 +875,11 @@ class HandlingData
             
             
             $name = $upload_dir . $id_user_dir .$promo_dir;
-            if (file_exists($name)) {
+            if (is_dir($_SERVER["DOCUMENT_ROOT"].$name)) {
                 echo "Uploading... Updating promo";
                 $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name.basename($pictures["promo_img_"]['name'][$i])  );
             } else {
-                mkdir($name, 0700, true);
+                mkdir(".".$name, 0777, true);
                 $mov = move_uploaded_file($pictures["promo_img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name .basename($pictures["promo_img_"]['name'][$i])  );
             }
             
@@ -906,6 +906,7 @@ class HandlingData
         // checking and approving img
         $i =0;
         echo ($pictures["img_"]['name'][$i]);
+		echo ($pictures["img_"]['tmp_name'][$i]);
         if ($pictures["img_"]['size'][$i] > (5 * 1024 * 1024))
             die('Размер файла не должен превышать 5Мб');
             $imageinfo = getimagesize($pictures["img_"]['tmp_name'][$i]);
@@ -915,30 +916,36 @@ class HandlingData
             $id = 1;
             $upload_dir = '/upload/'; // имя папки с картинками
             $id_dir = $id . '/';
-            $promo_dir = 'other/';
+            $other_dir = 'other/';
             
             //TODO: directory is not creating!!
-            $name = $upload_dir . $id_dir .$promo_dir;
-            if (file_exists($name)) {
-                echo "Uploading...";
-                $mov = move_uploaded_file($pictures["img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name. basename($pictures["promo_img_"]['name'][$i]));
-            } else {
-                mkdir($name, 0700, true);
-                $mov = move_uploaded_file($pictures["img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name. basename($pictures["promo_img_"]['name'][$i]));
+            $name = $upload_dir . $id_dir .$other_dir;
+			echo "<br>".$name."<br>";
+            if (is_dir($_SERVER["DOCUMENT_ROOT"].$name)) {
+               echo "Uploading... h ";
+                $mov = move_uploaded_file($pictures["img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name. basename($pictures["img_"]['name'][$i]));
+            } else { 
+			
+				echo "Creating dir ...";
+             $rest =   mkdir(".".$name, 0777, true);
+			 echo $rest;
+                $mov = move_uploaded_file($pictures["img_"]['tmp_name'][$i], $_SERVER["DOCUMENT_ROOT"].$name . basename($pictures["img_"]['name'][$i]) );
             }
             
-            
+            echo $mov." is moved?? ";
             if ($mov) {
                 // здесь коннект к БД
                 $name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
                 $name .= basename($pictures["img_"]['name'][$i]);
-                if (! empty($promo_id))
+               
                     $result = $this->controller->SavePics($id,  $name);
                     echo $result;
                     if ($result) {
                         return true;
-                    } else
-                        return false;
+                    }
+					else{
+						return false;
+					}
             }
     //} for authorize check
     }

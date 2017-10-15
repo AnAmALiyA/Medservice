@@ -1185,10 +1185,10 @@ class MedDB
         );
         $arrayValuesTabelRows = array(
             $id,
-            $name
+            "'$name'"
         );
         $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-        echo $getResult;
+        echo "save pics ".$getResult;
         if ($getResult) {
             return true;
         }

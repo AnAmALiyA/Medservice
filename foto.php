@@ -254,22 +254,24 @@
 					class="dwnld form-news-list"  enctype="multipart/form-data" multiple="multiple">
 
 					<div class="photo-list">
-                    <?php 
+                   
+				   <?php 
 					require_once 'med-BAL.php';
 					$select = new Controller();
 					
 					$pics= $select->GetPics();
 					 $i=0; //  for($i = 0; $i < 2; $i++) { 
 					if($pics){
-					foreach ($pics as  $value){ ?>
-                        
+					foreach ($pics as  $value){ 
+					?>
+                      <?php echo "fd ".$value["image_path"][$key]; ?>
                         
                             <div class="photo-holder">
                                 <img src="<?php												
 								
-								 $reslt= $values["image_path"][0];						
-								 
-								echo $reslt;?>" alt="empty">
+								 $reslt= $value["image_path"];						
+								
+								echo $reslt;?>" alt="empty" width=170 height=170 />
                                 <div class="icon-holder">
                                     <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     <i class="fa fa-times" aria-hidden="true"></i>
@@ -278,10 +280,11 @@
 									<input type="file"
 									id="add_img_<?php echo $i ?>"
 									name="img_[]"/>
+									
                                 </div>
                             </div>
-                            <?php }?>
-                            <?php }else{?>
+
+                            <?php }}else{?>
                             
                         
                             <div class="photo-holder">
@@ -294,13 +297,14 @@
 									файл</label> 
 									<input type="file"
 									id="add_img_[]"
-									name="img_[]"/>
+									name="img_[0]"/>
                                 </div>
                             </div>
                             
                             <?php }?>
                        
                     </div>
+					</div>
                     <div class="add">
                     <div class="button-add add_foto_js">
                         <span>Добавить</span>
@@ -311,7 +315,7 @@
                         <button >Сохранить</button>
                     </div>
                      </form>
-                </div>
+                
             </div>
         </section>
     </main>
