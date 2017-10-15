@@ -34,8 +34,9 @@ class Authorization
     }
 
     private function IsUserIdHash($id, $hash, $user_category)
-    {
+    {echo "$id, $hash, $user_category";
         $id = $this->validate->FilterStringOnHtmlSql($id);
+        echo "<br/>id - $id";
         if ($this->validate->ValidInteger($id)) {
             $userData = $this->bal->GetUserById($id);
             // echo 'userdata[\'hash\'] - '.$userdata['hash'].' == hash - '.$hash.'<br/>';

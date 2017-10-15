@@ -236,11 +236,11 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                                '<select name="typeCompany" class="type" id="typeCompany">' +
 																		//тип учереждения
 																		// + (typeCompany != null ? '<option value="' + typeCompany.id + '" selected>' + typeCompany.name + '</option>' : '<option value="0" selected></option>')
-																		'<option value="0" selected></option>' +
+																			'<option value="0" selected></option>' +
 																			// for (let i = 0; i < arrayTypeCompany.id.length; i++) {
 																			// 	+ '<option value="' + arrayTypeCompany.id[i] + '">' + arrayTypeCompany.name[i] + '</option>'
 																			// }
-		                              '</select>' +
+		                              	'</select>' +
 		                            '</div>' +
 		                        '</div>' +
 		                        '<div class="row">' +
@@ -256,7 +256,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                               '</select>' +
 		                                '<button type="button" name="button" class="button_section button_section_js">Выбрать</button>' +
 		                            '</div>' +
-		                        //     // '<div id="servicesCheck">test</div>' +
+		                            '<div id="servicesCheck">testServicesCheck</div>' +
 														// 		// generationServices(arrayServices);
 														// 		// if (arrayServices != null) {
 														// 		// 	for (let i = 0; i < arrayServices.name.length; i++) {
@@ -283,7 +283,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		 		                                '<button type="button" name="button" class="button_section button_section_js">Выбрать</button>' +
 		 		                            '</div>' +
 		                        '</div>' +
-														'<div id="arrayInsuranceCompanesCheck">'+
+														'<div id="arrayInsuranceCompanesCheck">testInsuranceCompanesCheck</div>' +
 														//generationInsuranceCompanes(arrayInsuranceCompanes);
 														// if (arrayInsuranceCompanes != null) {
 														// 	for (let i = 0; i < arrayInsuranceCompanes.name.length; i++) {
@@ -293,7 +293,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 														// 		'</div>'
 														// 	}
 														// }
-														  '</div>' +
+
 		                        '<div class="row">' +
 		                            '<div class="col1">' +
 		                                '<label for="name">Название</label>' +
@@ -357,6 +357,14 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '<div class="col1">' +
 		                                '<label for="phone">Телефон</label>' +
 		                            '</div>' +
+																'<div id="old-phones"></div>'+
+																'<div id="new-phones">'+
+																+ '<div class="col2 phone">' +
+			                                '<input class="phone_js" type="tel" name="phone-0" placeholder="+38 (0__) ___-__-__" value="0960009900">' +
+			                                '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
+			                                '<i class="fa fa-times" aria-hidden="true"></i>' +
+			                            '</div>' +
+																'</div>'
 																//проверить на существование и добавить по умолчанию
 																// for (let i = 0; i < arrayPhone.id.length; i++) {
 																// 	'<div class="col2 phone">' +
@@ -365,11 +373,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 			                          //       '<i class="fa fa-times" aria-hidden="true"></i>' +
 			                          //   '</div>'
 																// }
-		                          // + '<div class="col2 phone">' +
-		                          //       '<input id="phone" class="phone_js" type="tel" name="0" placeholder="+38 (0__) ___-__-__" value="0960009900">' +
-		                          //       '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-		                          //       '<i class="fa fa-times" aria-hidden="true"></i>' +
-		                          //   '</div>' +
+
 		                            '<div class="col2">' +
 		                                '<div class="add">' +
 		                                    '<i class="fa fa-plus" aria-hidden="true"></i>' +
@@ -381,6 +385,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                            '<div class="col1">' +
 		                                '<label for="time">Время работы</label>' +
 		                            '</div>' +
+																'<div id="startEndTime"></div>' +
 																//generationDaysTimes(daysTimes);
 													    '</div>' +
 		                        '<div class="row last">' +
@@ -394,7 +399,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                              //     '<p class="multiSel"></p>' +
 		                              //   '</a>' +
 		                              // '</div>' +
-		                                '<ul class="mutliSelect">' +
+		                                '<ul id="weekend" class="mutliSelect">' +
 																		//generateDaysOfWeekend(daysTimes);
 		                                '</ul>' +
 		                            '</div>' +
@@ -415,9 +420,19 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 	return formOrganization;
 }
 
-function setData(typeCompany, nameCompany, arrayLocation){
+// function setDataArrays(typeCompany, nameCompany, arrayLocation)
+function setDataArrays(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo)
+{
 	if (typeCompany != null) {
 		$('#typeCompany option:selected').text(typeCompany.name).attr("value", typeCompany.id);
+	}
+	//сервис
+	if(arrayServices != null){
+		$('#servicesCheck').html(generationServicesButtons(arrayServices));
+	}
+	//страховые
+	if(arrayInsuranceCompanes != null){
+		$('#arrayInsuranceCompanesCheck').html(generationInsuranceCompanes(arrayInsuranceCompanes));
 	}
 
 	if (nameCompany != null) {
@@ -443,10 +458,42 @@ function setData(typeCompany, nameCompany, arrayLocation){
 	if (arrayLocation.home != null) {
 		$('#home').val(arrayLocation.home.name).attr("name", "home-" + arrayLocation.home.id);
 	}
+	//телефоны(не работает в общем методе)
+	getPhones();//вызвать телефоны и там же установить после вызова
+	//время работы
+	if(daysTimes != null){
+		$('#startEndTime').html(generationDaysTimes(daysTimes));
+	}
+	//выходные дни
+	if(daysTimes != null){
+		$('#weekend').html(generateDaysOfWeekend(daysTimes));
+	}
 	// загрузка логотипа
-	// if (logo != null) {
-	// 	$('.imeg_js').attr('src', '');
-	// }
+	if (logo != null) {
+		$('.imeg_js').attr('src', '');
+	}
+}
+
+function generationServicesButtons(arrayServices){
+	let str = '';
+	for (let i = 0; i < arrayServices.name.length; i++) {
+					str += '<div class="green_button" id="services-'+ arrayServices.id[i] + '">' +
+						'<span>' + arrayServices.name[i] + '</span>' +
+						'<span class="delete_js"></span>' +
+					'</div>';
+				}
+	return str;
+}
+
+function generationInsuranceCompanes(arrayInsuranceCompanes){
+	let str = '';
+	for (let i = 0; i < arrayInsuranceCompanes.name.length; i++) {
+			str +='<div class="green_button" id="insuranceCompanes-'+ arrayInsuranceCompanes.id[i] + '">' +
+				'<span>' + arrayInsuranceCompanes.name[i] + '</span>' +
+				'<span class="delete_js"></span>' +
+			'</div>';
+		}
+		return str;
 }
 
 function generationDaysTimes(daysTimes) {
@@ -542,7 +589,7 @@ function generationTypeCompanyList(arrayTypeCompany){
 	}
 	return str;
 }
-
+//установить списки количества
 function setGenerationData(){
 	let mainDrop = {
 		 'comand' : 'ajax_form_main_region_service_institution'
@@ -571,7 +618,7 @@ function setGenerationData(){
 			document.regiones = response.regiones;
 		});
 }
-}
+
 
 function setFormMain(formM) {
 	let dates = {
@@ -601,11 +648,13 @@ function setFormMain(formM) {
 		   let daysTimes = response.daysTimes;
 		   let logo = response.logo;
 	   	   //сформировать разметку
-		   let form = addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo);
+		   let form = addFormOrganization();
 		   formM.html(form);
-			 setData(typeCompany, nameCompany, arrayLocation, logo);
+			//  setDataArrays(typeCompany, nameCompany, arrayLocation, logo);
+			 setDataArrays(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo);
 			 setGenerationData();
-			 //генерация на выпадающем списке
+			 //вывод типа кнопок
+
 	},
 	error: function (jqXHR, exception) {
         var msg = '';
@@ -687,10 +736,9 @@ function getCity(districtRegionId) {
     });
 }
 
-function getPhone(phoneId) {
+function getPhones() {
 	let phone = {
-		'comand' : 'ajax_form_main_phone',
-		'phoneId' :  phoneId
+		'comand' : 'ajax_form_main_phones'
 	};
 	$.ajax({
       type: 'POST', // define the type of HTTP verb we want to use (POST for our
@@ -702,7 +750,17 @@ function getPhone(phoneId) {
     })
     .done(function(response) {
       console.log(response);
-			formM.html(response);
+			if(response.phones != null){
+				let str = '';
+				for (let i = 0; i < arrayPhone.id.length; i++) {
+					'<div class="col2 phone">' +
+				      '<input id="phone-' + arrayPhone.id[i] + '" class="phone_js" type="tel" name="' + arrayPhone.id[i] + '" placeholder="+38 (0__) ___-__-__" value="' + arrayPhone.name[i] + '">' +
+				      '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
+				      '<i class="fa fa-times" aria-hidden="true"></i>' +
+				  '</div>'
+				}
+				$('#old-phones').html(str);//append - добавить в конец списка
+			}
     });
 }
 

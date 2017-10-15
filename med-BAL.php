@@ -183,10 +183,10 @@ class BAL
         return $this->dal->GetHomeById($id);
     }
     //телефоны
-    public function GetPhones() {
+    public function GetPhones($user_id) {
 //     public function GetPhones($organizationId) {
-        $id = $_SESSION['user_id'];
-        $organizationId = $this->dal->GetOrganizationIdByUser($id);
+//         $user_id = $_SESSION['user_id'];
+        $organizationId = $this->dal->GetOrganizationIdByUser($user_id);
         return $this->dal->GetPhonesOrganizationId($organizationId);
     }
     //дни время работы

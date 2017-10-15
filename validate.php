@@ -14,10 +14,15 @@ class ValidateData
     }
 
     public function FilterStringOnHtmlSql($input_text)
-    {
+    {echo "FilterStringOnHtmlSql - $input_text";
         $input_text = strip_tags($input_text);
+        echo "<br/>strip_tags - $input_text";
         $input_text = htmlspecialchars($input_text);
-        return mysql_escape_string($input_text);
+        echo "<br/>htmlspecialchars - $input_text";
+//         return 
+        $input_text = mysql_escape_string($input_text);
+        echo "<br/>mysql_escape_string - $input_text";
+        return $input_text;
     }
 
     public function CastInteger($input_integer)
