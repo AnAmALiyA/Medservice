@@ -32,10 +32,10 @@ $bal = new BAL();
                 
                 case 'ajax_form_main_region_service_institution':
                     echo json_encode(array(
-                        $bal->GetTypeInstitutions(),
-                        $bal->GetNamesServices(),
-                        $bal->GetNamesInsuranceCompanes(),
-                        $bal->GetRegiones()
+                        'arrayTypeCompanes' => $bal->GetTypeInstitutions(),//типы учереждений
+                        'arrayServices' => $bal->GetNamesServices(),//сервисы
+                        $bal->GetNamesInsuranceCompanes(),//страховые компании
+                        $bal->GetRegiones()//регионы
                     ));
                     break;
                 

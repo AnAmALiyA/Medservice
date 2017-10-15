@@ -404,7 +404,7 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                    '<div class="logo-holder">' +
 		                        '<span class="top-txt">Логотип</span>' +
 		                        '<input type=file name="img" accept="image/*">' +
-		                          '<img src="img/empty-img.jpg" alt="empty">' +
+		                          '<img class="imeg_js" src="img/empty-img.jpg" alt="empty">' +
 		                        '</input>' +
 		                        '<div class="icon-holder">' +
 		                            '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
@@ -424,25 +424,29 @@ function setData(typeCompany, nameCompany, arrayLocation){
 		$('#nameCompany').val(nameCompany.name).attr("name", "nameCompany-" + nameCompany.id);
 	}
 
-	if (arrayLocation.region) {
+	if (arrayLocation.region != null) {
 		$('#region').val(arrayLocation.region.name).attr("name", "region-" + arrayLocation.region.id);
 	}
 
-	if (arrayLocation.city) {
+	if (arrayLocation.city != null) {
 		$('#town').val(arrayLocation.city.name).attr("name", "town-" + arrayLocation.city.id);
 	}
 
-	if (arrayLocation.district) {
+	if (arrayLocation.district != null) {
 		$('#district').val(arrayLocation.district.name).attr("name", "districtCity-" + arrayLocation.district.id);
 	}
 
-	if (arrayLocation.street) {
+	if (arrayLocation.street != null) {
 		$('#street').val(arrayLocation.street.name).attr("name", "street-" + arrayLocation.street.id);
 	}
 
-	if (arrayLocation.home) {
+	if (arrayLocation.home != null) {
 		$('#home').val(arrayLocation.home.name).attr("name", "home-" + arrayLocation.home.id);
 	}
+	// загрузка логотипа
+	// if (logo != null) {
+	// 	$('.imeg_js').attr('src', '');
+	// }
 }
 
 function generationDaysTimes(daysTimes) {
@@ -513,19 +517,11 @@ function generateDaysOfWeekend(daysTimes) {
 	return strDaysOfWeekend;
 }
 
-function generationServices(arrayServices) {
-	console.log('метод - generationServices/arrayServices');
-	console.log(arrayServices);
-	if (arrayServices != null) {
+function generationServicesList(arrayServices) {
 		let str = '';
 		for (let i = 0; i < arrayServices.name.length; i++) {
-			str += '<div class="green_button" id="services-'+ arrayServices.id[i] + '">' +
-				'<span>' + arrayServices.name[i] + '</span>' +
-				'<i class="delete_js"></i>' +
-			'</div>'
+			str += '<option value="' + arrayServices.id[i] + '">' + arrayServices.name[i] + '</option>'
 		}
-		console.log('метод - generationServices');
-		console.log(str);
 		return str;
 	}
 }
@@ -533,14 +529,48 @@ function generationServices(arrayServices) {
 function generationInsuranceCompanes(arrayInsuranceCompanes) {
 	if (arrayInsuranceCompanes != null) {
 		let str = '';
-		for (let i = 0; i < arrayInsuranceCompanes.name.length; i++) {
-			'<div class="green_button" id="insuranceCompanes-'+ arrayInsuranceCompanes.id[i] + '">' +
-				'<span>' + arrayInsuranceCompanes.name[i] + '</span>' +
-				'<span class="delete_js"></span>' +
-			'</div>'
+			str += '<option value="' + arrayInsuranceCompanes.id[i] + '">' + arrayInsuranceCompanes.name[i] + '</option>';
 		}
 		return str;
 	}
+}
+
+function generationTypeCompanyList(arrayTypeCompany){
+	let str = '';
+	for (let i = 0; i < arrayTypeCompany.name.length; i++) {
+		str += '<option value="' + arrayTypeCompany.id[i] + '">' + arrayTypeCompany.name[i] + '</option>'
+	}
+	return str;
+}
+
+function setGenerationData(){
+	let mainDrop = {
+		 'comand' : 'ajax_form_main_region_service_institution'
+	};
+	$.ajax({
+			type: 'POST', // define the type of HTTP verb we want to use (POST for our
+					// form)
+			url: 'ajax.php', // the url where we want to POST
+			data: mainDrop, // our data object
+			dataType: 'json', // what type of data do we expect back from the server
+			encode: true
+		})
+		.done(function(response) {
+			//установить выпадающие списки
+			console.log(response);
+			//список учереждений
+			let typeCompanyList = generationTypeCompanyList(response.typeCompany);
+			$('#typeCompany').html(typeCompanyList);
+			//список сервисов
+			let servicesList = generationServicesList(response.arrayServices);
+			$('#services').html(servicesList);
+			//список страховые компании
+			let insuranceCompanyList = generationServicesList(response.arrayInsuranceCompanes);
+			$('#insuranceCompany').html(insuranceCompanyList);
+			//регионы TODO создать и проверять список регионов
+			document.regiones = response.regiones;
+		});
+}
 }
 
 function setFormMain(formM) {
@@ -558,7 +588,7 @@ function setFormMain(formM) {
       success: function(response){
     	   console.log('данные с сервера при успешном выполнении');
 		   console.log(response);
-		   let typeCompany = response.typeCompany;//id, name
+		   let typeCompany = response.arrayTypeCompanes;//id, name
 		   let arrayServices = response.arrayServices;//$arrayOrganizationData['arrayServices']
 		   let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
 		   let nameCompany = response.nameCompany;
@@ -573,8 +603,8 @@ function setFormMain(formM) {
 	   	   //сформировать разметку
 		   let form = addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo);
 		   formM.html(form);
-			 setData(typeCompany, nameCompany, arrayLocation);
-			//  setGenerationData(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo);
+			 setData(typeCompany, nameCompany, arrayLocation, logo);
+			 setGenerationData();
 			 //генерация на выпадающем списке
 	},
 	error: function (jqXHR, exception) {
