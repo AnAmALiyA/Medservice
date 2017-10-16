@@ -356,6 +356,7 @@ img.wp-smiley, img.emoji {
 					<div class="special-list">
 					<?php 
 					require_once 'med-BAL.php';
+
 					$select = new BAL();
 					$result = $select->GetSpecialAll(); 
 					 $i=0; //  for($i = 0; $i < 2; $i++) { 

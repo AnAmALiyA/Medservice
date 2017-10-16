@@ -242,6 +242,7 @@ img.wp-smiley, img.emoji {
 <!-- //                                 } -->
 <!-- //                             }); -->
 <!-- //                         } -->
+
                     </script>
 				</div>
 			</div>
@@ -358,11 +359,11 @@ img.wp-smiley, img.emoji {
 					<div class="news-list">
 					<?php 
 					require_once 'med-BAL.php';
+					
 					$select = new BAL();
 					$result = $select->GetNewsAll(); 
 					$pics= $select->GetPicsNews();
 					 $i=0; //  for($i = 0; $i < 2; $i++) { 
-					echo $result."AAAAAAAAAAA";
 					if($result){
 					foreach ($result as $key => $value){ ?>
 							
