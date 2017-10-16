@@ -1,22 +1,10 @@
-<?php session_start();
-require_once 'authorize.php';
-require_once 'action.php';
-require_once 'med-BAL.php';
-
-$auth = new Authorization();
-$bal = new Controller();
-
-if (!$auth->IsAuthorized('organization')) {
-    $bal->RedirectBack();
-}
-?>
 <html>
 <head>
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script type="text/javascript" style="">
         var pathInfo = {
-            base: 'http://medservice24.pirise.com/wp-content/themes/medservice24/',
+            base: 'http://medservice/wp-content/themes/medservice24/',
             css: 'css/',
             js: 'js/',
             swf: 'swf/',
@@ -45,8 +33,8 @@ if (!$auth->IsAuthorized('organization')) {
             padding: 0 !important;
         }
     </style>
-    <link rel="stylesheet" id="contact-form-7-css" href="http://medservice24.pirise.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.6" type="text/css" media="all">
-    <link rel="stylesheet" id="wp-polls-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-polls/polls-css.css?ver=2.73.2" type="text/css" media="all">
+    <link rel="stylesheet" id="contact-form-7-css" href="http://medservice/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.6" type="text/css" media="all">
+    <link rel="stylesheet" id="wp-polls-css" href="http://medservice/wp-content/plugins/wp-polls/polls-css.css?ver=2.73.2" type="text/css" media="all">
     <style id="wp-polls-inline-css" type="text/css">
         .wp-polls .pollbar {
             margin: 1px;
@@ -106,31 +94,31 @@ if (!$auth->IsAuthorized('organization')) {
             </div>
             <div class="select-position">
                 <div class="select-holder">
-                    <script type="text/javascript">
-                        jQuery( document ).ready(function() {
-                            taxonomyOfLocation();
-                        });
-                        function taxonomyOfLocation(){
-                            var page = jQuery('#taxonomy_location').val();
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php",
-                                data: {tax_id: page},
-                                success: function(data) {
-                                    jQuery('#ajax-select-filter-geo').html(data);   
-                                }
-                            });
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                data: {tax_id: page},
-                                success: function (data) {
-                                    jQuery('#health-facility-doctor').html(data);
+                      <script type="text/javascript"> 
+//                            jQuery( document ).ready(function() { 
+//                                taxonomyOfLocation(); 
+//                            }); 
+//                            function taxonomyOfLocation(){ 
+//                                var page = jQuery('#taxonomy_location').val(); 
+//                                jQuery.ajax({ 
+//                                    type: "POST", 
+//                                    url: "http://medservice/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php", 
+//                                    data: {tax_id: page}, 
+//                                    success: function(data) { 
+//                                        jQuery('#ajax-select-filter-geo').html(data);    
+//                                    } 
+//                                }); 
+//                                jQuery.ajax({ 
+//                                    type: "POST", 
+//                                    url: "http://medservice/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php", 
+//                                    data: {tax_id: page}, 
+//                                    success: function (data) { 
+//                                        jQuery('#health-facility-doctor').html(data); 
 
-                                }
-                            });
-                        };
-                    </script>
+//                                    } 
+//                                }); 
+//                            }; 
+                      </script> 
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                     <select name="taxonomy_location" id="taxonomy_location" onchange="taxonomyOfLocation();">
                         <option value="0">Область</option>
@@ -144,50 +132,50 @@ if (!$auth->IsAuthorized('organization')) {
                             <option value="0">Город</option>
                             <option selected="selected" value="8">Киев</option>
                         </select>
-                        <script type="text/javascript">
-                            jQuery( document ).ready(function() {
-                                taxonomyOfLocationChild();
-                            });
-                            function taxonomyOfLocationChild(){
-                                var page = jQuery('#taxonomy_location_child').val();
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax_child.php",
-                                    data: {tax_id: page},
-                                    success: function(data) {
-                                        jQuery('#ajax-taxonomy-child').html(data);
-                                    }
-                                });
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                    data: {tax_id: page},
-                                    success: function (data) {
-                                        jQuery('#health-facility-doctor').html(data);
+<!--                         <script type="text/javascript"> -->
+<!--                              jQuery( document ).ready(function() { -->
+<!-- //                                 taxonomyOfLocationChild(); -->
+<!-- //                             }); -->
+<!-- //                             function taxonomyOfLocationChild(){ -->
+<!-- //                                 var page = jQuery('#taxonomy_location_child').val(); -->
+<!-- //                                 jQuery.ajax({ -->
+<!-- //                                     type: "POST", -->
+<!-- //                                     url: "http://medservice/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax_child.php", -->
+<!-- //                                     data: {tax_id: page}, -->
+<!-- //                                     success: function(data) { -->
+<!-- //                                         jQuery('#ajax-taxonomy-child').html(data); -->
+<!-- //                                     } -->
+<!-- //                                 }); -->
+<!-- //                                 jQuery.ajax({ -->
+<!-- //                                     type: "POST", -->
+<!-- //                                     url: "http://medservice/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php", -->
+<!-- //                                     data: {tax_id: page}, -->
+<!-- //                                     success: function (data) { -->
+<!-- //                                         jQuery('#health-facility-doctor').html(data); -->
 
-                                    }
-                                });
-                            };
-                        </script>
+<!-- //                                     } -->
+<!-- //                                 }); -->
+<!-- //                             }; -->
+<!--                         </script> -->
                     </div>
                 </div>
                 <div class="select-holder" id="ajax-taxonomy-child">
                     <select onchange="areaId();" id="area-id" name="area-id">
                         <option value="8">Район</option>
                     </select>
-                    <script type="text/javascript">
-                        function areaId() {
-                            var page = jQuery('#area-id').val();
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                data: {tax_id: page},
-                                success: function (data) {
-                                    jQuery('#health-facility-doctor').html(data);
-                                }
-                            });
-                        }
-                    </script>
+<!-- <!--                     <script type="text/javascript"> --> 
+<!-- //                         function areaId() { -->
+<!-- //                             var page = jQuery('#area-id').val(); -->
+<!-- //                             jQuery.ajax({ -->
+<!-- //                                 type: "POST", -->
+<!-- //                                 url: "http://medservice/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php", -->
+<!-- //                                 data: {tax_id: page}, -->
+<!-- //                                 success: function (data) { -->
+<!-- //                                     jQuery('#health-facility-doctor').html(data); -->
+<!-- //                                 } -->
+<!-- //                             }); -->
+<!-- //                         } -->
+<!--                     </script> -->
                 </div>
             </div>
             <div class="reg">
@@ -244,7 +232,7 @@ if (!$auth->IsAuthorized('organization')) {
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медицинский центр</h2>
+                    <h2>Медецинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">
@@ -450,7 +438,7 @@ if (!$auth->IsAuthorized('organization')) {
             <h2>По вопросам сотрудничества обращайтесь</h2>
             <div role="form" class="wpcf7" id="wpcf7-f90-o2" dir="ltr" lang="en-GB">
                 <div class="screen-reader-response"></div>
-                <form action="/#wpcf7-f90-o2" method="post" class="wpcf7-form" novalidate="novalidate">
+                <form action="applyRequest.php" method="POST" enctype="multipart/form-data" class="wpcf7-form" novalidate="novalidate">
                     <div style="display: none;">
                         <input name="_wpcf7" value="90" type="hidden">
                         <input name="_wpcf7_version" value="4.6" type="hidden">
@@ -459,13 +447,13 @@ if (!$auth->IsAuthorized('organization')) {
                         <input name="_wpnonce" value="8a3f37bc58" type="hidden">
                     </div>
                     <div class="col-75">
-                        <label for="input-coop" class="req">Имя</label><span class="wpcf7-form-control-wrap your-name"><input name="your-name" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" type="text"></span>
+                        <label for="input-coop" class="req">Имя</label><span class="wpcf7-form-control-wrap your-name"><input name="your-name" required value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" type="text"></span>
                     </div>
                     <div class="col-75">
-                        <label for="input-coop2">Компания</label><span class="wpcf7-form-control-wrap your-company"><input name="your-company" value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" type="text"></span>
+                        <label for="input-coop2">Компания</label><span class="wpcf7-form-control-wrap your-company"><input name="your-company"  value="" size="40" class="wpcf7-form-control wpcf7-text" aria-invalid="false" type="text"></span>
                     </div>
                     <div class="col-75">
-                        <label for="input-coop3" class="req">Телефон</label><span class="wpcf7-form-control-wrap your-tel"><input name="your-tel" value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" type="tel"></span>
+                        <label for="input-coop3" class="req">Телефон</label><span class="wpcf7-form-control-wrap your-tel"><input name="your-tel" required  value="" size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel" aria-required="true" aria-invalid="false" pattern="^[ 0-9]+$" type="tel"></span>
                     </div>
                     <div class="col-75">
                         <label for="input-coop4">Сообщение</label><span class="wpcf7-form-control-wrap your-message"><textarea name="your-message" cols="40" rows="10" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"></textarea></span>

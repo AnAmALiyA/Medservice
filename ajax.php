@@ -23,10 +23,7 @@ $bal = new BAL();
                     break;
                 
                 case 'ajax_form_main_phones':
-//                     echo json_encode($bal->GetPhones());
-                    echo json_encode(array(
-                        'phones' => $bal->GetPhones($id = $_SESSION['user_id'])
-                    ));
+                    echo json_encode($bal->GetPhones($id = $_SESSION['user_id']));
                     break;
                 
                 case 'ajax_form_main_districtRegion':

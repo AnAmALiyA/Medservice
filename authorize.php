@@ -4,12 +4,14 @@ require_once 'med-DAL.php';
 
 class Authorization
 {
+
     private $validate;
-    private $bal;
+
+    private $dal;
 
     public function __construct()
     {
-        $this->bal = new BAL();
+        $this->dal = new DAL();
         $this->validate = new ValidateData();
     }
 
@@ -34,13 +36,12 @@ class Authorization
     }
 
     private function IsUserIdHash($id, $hash, $user_category)
-    {echo "$id, $hash, $user_category";
+    {
         $id = $this->validate->FilterStringOnHtmlSql($id);
-        echo "<br/>id - $id";
         if ($this->validate->ValidInteger($id)) {
-            $userData = $this->bal->GetUserById($id);
+            $userdata = $this->dal->GetUserById($id);
             // echo 'userdata[\'hash\'] - '.$userdata['hash'].' == hash - '.$hash.'<br/>';
-            if ($userData['hash'] == $hash && $userData['user_category'] == $user_category) {
+            if ($userdata['hash'] == $hash && $userdata['user_category'] == $user_category) {
                 return true;
             }
         }
@@ -81,11 +82,11 @@ class Authorization
         return $code;
     }
 
-    public function GetIsLogin($login)
+    private function GetIsLogin($login)
     {
         $login = $this->validate->FilterStringOnHtmlSql($login);
         if ($this->validate->ValidIntegerString($login)) {
-            return $this->bal->FindIdByLogin($login);
+            return $this->dal->FindIdLogin($login);
         }
     }
     
@@ -98,20 +99,16 @@ class Authorization
 
     public function SaveUser($login, $password, $user_category)
     {
-        $id = $this->GetIsLogin($login, $passwordMd5);
+        $id = $this->GetIsLogin($login);
         if ($id < 0) {
-//             $id = $this->bal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
-//             $id++;
+            $id = $this->dal->GetLastLoginId(); // проверить в DAL SELECT id FROM med_users ORDER BY id DESC LIMIT 1
+            
             $passwordMd5 = md5(md5(trim($password)));
             $hash = md5($this->GenerateCode(10));
             
-            $result = $this->bal->SaveUser($login, $passwordmd5, $hash, $user_category);
-            echo $result;
-            if ($result) {
-                $userId = $this->dal->GetIdByLoginPassword($login, $passwordmd5);
-                return array(userId, $hash);
-            }
-            return array(-1);
+            $this->dal->SaveUser($id, $login, $passwordmd5, $hash, $user_category);
+            $arrSave = array($id, $hash);
+            return $arrSave;
         }
         return array(-1);
     }

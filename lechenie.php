@@ -1,4 +1,4 @@
-﻿<?php session_start();
+<?php session_start();
 require_once 'authorize.php';
 require_once 'action.php';
 require_once 'med-BAL.php';
@@ -16,7 +16,7 @@ if (!$auth->IsAuthorized('organization')) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Регистрация</title>
+	<title>Лечение</title>
 
 	<link rel="stylesheet" href="wp-content/themes/medservice24/css/style.css">
   <!-- <link rel="stylesheet" id="base-style-css" href="http://medservice24.webspectrum.top/wp-content/themes/medservice24/css/style.css"> -->
@@ -113,102 +113,9 @@ if (!$auth->IsAuthorized('organization')) {
 	<div class="page page_registration">
 
 		<div class="form-wrap">
-			<h2 class="form__title text-center">Регистрация</h2>
+			<h2 class="form__title text-center">Лечение</h2>
 
-			<div class="tab-panel">
-				<div class="tab-head">
-					<div class="tab active organization_js">
-						Мед учереждение
-					</div>
-					<div class="tab client_js">
-						Клиент
-					</div>
-				</div>
-
-				<div class="tab-body">
-					<div class="tab-content organization active">
-						<form action="#" method="post" enctype="multipart/form-data" name="reg_med_organization" class="med-form">
-							<div class="med-form__item-group">
-								<label for="mf-title" class="med-form__label">Название мед учереждения*</label>
-								<input id="mf-title" name="mf_title" type="text" class="med-form__field" required="required">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-type" class="med-form__label">Тип заведения</label>
-								<input id="mf-type" name="mf_type" type="text" class="med-form__field">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-form_of_ownership" class="med-form__label">Форма собственности</label>
-								<input id="mf-form_of_ownership" name="mf_form_of_ownership" type="text" class="med-form__field">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-contact_person" class="med-form__label">Контактное лицо, ФИО*</label>
-								<input id="mf-contact_person" name="mf_contact_person" type="text" class="med-form__field" required="required">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-contact_person-post" class="med-form__label">Должность</label>
-								<input id="mf-contact_person-post" name="mf_contact_person_post" type="text" class="med-form__field">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-contact_person-tel-number" class="med-form__label">Контактный телефон*</label>
-								<input id="mf-contact_person-tel-number" name="mf_contact_person_tel_number" type="tel" class="med-form__field phone_js" required="required" placeholder="+38 (0__) ___-__-__">
-							</div>
-
-							<div class="med-form__item-group">
-								<span class="med-form__label med-form__file-label">Загрузить фото</span>
-								<label for="mf-photo" class="med-form__load-label">
-									<img src="wp-content/themes/medservice24/images/no_photo.png" alt="med photo" class="med-form__photo">
-								</label>
-								<input id="mf-photo" name="mf_photo" type="file" accept="image/*,image/jpeg,image/png" class="med-form__field med-form__field_input-file">
-							</div>
-
-							<div class="med-form__item-group text-center">
-								<button class="med-form__btn btn">Сохранить</button>
-							</div>
-
-						</form>
-					</div>
-
-					<div class="tab-content client">
-						<form action="#" method="post" enctype="multipart/form-data" name="reg_med_client" class="med-form">
-
-							<div class="med-form__item-group">
-								<label for="mf-contact_person" class="med-form__label">Контактное лицо, ФИО*</label>
-								<input id="mf-contact_person" name="mf_contact_person" type="text" class="med-form__field" required="required">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-contact_person-email" class="med-form__label">Почта*</label>
-								<input id="mf-contact_person-email" name="mf_contact_person_email" type="email" class="med-form__field">
-							</div>
-
-							<div class="med-form__item-group">
-								<label for="mf-contact_person-tel-number" class="med-form__label">Контактный телефон*</label>
-								<input id="mf-contact_person-tel-number" name="mf_contact_person_tel_number" type="tel" class="med-form__field phone_js" required="required" placeholder="+38 (0__) ___-__-__">
-							</div>
-
-							<div class="med-form__item-group">
-								<span class="med-form__label med-form__file-label">Загрузить фото</span>
-								<label for="mf-photo" class="med-form__load-label">
-									<img src="wp-content/themes/medservice24/images/no_photo.png" alt="med photo" class="med-form__photo">
-								</label>
-								<input id="mf-photo" name="mf_photo" type="file" accept="image/*,image/jpeg,image/png" class="med-form__field med-form__field_input-file">
-							</div>
-
-							<div class="med-form__item-group text-center">
-								<button class="med-form__btn btn">Сохранить</button>
-							</div>
-
-						</form>
-					</div>
-
-				</div>
-			</div>
-
+			
 		</div>
 
 	</div>
@@ -226,10 +133,9 @@ if (!$auth->IsAuthorized('organization')) {
     </div>
     <div class="row">
       <div class="col">
-        <h3>Сервис</h3>
-		<p><a href="/kontakty.php">О нас</a>
+        <h3>Сервис</h3><p><a href="/kontakty.php">О нас</a>
 				<a href="/poltika-konfidentsialnosti.php">Политика конфиденциальности</a>
-				<a href="/pravila-servisa">Правила сервиса</a>
+				<a href="/pravila-servisa.php">Правила сервиса</a>
 				<a href="/vopros-administratoru.php">Вопрос администратору</a>
 				<a href="/sotrudnichestvo.php">Сотрудничество</a></p>
 				</div>

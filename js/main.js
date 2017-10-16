@@ -358,13 +358,13 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 		                                '<label for="phone">Телефон</label>' +
 		                            '</div>' +
 																'<div id="old-phones"></div>'+
-																'<div id="new-phones">'+
-																+ '<div class="col2 phone">' +
-			                                '<input class="phone_js" type="tel" name="phone-0" placeholder="+38 (0__) ___-__-__" value="0960009900">' +
-			                                '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-			                                '<i class="fa fa-times" aria-hidden="true"></i>' +
-			                            '</div>' +
-																'</div>'
+																'<div id="new-phones">' +
+																	'<div class="col2 phone">' +
+																			'<input class="phone_js" type="tel" name="phone-0" placeholder="+38 (0__) ___-__-__" value="0960009900">' +
+																			'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
+																			'<i class="fa fa-times" aria-hidden="true"></i>' +
+																		'</div>' +
+																  '</div>' +
 																//проверить на существование и добавить по умолчанию
 																// for (let i = 0; i < arrayPhone.id.length; i++) {
 																// 	'<div class="col2 phone">' +
@@ -420,9 +420,15 @@ function addFormOrganization(typeCompany, arrayServices, arrayInsuranceCompanes,
 	return formOrganization;
 }
 
-// function setDataArrays(typeCompany, nameCompany, arrayLocation)
 function setDataArrays(typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo)
 {
+	// console.log('setDataArrays --- start --- typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo');
+	// console.log(typeCompany);
+	// console.log(arrayServices);
+	// console.log(arrayInsuranceCompanes);
+	// console.log(nameCompany);
+	// console.log(arrayLocation);
+	// console.log('setDataArrays --- end --- typeCompany, arrayServices, arrayInsuranceCompanes, nameCompany, arrayLocation, daysTimes, logo');
 	if (typeCompany != null) {
 		$('#typeCompany option:selected').text(typeCompany.name).attr("value", typeCompany.id);
 	}
@@ -458,7 +464,7 @@ function setDataArrays(typeCompany, arrayServices, arrayInsuranceCompanes, nameC
 	if (arrayLocation.home != null) {
 		$('#home').val(arrayLocation.home.name).attr("name", "home-" + arrayLocation.home.id);
 	}
-	//телефоны(не работает в общем методе)
+	//TODO телефоны(не работает в общем методе да и так не работает)
 	getPhones();//вызвать телефоны и там же установить после вызова
 	//время работы
 	if(daysTimes != null){
@@ -500,23 +506,33 @@ function generationDaysTimes(daysTimes) {
   let arrayDaysOfWeekRU = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"];
   let arrayDaysOfWeekUS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
   let strDaysOfWeek = '';
-	console.log('дни и время');
-	console.log(daysTimes);
+	let startDaysOfWeek = '';
+	let endDaysOfWeek = '';
+console.log(daysTimes);
   if (daysTimes != null) {
     for (let i = 0; i < 7; i++) {
       strDaysOfWeek += '<div class="col2">' +
         '<span>' + arrayDaysOfWeekRU[i] + '</span>' +
-        '<select name="Start-' + arrayDaysOfWeekUS[i] + '" class="time">' +
-        generationTime(daysTimes.day[i] != null ? daysTimes.startWork[i] : 7); +
-      '</select>' +
+        '<select name="Start-' + arrayDaysOfWeekUS[i] + '" class="time">';
+        startDaysOfWeek += generationTime(
+					daysTimes.day[arrayDaysOfWeekUS[i]]
+					? 7
+					: daysTimes.startTime[arrayDaysOfWeekUS[i]]
+				);
+      strDaysOfWeek += startDaysOfWeek + '</select>' +
       '<span>до</span>' +
-      '<select name="End-' + arrayDaysOfWeekUS[i] + '" class="time">' +
-        generationTime(daysTimes.day[i] != null ? daysTimes.endtWork[i] : 19); +
-      '</select>' +
+      '<select name="End-' + arrayDaysOfWeekUS[i] + '" class="time">';
+        endDaysOfWeek += generationTime(
+					daysTimes.day[arrayDaysOfWeekUS[i]]
+					? 19
+					: daysTimes.endTime[arrayDaysOfWeekUS[i]]
+				);
+      strDaysOfWeek += endDaysOfWeek + '</select>' +
       '</div>';
+			console.log(daysTimes.startTime[arrayDaysOfWeekUS[i]]);
+			console.log(generationTime(daysTimes.startTime[arrayDaysOfWeekUS[i]]));
     }
   } else {
-    // if (daysTimes == null) {
     for (let i = 0; i < 7; i++) {
       strDaysOfWeek += '<div class="col2">' +
         '<span>' + arrayDaysOfWeekRU[i] + '</span>' +
@@ -566,6 +582,7 @@ function generateDaysOfWeekend(daysTimes) {
 
 function generationServicesList(arrayServices) {
 		let str = '';
+		if (arrayServices != null) {
 		for (let i = 0; i < arrayServices.name.length; i++) {
 			str += '<option value="' + arrayServices.id[i] + '">' + arrayServices.name[i] + '</option>'
 		}
@@ -573,14 +590,17 @@ function generationServicesList(arrayServices) {
 	}
 }
 
+
 function generationInsuranceCompanes(arrayInsuranceCompanes) {
+			let str = '';
 	if (arrayInsuranceCompanes != null) {
-		let str = '';
+		for (let i = 0; i < arrayInsuranceCompanes.name.length; i++) {
 			str += '<option value="' + arrayInsuranceCompanes.id[i] + '">' + arrayInsuranceCompanes.name[i] + '</option>';
 		}
 		return str;
 	}
 }
+
 
 function generationTypeCompanyList(arrayTypeCompany){
 	let str = '';
@@ -635,7 +655,7 @@ function setFormMain(formM) {
       success: function(response){
     	   console.log('данные с сервера при успешном выполнении');
 		   console.log(response);
-		   let typeCompany = response.arrayTypeCompanes;//id, name
+		   let typeCompany = response.typeCompany;//id, name
 		   let arrayServices = response.arrayServices;//$arrayOrganizationData['arrayServices']
 		   let arrayInsuranceCompanes = response.arrayInsuranceCompanes;
 		   let nameCompany = response.nameCompany;
@@ -737,31 +757,53 @@ function getCity(districtRegionId) {
 }
 
 function getPhones() {
-	let phone = {
-		'comand' : 'ajax_form_main_phones'
-	};
-	$.ajax({
-      type: 'POST', // define the type of HTTP verb we want to use (POST for our
-					// form)
-      url: 'ajax.php', // the url where we want to POST
-      data: phone, // our data object
-      dataType: 'json', // what type of data do we expect back from the server
-      encode: true
-    })
-    .done(function(response) {
-      console.log(response);
-			if(response.phones != null){
-				let str = '';
-				for (let i = 0; i < arrayPhone.id.length; i++) {
-					'<div class="col2 phone">' +
-				      '<input id="phone-' + arrayPhone.id[i] + '" class="phone_js" type="tel" name="' + arrayPhone.id[i] + '" placeholder="+38 (0__) ___-__-__" value="' + arrayPhone.name[i] + '">' +
-				      '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
-				      '<i class="fa fa-times" aria-hidden="true"></i>' +
-				  '</div>'
-				}
-				$('#old-phones').html(str);//append - добавить в конец списка
-			}
-    });
+  let phone = {
+    'comand': 'ajax_form_main_phones'
+  };
+  $.ajax({
+    type: 'POST', // define the type of HTTP verb we want to use (POST for our
+    // form)
+    url: 'ajax.php', // the url where we want to POST
+    data: phone, // our data object
+    dataType: 'json', // what type of data do we expect back from the server
+    encode: true,
+    success: function(phones) {
+      console.log(phones);
+      if (phones != null) {
+        let str = '';
+        for (let i = 0; i < phones.id.length; i++) {
+          str += '<div class="col2 phone">' +
+            '<input id="phone-' + phones.id[i] + '" class="phone_js" type="tel" name="' + phones.id[i] + '" placeholder="+38 (0__) ___-__-__" value="' + phones.name[i] + '">' +
+            '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
+            '<i class="fa fa-times" aria-hidden="true"></i>' +
+            '</div>';
+        }
+        $('#old-phones').html(str); //append - добавить в конец списка
+      }
+    },
+    error: function(jqXHR, exception) {
+      var msg = '';
+      if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+      } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+      } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+      } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+      } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+      } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+      } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+      }
+      // $('#post').html(msg);
+      console.log('error: ' + msg);
+    }
+  });
+  // .done(function(response) { //вместо success: function(response){
+  // 	}
 }
 
 function deletePhone(phoneId) {

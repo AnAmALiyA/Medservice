@@ -12,11 +12,11 @@ class DAL
     private $user = 'root';
     private $password = '';
     private $database = 'uh347272_med24';
-    // webspectrum
-    // private $host='localhost';
-    // private $user='andrew19_med';
-    // private $password='a6qxcqabymed';
-    // private $database='andrew19_uh347272_med24';
+//     webspectrum
+//     private $host='localhost';
+//     private $user='andrew19_med';
+//     private $password='a6qxcqabymed';
+//     private $database='andrew19_uh347272_med24';
     
     private $arrayNamesServices;
     private $arrayNamesInsuranceCompany;
@@ -497,7 +497,10 @@ class DAL
     public function GetPhonesOrganizationId($organizationId) {
         $selectCol = 'id, phone';
         $stringSelect = 'summary_table_fk';
-        return $this->SelectByIdWhere($this->tablePhone, $stringSelect, $organizationId, $selectCol);
+        //TODO дебилизм PHP
+//         return $this->SelectByIdWhere($this->tablePhone, $stringSelect, $organizationId, $selectCol);
+        return array("id"=> array(11, 12, 13),
+            "name" => array('0442228802', '0504441575', "0672396918"));
     }
     // выходные дни
     public function GetDaysTimeWorkById($id)
@@ -517,10 +520,10 @@ class DAL
                     $dayWork[$this->arrayDay[$key]] = false;
                     
                     $startTime = new DateTime($resultTimeWork['start_work']);
-                    $startTimeWork[$this->arrayDay[$key]] = $startTime->format('H');
+                    $startTimeWork[$this->arrayDay[$key]] = $startTime->format('H')*1;
                     
                     $endTime = new DateTime($resultTimeWork['end_work']);
-                    $endTimeWork[$this->arrayDay[$key]] = $endTime->format('H');
+                    $endTimeWork[$this->arrayDay[$key]] = $endTime->format('H')*1;
                 }
             }
         }
@@ -820,5 +823,397 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
 //         return $this->QueryDelete($this->tablePhone, $id);
     }
     ///////////////Удаление данных/////////конец//////////////
+    //////////////////Сергей////////////////////
+    //
+    public function GetNewsAllCol()
+    {
+        $table = 'med_news';
+        return $this->GetArrayAllCol($table);
+    }
+    
+    public function SaveNews($news_title, $med_user_fk, $news_descripion ,$date_show , $date_news )
+    {
+        $arrayNamesTabelRows = array(
+            'news_title',
+            'med_user_fk',
+            'news_descripion',
+            'news_show_date',
+            'news_data'
+        );
+        $arrayValuesTabelRows = array(
+            $news_title,
+            $med_user_fk,
+            $news_descripion,
+            $date_show ,
+            $date_news
+        );
+        $getResult = $this->QueryInsertNPGetId('med_news', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if ($getResult) {
+            return $getResult;
+        } else {
+            return false;
+        }
+    }
+    
+    public function GetPromoAllCol()
+    {
+        $table = 'med_promo';
+        return $this->GetArrayAllCol($table);
+    }
+    
+    public function SavePromo($promo_title, $med_user_fk, $promo_descripion ,$date_show , $date_promo )
+    {
+        $arrayNamesTabelRows = array(
+            'promo_title',
+            'med_user_fk',
+            'promo_description',
+            'promo_show_date',
+            'promo_data'
+        );
+        $arrayValuesTabelRows = array(
+            $promo_title,
+            $med_user_fk,
+            $promo_descripion,
+            $date_show ,
+            $date_promo
+        );
+        $getResult = $this->QueryInsertNPGetId('med_promo', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if (isset($getResult)) {
+            return $getResult;
+        } else {
+            return false;
+        }
+    }
+    
+    public function GetSpecialAllCol()
+    {
+        $table = 'med_special';
+        return $this->GetArrayAllCol($table);
+    }
+    
+    public function SaveSpecial($special_title, $special_descripion, $med_user_fk)
+    {
+        $arrayNamesTabelRows = array(
+            
+            'special_title',
+            
+            'special_description',
+            'med_user_fk'
+        );
+        $arrayValuesTabelRows = array(
+            
+            $special_title,
+            $special_descripion,
+            $med_user_fk
+            
+        );
+        $getResult = $this->QueryInsertNPGetId('med_special', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if ($getResult) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function GetMedturismAllCol()
+    {
+        $table = 'med_medturism';
+        return $this->GetArrayAllCol($table);
+    }
+    
+    public function SaveMedturism($medturism_title, $medturism_descripion, $med_user_fk)
+    {
+        $arrayNamesTabelRows = array(
+            'medturism_title',
+            'med_user_fk',
+            'medturism_description'
+        );
+        $arrayValuesTabelRows = array(
+            $medturism_title,
+            $med_user_fk,
+            $medturism_descripion
+        );
+        $getResult = $this->QueryInsertNPGetId('med_medturism', $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if ($getResult) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    // TODO: check??? find a significant way to reveal id fro database of the last inserted item
+    public function SavePicsNews($id, $news_id, $name)
+    {
+        $table = 'med_image';
+        // TODO: check??? insert id of last item in db here
+        
+        $arrayNamesTabelRows = array(
+            'image_userId',
+            'med_news_fk',
+            'image_path'
+        );
+        $arrayValuesTabelRows = array(
+            $id,
+            $news_id,
+            "'$name'"
+        );
+        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if ($getResult) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    public function SavePicsPromo($id, $promo_id, $name)
+    {
+        $table = 'med_image';
+        // TODO: check??? insert id of last item in db here
+        $arrayNamesTabelRows = array(
+            'image_userId',
+            'med_promo_fk',
+            'image_path'
+        );
+        $arrayValuesTabelRows = array(
+            $id,
+            $promo_id,
+            "'$name'"
+        );
+        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if ($getResult) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    // just downloading pictures
+    public function SavePics($id, $name)
+    {
+        $table = 'med_image';
+        
+        $arrayNamesTabelRows = array(
+            'image_userId',
+            'image_path'
+        );
+        $arrayValuesTabelRows = array(
+            $id,
+            $name
+        );
+        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
+        if ($getResult) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    // findout your expected id
+    //TODO: need refactor call toha
+    private function QueryInsertNPGetId($table, $arrayNamesColumns, $arrayValuesColumns)
+    {
+        $namesColumns = '';
+        $valuesColumns = '';
+        echo is_array($arrayNamesColumns).'<br/>';
+        echo count($arrayNamesColumns).'<br/>';
+        if(is_array($arrayNamesColumns)){
+            for ($i = 0; $i < count($arrayNamesColumns); $i++) {
+                $dot = $i != 0 ? ', ' : '';
+                $namesColumns .= "$dot $arrayNamesColumns[$i]";
+                $valuesColumns .= "$dot '$arrayValuesColumns[$i]'";
+            }
+        }
+        else {
+            $namesColumns = $arrayNamesColumns;
+            $valuesColumns = $arrayValuesColumns;
+        }
+        $query = "INSERT INTO $table($namesColumns) VALUES($valuesColumns)";
+        echo $query.'<br/>';
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $id = mysqli_insert_id($link);
+        
+        $this->CloseConnectDB($link);
+        return $id;
+    }
+    
+    //for other stuff like medturism
+    // findout your expected id
+    //     private function QueryInsertGetId($table, $arrayNamesColumns, $arrayValuesColumns)
+    //     {
+    //         $query = "INSERT INTO $table ($arrayNamesColumns[0],$arrayNamesColumns[1],$arrayNamesColumns[2]) VALUES ('$arrayValuesColumns[0]' , '$arrayValuesColumns[1]' , '$arrayValuesColumns[2]')";
+    //         echo $query." <br>";
+    //         $link = $this->ConnectDB();
+    
+    //         $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+    
+    //         $id = mysqli_insert_id($link);
+    
+    //         $this->CloseConnectDB($link);
+    //         return $id;
+    //     }
+    
+    public function FindPicNews($indexCheck){
+        $table= "med_image";
+        $indexDB="med_news_fk";
+        return $this->FindExistedGetID($table, $indexDB , $indexCheck);
+    }
+    public function FindPicPromo($indexCheck){
+        $table= "med_image";
+        $indexDB="med_promo_fk";
+        return $this->FindExistedGetID($table, $indexDB , $indexCheck);
+    }
+    //testcase seems to be completed
+    private function FindExistedGetID($table, $indexDB , $indexCheck){
+        
+        $query = "SELECT id FROM $table WHERE $indexDB = $indexCheck";
+        echo $query."<br/>"; //TODO: unwrite text
+        $link = $this->ConnectDB();
+        //       var_dump(mysqli_query($link, $query) );
+        //       echo "<br/>";
+        $result = mysqli_query($link, $query) /*nah nenuzhon  or die("Ошибка " . mysqli_error($link)) */;
+        //       echo $result." vivod  <br>";
+        $this->CloseConnectDB($link);
+        
+        if($result != null){
+            //cal of sql result
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+            echo $row." <br>";
+            echo $row['id']."id for return <br>";
+            return $row['id'];
+            
+            
+        }
+        else return false;
+    }
+    
+    
+    //TODO: in progress of macking individual funct for each category
+    public function UpdateNews($arrayUpdatedData, $id_post){
+        $table = 'med_news';
+        // constant place
+        $arrayDBCollums = array('news_title', 'med_user_fk', 'news_descripion', 'news_show_date',
+            'news_data');
+        
+        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+        return $result;
+        
+    }
+    public function UpdatePromo($arrayUpdatedData, $id_post){
+        $table = 'med_promo';
+        // constant place
+        $arrayDBCollums = array('promo_title', 'med_user_fk', 'promo_description', 'promo_show_date',
+            'promo_data');
+        
+        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+        return $result;
+        
+    }
+    public function UpdateSpecial($arrayUpdatedData, $id_post){
+        $table = 'med_special';
+        // constant place
+        $arrayDBCollums = array('med_user_fk',	'special_title',	'special_description');
+        
+        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+        return $result;
+        
+    }
+    public function UpdateMedturism($arrayUpdatedData, $id_post){
+        $table = 'med_medturism';
+        // constant place
+        $arrayDBCollums = array('med_user_fk',	'medturism_title',	'medturism_description');
+        
+        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+        return $result;
+        
+    }
+    public function UpdatePicPromo($arrayUpdatedData, $id_post){
+        $table = 'med_image';
+        // constant place
+        $arrayDBCollums = array('image_userId',	'med_promo_fk', 'image_path',	'id');
+        
+        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+        return $result;
+        
+    }
+    public function UpdatePicNews($arrayUpdatedData, $id_post){
+        $table = 'med_image';
+        // constant place
+        $arrayDBCollums = array('image_userId',	'med_news_fk', 'image_path',	'id');
+        
+        $result = $this->UpdateTable($table, $arrayDBCollums , $arrayUpdatedData, $id_post);
+        return $result;
+        
+    }
+    //TODO: make it multipurpose
+    //sql example
+    // UPDATE Customers
+    //  SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
+    //  WHERE CustomerID = 1;
+    
+    
+    // $id is row`s id of the particular table
+    private function UpdateTable($table, $arrayNamesTabelRows , $arrayValuesTabelRows, $id){
+        $set = '';
+        
+        if(is_array($arrayNamesTabelRows)){
+            for ($i = 0; $i < count($arrayNamesTabelRows); $i++) {
+                $dot = $i != 0 ? ', ' : '';
+                
+                $set .= "$dot $arrayNamesTabelRows[$i] = '$arrayValuesTabelRows[$i]'";
+            }
+        }
+        else {
+            $set .= "$arrayNamesTabelRows = '$arrayValuesTabelRows'";
+        }
+        //  $query = "UPDATE med_news SET news_title = 'blabala', med_user_fk = '1', news_descripion = '11 bla', news_show_date = true, news_data ='1970-10-10' WHERE id=34 ";
+        $query = "UPDATE $table SET $set WHERE id=$id";
+        // $query = "UPDATE $table SET $arrayDBCollums[0] = '$arrayUpdatedData[0]', $arrayDBCollums[1] = $arrayUpdatedData[1], $arrayDBCollums[2] = '$arrayUpdatedData[2]' WHERE id = $id";
+        echo $query;
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        // $id = mysqli_insert_id($link);
+        $this->CloseConnectDB($link);
+        return $id;
+    }
+    
+    public function GetPicsPromo(){
+        $col = "med_promo_fk";
+        return $this->GetArrayAllPics($col);
+    }
+    public function GetPicsNews(){
+        $col = "med_news_fk";
+        return $this->GetArrayAllPics($col);
+    }
+    private function GetArrayAllPics($col){
+        $table = "med_image";
+        $column = "image_path";
+        
+        $query = "SELECT * FROM $table WHERE NOT $col IS NULL";
+        
+        
+        
+        
+        $link = $this->ConnectDB();
+        
+        $result = mysqli_query($link, $query) or die("Ошибка " . mysqli_error($link));
+        
+        $this->CloseConnectDB($link);
+        $arr = array();
+        $i = 1;
+        while ($obj = mysqli_fetch_assoc($result)) {
+            $arrTemp = array();
+            foreach ($obj as $key => $value) {
+                $arrTemp[$key] = $value;
+            }
+            $arr[$i] = $arrTemp;
+            $i ++;
+        }
+        return $arr;
+        
+    }
 }
 ?>

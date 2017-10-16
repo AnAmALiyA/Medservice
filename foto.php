@@ -1,15 +1,3 @@
-<?php session_start();
-require_once 'authorize.php';
-require_once 'action.php';
-require_once 'med-BAL.php';
-
-$auth = new Authorization();
-$bal = new Controller();
-
-if (!$auth->IsAuthorized('organization')) {
-    $bal->RedirectBack();
-}
-?>
 <html>
 <head>
     <meta charset="UTF-8">  
@@ -26,14 +14,11 @@ if (!$auth->IsAuthorized('organization')) {
     <link rel="dns-prefetch" href="//s.w.org">
     <link rel="alternate" type="application/rss+xml" title="MedService24 » Лента" href="http://medservice24.pirise.com/feed/">
     <link rel="alternate" type="application/rss+xml" title="MedService24 » Лента комментариев" href="http://medservice24.pirise.com/comments/feed/">
-    <script type="text/javascript">
-        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/medservice24.pirise.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.5"}};
-        !function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
-    </script>
+<!-- <!--     <script type="text/javascript"> --> -->
+<!--          window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.2.1\/svg\/","svgExt":".svg","source":{"concatemoji":"http:\/\/medservice24.pirise.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.7.5"}}; -->
+<!--         !function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),!(j.toDataURL().length<3e3)&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,65039,8205,55356,57096),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57331,55356,57096),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55357,56425,55356,57341,8205,55357,56507),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55357,56425,55356,57341,55357,56507),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings); -->
+<!--     </script> -->
     <script src="http://medservice24.pirise.com/wp-includes/js/wp-emoji-release.min.js?ver=4.7.5" type="text/javascript" defer=""></script>
-           
-    
-
     <style type="text/css">
         img.wp-smiley,
         img.emoji {
@@ -62,7 +47,7 @@ if (!$auth->IsAuthorized('organization')) {
     </style>
     <link rel="stylesheet" id="wp-postratings-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.84" type="text/css" media="all">
     <link rel="stylesheet" id="jquery-ui-custom-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/jquery-ui.css?ver=4.7.5" type="text/css" media="all">
-    <link rel="stylesheet" id="ajax-login-register-style-css" href="localmedservice/css/style.css" type="text/css" media="all">
+    <link rel="stylesheet" id="ajax-login-register-style-css" href="http://medservice24.pirise.com/wp-content/plugins/zm-ajax-login-register/assets/style.css?ver=4.7.5" type="text/css" media="all">
     <link rel="stylesheet" id="wp-pagenavi-css" href="http://medservice24.pirise.com/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all">
     <link rel="stylesheet" id="base-style-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/style.css?ver=4.7.5" type="text/css" media="all">
     <link rel="stylesheet" id="base-theme-css" href="http://medservice24.pirise.com/wp-content/themes/medservice24/css/styles.css?ver=4.7.5" type="text/css" media="all">
@@ -109,31 +94,31 @@ if (!$auth->IsAuthorized('organization')) {
             </div>
             <div class="select-position">
                 <div class="select-holder">
-                    <script type="text/javascript">
-                        jQuery( document ).ready(function() {
-                            taxonomyOfLocation();
-                        });
-                        function taxonomyOfLocation(){
-                            var page = jQuery('#taxonomy_location').val();
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php",
-                                data: {tax_id: page},
-                                success: function(data) {
-                                    jQuery('#ajax-select-filter-geo').html(data);
-                                }
-                            });
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                data: {tax_id: page},
-                                success: function (data) {
-                                    jQuery('#health-facility-doctor').html(data);
+<!-- <!--                     <script type="text/javascript"> --> -->
+<!-- //                         jQuery( document ).ready(function() { -->
+<!-- //                             taxonomyOfLocation(); -->
+<!-- //                         }); -->
+<!-- //                         function taxonomyOfLocation(){ -->
+<!-- //                             var page = jQuery('#taxonomy_location').val(); -->
+<!-- //                             jQuery.ajax({ -->
+<!-- //                                 type: "POST", -->
+<!-- //                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax.php", -->
+<!-- //                                 data: {tax_id: page}, -->
+<!-- //                                 success: function(data) { -->
+<!-- //                                     jQuery('#ajax-select-filter-geo').html(data);    -->
+<!-- //                                 } -->
+<!-- //                             }); -->
+<!-- //                             jQuery.ajax({ -->
+<!-- //                                 type: "POST", -->
+<!-- //                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php", -->
+<!-- //                                 data: {tax_id: page}, -->
+<!-- //                                 success: function (data) { -->
+<!-- //                                     jQuery('#health-facility-doctor').html(data); -->
 
-                                }
-                            });
-                        };
-                    </script>
+<!-- //                                 } -->
+<!-- //                             }); -->
+<!-- //                         }; -->
+<!--                     </script> -->
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                     <select name="taxonomy_location" id="taxonomy_location" onchange="taxonomyOfLocation();">
                         <option value="0">Область</option>
@@ -147,50 +132,50 @@ if (!$auth->IsAuthorized('organization')) {
                             <option value="0">Город</option>
                             <option selected="selected" value="8">Киев</option>
                         </select>
-                        <script type="text/javascript">
-                            jQuery( document ).ready(function() {
-                                taxonomyOfLocationChild();
-                            });
-                            function taxonomyOfLocationChild(){
-                                var page = jQuery('#taxonomy_location_child').val();
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax_child.php",
-                                    data: {tax_id: page},
-                                    success: function(data) {
-                                        jQuery('#ajax-taxonomy-child').html(data);
-                                    }
-                                });
-                                jQuery.ajax({
-                                    type: "POST",
-                                    url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                    data: {tax_id: page},
-                                    success: function (data) {
-                                        jQuery('#health-facility-doctor').html(data);
+<!-- <!--                         <script type="text/javascript"> --> -->
+<!-- //                             jQuery( document ).ready(function() { -->
+<!-- //                                 taxonomyOfLocationChild(); -->
+<!-- //                             }); -->
+<!-- //                             function taxonomyOfLocationChild(){ -->
+<!-- //                                 var page = jQuery('#taxonomy_location_child').val(); -->
+<!-- //                                 jQuery.ajax({ -->
+<!-- //                                     type: "POST", -->
+<!-- //                                     url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_location_tax_child.php", -->
+<!-- //                                     data: {tax_id: page}, -->
+<!-- //                                     success: function(data) { -->
+<!-- //                                         jQuery('#ajax-taxonomy-child').html(data); -->
+<!-- //                                     } -->
+<!-- //                                 }); -->
+<!-- //                                 jQuery.ajax({ -->
+<!-- //                                     type: "POST", -->
+<!-- //                                     url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php", -->
+<!-- //                                     data: {tax_id: page}, -->
+<!-- //                                     success: function (data) { -->
+<!-- //                                         jQuery('#health-facility-doctor').html(data); -->
 
-                                    }
-                                });
-                            };
-                        </script>
+<!-- //                                     } -->
+<!-- //                                 }); -->
+<!-- //                             }; -->
+<!--                         </script> -->
                     </div>
                 </div>
                 <div class="select-holder" id="ajax-taxonomy-child">
                     <select onchange="areaId();" id="area-id" name="area-id">
                         <option value="8">Район</option>
                     </select>
-                    <script type="text/javascript">
-                        function areaId() {
-                            var page = jQuery('#area-id').val();
-                            jQuery.ajax({
-                                type: "POST",
-                                url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php",
-                                data: {tax_id: page},
-                                success: function (data) {
-                                    jQuery('#health-facility-doctor').html(data);
-                                }
-                            });
-                        }
-                    </script>
+<!-- <!--                     <script type="text/javascript"> --> -->
+<!-- //                         function areaId() { -->
+<!-- //                             var page = jQuery('#area-id').val(); -->
+<!-- //                             jQuery.ajax({ -->
+<!-- //                                 type: "POST", -->
+<!-- //                                 url: "http://medservice24.pirise.com/wp-content/themes/medservice24/ajax/tax_filter_geo/ajax_filter_health_facility_doctor.php", -->
+<!-- //                                 data: {tax_id: page}, -->
+<!-- //                                 success: function (data) { -->
+<!-- //                                     jQuery('#health-facility-doctor').html(data); -->
+<!-- //                                 } -->
+<!-- //                             }); -->
+<!-- //                         } -->
+<!--                     </script> -->
                 </div>
             </div>
             <div class="reg">
@@ -247,7 +232,7 @@ if (!$auth->IsAuthorized('organization')) {
             </div>
             <div class="personal-cab box clearfix">
                 <div class="title">
-                    <h2>Медицинский центр</h2>
+                    <h2>Медецинский центр</h2>
                 </div>
                 <div class="left-col">
                     <div class="navigation">
@@ -264,74 +249,76 @@ if (!$auth->IsAuthorized('organization')) {
                     </div>
                 </div>
                 <div class="right-col">
-                
-                  <form name="formMultiFoto" action="action.php" method="POST" class="dwnld form-foto-list">
-                  
-                  <div class="foto-list">
-                  
                     <div class="download-holder clearfix">
-                        <span class="top-txt">Загрузить файлы</span>
+                  <form name="fotoForm" action="fotoSave.php" method="POST"
+					class="dwnld form-news-list"  enctype="multipart/form-data" multiple="multiple">
+
+					<div class="photo-list">
+                   
+				   <?php 
+					require_once 'med-BAL.php';
+					$select = new BAL();
+					
+					$pics= $select->GetPics();
+					 $i=0; //  for($i = 0; $i < 2; $i++) { 
+					if($pics){
+					foreach ($pics as  $value){ 
+					?>
+                      <?php echo "fd ".$value["image_path"][$key]; ?>
+                        
+                            <div class="photo-holder">
+                                <img src="<?php												
+								
+								 $reslt= $value["image_path"];						
+								
+								echo $reslt;?>" alt="empty" width=170 height=170 />
+                                <div class="icon-holder">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    <label class="file-label" for="add_img_<?php echo $i ?>">Загрузить
+									файл</label> 
+									<input type="file"
+									id="add_img_<?php echo $i ?>"
+									name="img_[]"/>
+									
+                                </div>
+                            </div>
+
+                            <?php }}else{?>
+                            
                         
                             <div class="photo-holder">
                                 <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                                     <i class="fa fa-times" aria-hidden="true"></i>
+                            <div class="icon-holder">
+                                    
+                                    <label class="file-label" for="add_img_[]">Загрузить
+									файл</label> 
+									<input type="file"
+									id="add_img_[]"
+									name="img_[0]"/>
                                 </div>
                             </div>
-                            <div class="photo-holder">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="photo-holder">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="photo-holder">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="photo-holder">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                            <div class="photo-holder">
-                                <img src="img/empty-img.jpg" alt="empty">
-                                <div class="icon-holder">
-                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                    <i class="fa fa-times" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        
+                            
+                            <?php }?>
+                       
                     </div>
-                    </div>
+					</div>
                     <div class="add">
                     <div class="button-add add_foto_js">
                         <span>Добавить</span>
                         <i class="fa fa-plus" aria-hidden="true"></i>
-                    </div>
+                        </div>
                     </div>
                     <div class="button-save">
-                        <button>Сохранить</button>
+                        <button >Сохранить</button>
                     </div>
-                    </form>
-                </div>
+                     </form>
+                
             </div>
         </section>
     </main>
-    
     <footer id="footer">
         <div class="container">
             <div class="row">
@@ -388,9 +375,6 @@ if (!$auth->IsAuthorized('organization')) {
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/common.js?ver=4.7.5"></script>
     <script type="text/javascript" src="http://medservice24.pirise.com/wp-includes/js/wp-embed.min.js?ver=4.7.5"></script>
     <script src="http://medservice24.pirise.com/wp-content/themes/medservice24/js/library/jquery.validate.min.js"></script>
-    
-    <script src="js/main.js"></script>
-
     <script type="text/javascript">
         jQuery(document).ready(function($){
 
@@ -490,11 +474,5 @@ if (!$auth->IsAuthorized('organization')) {
     <span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
     <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content" id="ui-id-4" tabindex="0" style="display: none;"></ul>
     <span role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></span>
-
-
-
-
-
-
 </body>
 </html>

@@ -430,7 +430,7 @@ span.overal {
   outline: none;
 }
 *:after {
-  /*content: '';*/
+  content: '';
   display: block;
   clear: both;
 }

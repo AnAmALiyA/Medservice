@@ -184,8 +184,6 @@ class BAL
     }
     //телефоны
     public function GetPhones($user_id) {
-//     public function GetPhones($organizationId) {
-//         $user_id = $_SESSION['user_id'];
         $organizationId = $this->dal->GetOrganizationIdByUser($user_id);
         return $this->dal->GetPhonesOrganizationId($organizationId);
     }
@@ -496,5 +494,129 @@ class BAL
         $this->dal->DeleteImage($id);
     }
     //////Методы удаления // конец
+    ///////////////////////Сергей//////////////////////
+    ////v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v////
+    
+    //fetch from DB all news
+    public function GetNewsAll(){
+        return $this->dal->GetNewsAllCol();
+    }
+    //fetch from DB all promo
+    public function GetPromoAll(){
+        return $this->dal->GetPromoAllCol();
+    }
+    public function GetSpecialAll(){
+        return $this->dal->GetSpecialAllCol();
+    }
+    public function GetMedturismAll(){
+        return $this->dal->GetMedturismAllCol();
+    }
+    public function SaveNews($title, $user, $description,$date_show , $date_news ){
+        
+        $result =    $this->dal->SaveNews($title,$user, $description,$date_show , $date_news );
+        return $result;
+    }
+    
+    public  function  SavePromo($title, $description, $user ,$date_show , $date_promo ){
+        
+        $result =  $this->dal->SavePromo($title, $description, $user ,$date_show , $date_promo );
+        return $result;
+    }
+    
+    public function SaveSpecial($title, $description, $user){
+        
+        $this->dal->SaveSpecial($title, $description, $user);
+        return true;
+    }
+    
+    public function SaveMedturism($title, $description, $user){
+        
+        $this->dal->SaveMedturism($title, $description, $user);
+        return true;
+    }
+    
+    public  function  SavePicsNews($id , $news_id , $name){
+        
+        $result =  $this->dal->SavePicsNews($id , $news_id , $name);
+        
+        if($result){
+            return true;
+        }
+        else return false;
+    }
+    public  function  SavePicsPromo($id , $promo_id , $name){
+        
+        $result =  $this->dal->SavePicsPromo($id , $promo_id , $name);
+        
+        if($result){
+            return true;
+        }
+        else return false;
+    }
+    public  function  SavePics($id , $name){
+        
+        $result =  $this->dal->SavePics($id  , $name);
+        
+        if($result){
+            return true;
+        }
+        else return false;
+    }
+    
+    
+    //works updating
+    public  function UpdateNews($title, $id_user, $description, $find_id ,$date_show , $date_news ) {
+        
+        $arrayUpdatedData = array($title,  $id_user, $description,$date_show , $date_news) ;
+        $result = $this->dal->UpdateNews($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    public  function UpdatePromo($title, $id_user, $description, $find_id ,$date_show , $date_promo ) {
+        
+        $arrayUpdatedData = array($title,  $id_user, $description, $date_show , $date_promo );
+        $result = $this->dal->UpdatePromo($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    
+    public  function UpdateSpecial($title, $description, $id_user, $find_id  ) {
+        
+        $arrayUpdatedData = array($id_user, $title, $description   );
+        $result = $this->dal->UpdateSpecial($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    public  function UpdateMedturism($title, $description, $id_user, $find_id  ) {
+        
+        $arrayUpdatedData = array($id_user, $title, $description )  ;
+        $result = $this->dal->UpdateMedturism($arrayUpdatedData,  $find_id  );
+        return $result;
+    }
+    public  function UpdatePicPromo($id , $promo_id , $name , $pic_id) {
+        
+        $arrayUpdatedData = array($id , $promo_id , $name,  $pic_id )  ;
+        $result = $this->dal->UpdatePicPromo($arrayUpdatedData,  $pic_id  );
+        return $result;
+    }
+    public  function UpdatePicNews($id , $news_id , $name , $pic_id) {
+        
+        $arrayUpdatedData = array($id , $news_id , $name,  $pic_id )  ;
+        $result = $this->dal->UpdatePicNews($arrayUpdatedData,  $pic_id  );
+        return $result;
+    }
+    public function FindPicPromo($indexCheck){
+        return $this->dal->FindPicPromo($indexCheck);
+    }
+    public function FindPicNews($indexCheck){
+        return $this->dal->FindPicNews($indexCheck);
+    }
+    public function GetPicsPromo(){
+        
+        return $this->dal->GetPicsPromo();
+        
+    }
+    public function GetPicsNews(){
+        
+        return $this->dal->GetPicsNews();
+        
+    }
 }
 ?>

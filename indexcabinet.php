@@ -261,7 +261,7 @@ if (!$auth->IsAuthorized('organization')) {
                             <li><a href="/zayavki.php">Заявки пациентов</a></li>
                             <li><a href="/foto.php">Фото</a></li>
                         </ul>
-                        <span class="allert-block">Закрыто на ремонт</span>
+                       <button class="allert-block">Закрыто на ремонт</button>
                     </div>
                 </div>
                 <div class="right-col">
@@ -295,7 +295,7 @@ if (!$auth->IsAuthorized('organization')) {
                         </div>
                         <div class="status">
                             <span>Статус заявки</span>
-                            <span class="bord">В работе</span>
+                            <button class="bord">В работе</button>
                         </div>
                     </div>
                 </div>
@@ -310,13 +310,22 @@ if (!$auth->IsAuthorized('organization')) {
             <div class="row">
                 <div class="col">
                     <h3>Сервис</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla </p>
-                </div>
-                <div class="col">
-                    <h3>Пациенту</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla </p>
-                </div>
-                <div class="col">
+                    <p><a href="/kontakty.php">О нас</a>
+				<a href="/poltika-konfidentsialnosti.php">Политика конфиденциальности</a>
+				<a href="/pravila-servisa.php">Правила сервиса</a>
+				<a href="/vopros-administratoru.php">Вопрос администратору</a>
+				<a href="/sotrudnichestvo.php">Сотрудничество</a></p>
+				</div>
+								<div class="col">
+									<h3>Пациенту</h3>
+									<p><a href="/diagnostika.php">Диагностика</a>
+				<a href="/analizy.php">Анализы</a>
+				<a href="/lechenie.php">Лечение</a>
+				<a href="/vaktsinatsiya.php">Вакцинация</a>
+				<a href="/uslugi.php">Услуги</a>
+				<a href="/chasto-zadavaemye-voprosy.php">Часто задаваемые вопросы</a> </p>
+								</div>
+								<div class="col">
                     <h3>Контакты</h3>
                     <ul>
                         <li><a href="tel:0969885566">(096) 988 55 66</a></li>
