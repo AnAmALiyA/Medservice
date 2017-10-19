@@ -7,41 +7,107 @@ jQuery(document).ready(function($){
 		// setFormMainDrop(formMain);
 	}
 
-// $('body').on('click', '.organization_js', function() {
-// $(this).addClass('active').siblings('.tab').removeClass('active')
-// .closest('.tab-panel')
-// .find('.tab-content.organization').addClass('active').siblings('.client').removeClass('active');
-// });
-//
-// $('body').on('click', '.client_js', function() {
-// $(this).addClass('active').siblings('.tab').removeClass('active')
-// .closest('.tab-panel')
-// .find('.tab-content.client').addClass('active').siblings('.organization').removeClass('active');
-// });
-//
-// // Отображение загруженного изображения
-// // var mfPhoto = document.getElementById('mf-photo');
-// $('mf-photo').on('change', 'mf-photo', function(event) {
-// var inputFiles = this.files;
-// if(inputFiles == undefined || inputFiles.length == 0) return;
-//
-// var inputFile = inputFiles[0],
-// reader = new FileReader();
-//
-// reader.onload = function(event) {
-// var photo = document.getElementsByClassName('med-form__photo');
-//
-// photo[0].setAttribute('src', event.target.result);
-// photo[1].setAttribute('src', event.target.result);
-// };
-//
-// reader.onerror = function(event) {
-// alert("ERROR: " + event.target.error.code);
-// };
-//
-// reader.readAsDataURL(inputFile);
-// }); // End Отображение загруженного изображения
+ $('body').on('click', '.organization_js', function() {
+ $(this).addClass('active').siblings('.tab').removeClass('active')
+ .closest('.tab-panel')
+ .find('.tab-content.organization').addClass('active').siblings('.client').removeClass('active');
+ });
+
+ $('body').on('click', '.client_js', function() {
+ $(this).addClass('active').siblings('.tab').removeClass('active')
+ .closest('.tab-panel')
+ .find('.tab-content.client').addClass('active').siblings('.organization').removeClass('active');
+ });
+
+ // Отображение загруженного изображения
+ // var mfPhoto = document.getElementById('mf-photo');
+ $('mf-photo').on('change', 'mf-photo', function(event) {
+ var inputFiles = this.files;
+ if(inputFiles == undefined || inputFiles.length == 0) return;
+
+ var inputFile = inputFiles[0],
+ reader = new FileReader();
+
+ reader.onload = function(event) {
+ var photo = document.getElementsByClassName('med-form__photo');
+
+ photo[0].setAttribute('src', event.target.result);
+ photo[1].setAttribute('src', event.target.result);
+ };
+
+ reader.onerror = function(event) {
+ alert("ERROR: " + event.target.error.code);
+ };
+
+ reader.readAsDataURL(inputFile);
+ }); // End Отображение загруженного изображения
 	cifra = 20;
+
+// //форма регистрации - валидность
+// $('body').on('keyup','#mf-title', function(event){
+// 	//сравнение
+// 	// console.log(event);
+// 	// console.log(this);
+// // try {
+// // 	var test = $(this).val();
+// // 	console.log(test);
+// // } catch (e) {
+// // 	console.log(e.message);
+// // }
+// if (document.arrayNamesCompanes == null) {
+// var namesCompanes = {
+// 	'comand' : 'ajax_form_regestration'
+// };
+//
+// 	$.ajax({
+// 		type:'POST',
+// 		url: 'ajax.php',
+// 		data: namesCompanes,
+// 		dataType: 'json',
+// 		encode:true,
+// 		success: function(response){
+// 			if (response != null) {
+// 				document.arrayNamesCompanes = response;
+// 			}
+// 		},
+// 		error: function (jqXHR, exception) {
+// 					var msg = '';
+// 					if (jqXHR.status === 0) {
+// 							msg = 'Not connect.\n Verify Network.';
+// 					} else if (jqXHR.status == 404) {
+// 							msg = 'Requested page not found. [404]';
+// 					} else if (jqXHR.status == 500) {
+// 							msg = 'Internal Server Error [500].';
+// 					} else if (exception === 'parsererror') {
+// 							msg = 'Requested JSON parse failed.';
+// 					} else if (exception === 'timeout') {
+// 							msg = 'Time out error.';
+// 					} else if (exception === 'abort') {
+// 							msg = 'Ajax request aborted.';
+// 					} else {
+// 							msg = 'Uncaught Error.\n' + jqXHR.responseText;
+// 					}
+// 					// $('#post').html(msg);
+// 					console.log('error: ' + msg);
+// 				}
+// 	});
+// }
+//
+// 	for (let i = 0; i < document.arrayNamesCompanes.length; i++) {
+// 		if(array[i] == nameCompany){
+// 			$(this).attr('class', 'med-form__field error_text');
+// 		}
+// 	}
+// });
+$('body').on('submit', '#client', function(){
+
+});
+
+$('body').on('submit', '#organization', function(){
+
+});
+
+  //$(".phone_js").mask("+38(099)999-9999");
 
 	$('body').on('click', '.add_promo_js', function() {
 		addFormMarkup('promo');
@@ -105,11 +171,7 @@ function addFormMarkup (marker) {
 								'<i class="fa fa-times remove_imeg_js" aria-hidden="true"></i>' +
 							'</div>' +
 							'<label class="file-label" for="add-' + marker + '-img">Загрузить файл</label>' +
-<<<<<<< HEAD
-							'<input type="file" id="add-' + marker + '-img-' + itemPromoNews +'" name="' + marker + '_img">' +
-=======
 							'<input type="file" id="add-' + marker + '-img" name="'+ marker+'_img_[]">' +
->>>>>>> for_sergey_v2
 						'</div>' +
 						'<div class="right-form">' +
 							'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
@@ -132,16 +194,7 @@ function readURL(input) {
 	    var reader = new FileReader();
 
 	    reader.onload = function(e) {
-<<<<<<< HEAD
 	    	$(input).siblings('.imeg_js').attr('src', e.target.result);
-=======
-	    	var ii = $(this).closest('.download-holder');
-	    	var ff = ii.find('img.imeg_js');
-	    	console.log(this);
-	    	console.log(ii);
-	    	console.log(ff);
-	    	ff.attr('src', e.target.result);
->>>>>>> for_sergey_v2
 	    };
 	    reader.readAsDataURL(input.files[0]);
 	  }
@@ -151,13 +204,8 @@ function addFormSpecialMarkup (marker) {
 	var formMarkup = '<div class="download-holder clearfix">' +
         				'<div class="dwnld">' +
 							'<div class="form-holder">' +
-<<<<<<< HEAD
-									'<input type="text" required="required" class="form-control" id="name<?php echo $i ?>" name="name<?php echo $i ?>" placeholder="Заголовок"/>' +
-
-=======
 									'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
 
->>>>>>> for_sergey_v2
 							        '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
 							        '<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
 							        '<textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>' +
@@ -172,13 +220,8 @@ function addFormMedturMarkup (marker) {
 	var formMarkup = '<div class="download-holder clearfix">' +
         				'<div class="dwnld">' +
 							'<div class="form-holder">' +
-<<<<<<< HEAD
-									'<input type="text" required="required" class="form-control" id="name<?php echo $i ?>" name="name<?php echo $i ?>" placeholder="Заголовок"/>' +
-
-=======
 									'<input type="text" required="required" class="form-control"  name="name[]" placeholder="Заголовок"/>' +
 
->>>>>>> for_sergey_v2
 							        '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>' +
 							        '<i class="fa fa-times remove_item_js" aria-hidden="true"></i>' +
 							        '<textarea class="form-control" required="required" rows="5"  name="comment[]" placeholder="Описание"></textarea>' +
