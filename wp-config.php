@@ -41,13 +41,13 @@ define('DB_USER', 'andrew19_med');
 /** MySQL database password */
 define('DB_PASSWORD', 'a6qxcqabymed');
 
-/** MySQL hostname */
+/** Имя сервера MySQL */
 define('DB_HOST', 'localhost');
 
-/** Database Charset to use in creating database tables. */
+/** Кодировка базы данных для создания таблиц. */
 define('DB_CHARSET', 'utf8');
 
-/** The Database Collate type. Don't change this if in doubt. */
+/** Схема сопоставления. Не меняйте, если не уверены. */
 define('DB_COLLATE', '');
 
 /**#@+
@@ -90,7 +90,10 @@ $table_prefix  = 'wp_';
  *
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
-define('WP_DEBUG', false);
+define( 'WP_DEBUG', false );
+/*define( 'WP_DEBUG', true );*/
+/*define( 'WP_DEBUG_DISPLAY', false );*/
+/*define( 'WP_DEBUG_LOG', true );*/
 
 /* That's all, stop editing! Happy blogging. */
 

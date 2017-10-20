@@ -1,0 +1,2 @@
+[18-Oct-2017 13:42:12 UTC] PHP Fatal error:  Class 'PasswordHash' not found in /home/andrew19/medservice24.webspectrum.top/wp-includes/pluggable.php on line 2079
+[18-Oct-2017 13:50:41 UTC] PHP Notice:  Undefined offset: 1 in /home/andrew19/medservice24.webspectrum.top/wp-admin/includes/dashboard.php on line 1227

@@ -14,12 +14,21 @@ require_once 'med-DAL.php';
 require_once 'med-BAL.php';
 
 // $dal = new DAL();
- $dal = new BAL();
+  $dal = new BAL();
 
-echo '<br/>';
-$resultHome = $dal->GetPhones(1);
-// $tt = $dal->SelectById('med_actual_location', 4);
-var_dump($resultHome);
+  echo "test<br/>";
+  
+ echo $dal->ParsePhone("+38(096)000-0000");
+// foreach ($_POST as $key => $value){
+//     echo "_POST[$key] => $value<br/>";
+// }
+// foreach ($_FILES as $key => $value){
+//     echo "_FILES[$key] => $value<br/>";
+// }
+// $resultHome = $dal->GetPhones(1);
+
+// var_dump($resultHome);
+
 // echo '<br/>-----------foreach ----------------<br/>';
 // echo '<br/>';
 // foreach ($m as $key => $value) {

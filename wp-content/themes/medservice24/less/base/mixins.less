@@ -1,0 +1,76 @@
+// clearfix
+.clearfix() {
+  &:after {
+    content: " ";
+    display: block;
+    clear: both;
+  }
+}
+
+// reset for list
+.listreset() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// hide text
+.hide-text() {
+  overflow: hidden;
+  text-indent: -9999px;
+}
+
+.placeholder(@rules) {
+    &::-webkit-input-placeholder {
+        @rules();
+    }
+    &:-moz-placeholder {
+        @rules();
+    }
+    &::-moz-placeholder {
+        @rules();
+    }
+    &:-ms-input-placeholder {
+        @rules();
+    }
+}
+/* .placeholder({
+    color: #0000FF;
+    text-transform: uppercase;
+});
+ */
+
+
+//
+.placeholder_color(@color: @placeholderText) {
+    &:-moz-placeholder {
+        color: @color;
+    }
+    &::-webkit-input-placeholder {
+        color: @color;
+    }
+}
+//.placeholder_color(#ccc);
+
+// full width
+.full-width() {
+  padding-left: 9999px;
+  padding-right: 9999px;
+  margin-left: -9999px;
+  margin-right: -9999px;
+}
+
+// Breakpoints
+// ------------------------- Source: http://blog.scur.pl/2012/06/variable-media-queries-less-css/
+@highdensity: ~"only screen and (-webkit-min-device-pixel-ratio: 1.5)",
+              ~"only screen and (min--moz-device-pixel-ratio: 1.5)",
+              ~"only screen and (-o-min-device-pixel-ratio: 3/2)",
+              ~"only screen and (min-device-pixel-ratio: 1.5)";
+@mobile-xs:   ~"only screen and (max-width: 479px)";
+@mobile:      ~"only screen and (max-width: 767px)";
+@tablet:      ~"only screen and (max-width: 1023px)";
+@desktop:     ~"only screen and (max-width: 1169px)";
+
+//    @media @desktop, @tablet {
+//      background: green;
+//    }

@@ -13,11 +13,11 @@ class DAL
      private $password = '';
      private $database = 'uh347272_med24';
 //     webspectrum
-    /* private $host='localhost';
-    private $user='andrew19_med';
-    private $password='a6qxcqabymed';
-    private $database='andrew19_uh347272_med24';
- */
+//    private $host='localhost';
+//    private $user='andrew19_med';
+//    private $password='a6qxcqabymed';
+//    private $database='andrew19_uh347272_med24';
+
     private $arrayNamesServices;
     private $arrayNamesInsuranceCompany;
     private $arrayDay;

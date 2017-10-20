@@ -1,0 +1,306 @@
+#main { .clearfix; }
+#content { width: 100%; }
+#sidebar { width: 100%; }
+
+
+.widget {
+	margin-bottom: 20px;
+	.clearfix;
+	ul {
+		padding-left: 2em;
+	}
+	select {
+		min-width: 150px;
+		color: @black;
+	}
+}
+
+iframe {
+	max-width: 100%;
+}
+
+.comment-form {
+	>p{
+		.clearfix;
+	}
+	label {
+		display: block;
+		padding-bottom: 4px;
+		font-size: 10px;
+		text-transform: uppercase;
+		padding: 0 10px;
+		line-height: 38px;
+	}
+	textarea {
+		overflow: auto;
+		margin: 0;
+		height: 120px;
+		min-height: 120px;
+		border: 2px solid #97a9bd;
+		border-radius: 3px;
+	}
+	textarea,
+	input[type='text'] {
+		margin: 0 4px 0 0;
+		margin: 0;
+		width: 300px;
+		border: 2px solid #97a9bd;
+		border-radius: 3px;
+		border: 1px solid #d7cfd3;
+		width: 100%;
+		border-radius: 3px;
+		font-size: 14px;
+		color: #212121;
+	}
+	input[type='submit'] {
+		display: block;
+		float: none;
+	}
+}
+
+.post-password-form {
+	label {
+		display: block;
+	}
+	input[type='password'] {
+		margin: 0 4px 0 0;
+		width: 300px;
+		border: 2px solid #97a9bd;
+		border-radius: 3px;
+	}
+}
+
+.search-form {
+	.clearfix;
+	input {
+		float: left;
+		height: auto;
+		border-radius: 3px;
+		border: 2px solid #97a9bd;
+		&[type='search'] {
+			margin: 0 4px 0 0;
+			width: 150px;
+			border: 2px solid #97a9bd;
+			border-radius: 3px;
+		}
+	}
+}
+
+.post-password-form {
+	p {
+		.clearfix;
+	}
+	input {
+		float: left;
+		height: 2em;
+		&[type='password'] {
+			width: 150px;
+		}
+	}
+}
+
+.comment-form,
+.post-password-form,
+.search-form {
+	.clearfix;
+	input[type='submit'] {
+		background: @orange;
+		color: @white;
+		height: 2em;
+		border: none;
+		padding: 0 .5em;
+		border-radius: 3px;
+		border: 1px solid @orange;
+		transition: .3s;
+		&:hover {
+			background: transparent;
+			color: @orange;
+		}
+	}
+}
+
+.commentlist {
+	margin: 0 0 10px;
+	.edit-link {
+		margin: 0;
+	}
+	.avatar-holder {
+		float: left;
+		text-align: center;
+		margin: 0 84px 4px 0;
+		@media @tablet{
+			margin: 0 20px 4px 0;
+		}
+		@media @mobile{
+			float: none;
+			text-align: center;
+		}
+		img {
+			margin: 0 0 12px;
+		}
+	}
+}
+
+.commentlist-item {
+	.commentlist-item {
+		padding: 0;
+		// @media @tablet{
+		// 	padding: 0 0 0 2em;
+		// }
+	}
+}
+
+.comment,
+.commentlist-holder {
+	overflow: hidden;
+}
+
+.commentlist-item .commentlist-item,
+.commentlist-item + .commentlist-item {
+	padding-top: 10px;
+}
+
+.widget_calendar {
+	#next {
+		text-align: right;
+	}
+}
+
+.gallery-item {
+	dt {
+		float: none;
+		padding: 0;
+	}
+}
+
+.navigation,
+.navigation-comments {
+	position: relative;
+	vertical-align: middle;
+	margin-bottom: 10px;
+
+	.screen-reader-text {
+		position: absolute;
+		left: -99999px;
+	}
+
+	.page-numbers {
+		display: inline-block;
+		vertical-align: middle;
+		padding: 0 .4em;
+		@media @tablet{
+			//padding:0;
+		}
+	}
+
+	.next,
+	.prev {
+		display: inline-block;
+		vertical-align: middle;
+		max-width: 50%;
+		background: @orange;
+		color: @white;
+		padding: .4em;
+		border-radius: 3px;
+		text-decoration: none;
+		border: 1px solid @orange;
+		&:hover {
+			background: transparent;
+			color: @orange;
+		}
+		@media @tablet{
+			padding:.2em;
+		}
+	}
+}
+
+.navigation-single{
+	.clearfix;
+	margin-bottom: 20px;
+	.next,
+	.prev {
+		float: left;
+		vertical-align: middle;
+		max-width: 48%;
+		background: @orange;
+		color: @white;
+		border-radius: 3px;
+		text-decoration: none;
+		border: 1px solid @orange;
+		&:hover {
+			background: transparent;
+			color: @orange;
+		}
+		a {
+			color: inherit;
+			text-decoration: none;
+			padding: .4em;
+			display: block;
+			@media @tablet{
+				padding:.2em;
+			}
+		}
+	}
+	.next {
+		float: right;
+		margin: 0 0 0 10px;
+	}
+}
+
+.wp-caption {
+	max-width: 100%;
+	clear: both;
+	border: 1px solid @black;
+	padding: .4em;
+	margin-bottom: 20px;
+	img {
+		margin: 0;
+		vertical-align: top;
+		width: 100%;
+		max-width: 100%;
+	}
+	p {
+		margin: .4em 0 0;
+	}
+}
+
+div.aligncenter {
+	margin: 0 auto 10px;
+}
+
+img.aligncenter {
+	display: block;
+	margin: 0 auto;
+}
+
+.alignleft {
+	float: left;
+	margin: 0 10px 4px 0; 
+}
+
+.alignright {
+	float: right;
+	margin: 0 0 4px 10px;
+}
+
+.mejs-container {
+	margin-bottom: 10px;
+}
+
+.wp-caption-text,
+.gallery,
+.alignnone,
+.gallery-caption,
+.sticky,
+.bypostauthor {
+	height: auto;
+}
+
+#wp-calendar {
+	td {
+		padding: 4px;
+	}
+}
+pre {
+	overflow-x: auto;
+}

@@ -258,7 +258,7 @@
 				   <?php 
 					require_once 'med-BAL.php';
 					$select = new BAL();
-					
+					echo "jhfhgf";
 					$pics= $select->GetPics();
 					 $i=0; //  for($i = 0; $i < 2; $i++) { 
 					if($pics){

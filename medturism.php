@@ -356,7 +356,7 @@ img.wp-smiley, img.emoji {
 					<div class="medturism-list">
 					<?php 
 					require_once 'med-BAL.php';
-					$select = new Controller();
+					$select = new BAL();
 					$result = $select->GetMedturismAll(); 
 					 $i=0; //  for($i = 0; $i < 2; $i++) { 
 					 if($result){ ?>

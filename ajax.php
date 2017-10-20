@@ -53,6 +53,12 @@ $bal = new BAL();
                     $bal->DeleteImage($_POST['imageId']);
                     break;
                     
+                case 'ajax_form_regiatration_typeCompany':
+                    echo json_encode(array(
+                    'arrayTypeCompanes' => $bal->GetTypeInstitutions()
+                    ));
+                    break;
+                    
                 default:
                     echo json_encode(array('error: action default break'));
                     break;

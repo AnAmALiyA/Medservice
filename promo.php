@@ -255,7 +255,6 @@
 
 							<?php 
 							require_once 'med-BAL.php';
-
 					$select = new BAL();
 					$result = $select->GetPromoAll(); 
 					 $pics= $select->GetPicsPromo();

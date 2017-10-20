@@ -1,6 +1,6 @@
 <?php
-//session_start();
 require_once 'med-DAL.php';
+
 class BAL
 {
     private $dal;
@@ -446,11 +446,11 @@ class BAL
             header("Location: " . $_SERVER['HTTP_REFERER']);
             exit();
         } else {
-            $this->RedirectMain();
+            $this->RedirectHome();
         }
     }
     
-    public function RedirectMain()
+    public function RedirectHome()
     {
         header('Location: http://medservice24.webspectrum.top');
         exit();
@@ -461,6 +461,12 @@ class BAL
     public function RedirectKabinet()
     {
         header('Location: indexcabinet.php');
+        exit();
+    }
+    
+    public function RedirectMain()
+    {
+        header('Location: main.php');
         exit();
     }
     ////////Методы по авторизации // коенц////////
@@ -494,7 +500,15 @@ class BAL
         $this->dal->DeleteImage($id);
     }
     //////Методы удаления // конец
-    ///////////////////////Сергей//////////////////////
+    //////Методы регистрации /// начало ////
+    public function ParsePhone($number){
+        $temp = '';
+        $temp = trim($number, "+38(");
+        $temp = trim($temp, ")");
+        return trim($temp, "-");
+    }
+    //////Методы регистрации /// конец ////
+    ///////////////////////Сергей///////////начало///////////
     ////v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v////
     
     //fetch from DB all news
@@ -563,7 +577,6 @@ class BAL
         else return false;
     }
     
-    
     //works updating
     public  function UpdateNews($title, $id_user, $description, $find_id ,$date_show , $date_news ) {
         
@@ -613,10 +626,14 @@ class BAL
         return $this->dal->GetPicsPromo();
         
     }
+	public function GetPics(){
+		 return $this->dal->GetPics();
+	}
     public function GetPicsNews(){
         
         return $this->dal->GetPicsNews();
         
     }
+    /////////////////////Сергей///////////конец///////////
 }
 ?>

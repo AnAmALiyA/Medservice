@@ -1,0 +1,54 @@
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Roboto:400,400i,500,700&subset=cyrillic,cyrillic-ext');
+// <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700|Roboto:400,400i,500,700" rel="stylesheet">
+
+@import "lib/slick.less";
+@import "lib/fancybox.less";
+@import "lib/awesome/font-awesome.less";
+
+@import "base/variables";
+@import "base/mixins";
+@import "base/reset";
+@import "base/wp-reset.less";
+
+@import "layout/header.less";
+@import "layout/footer.less";
+@import "layout/main.less";
+
+
+
+#datepicker_2 a.ui-state-default.ui-state-active {
+    background: rgb(255, 133, 133);
+} 
+
+
+/*form-validate*/
+.form-group{
+  position: relative;
+}
+input.error,
+select.error,
+textarea.error {
+  border: 2px solid red !important;
+  box-shadow: inset 0px 2px 15px -2px rgba(255, 0, 0, 0.75) !important;
+}
+
+input.valid,
+select.valid,
+textarea.valid {
+  border: 2px solid green !important;
+  box-shadow: inset 0px 2px 15px -2px rgba(0, 255, 0, 0.75) !important;
+}
+
+label.error {
+  display: inline-block;
+  font-size: 11px;
+  color: red;
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-weight: bold;
+}
+/*form-validate*/

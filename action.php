@@ -4,13 +4,8 @@ require_once 'med-BAL.php';
 require_once 'validate.php';
 require_once 'authorize.php';
 
-$auth = new Authorization();
-$bal = new BAL();
-$handling = new HandlingData();
-
 class HandlingData
 {
-
     private $arrHoliday = array(
         'none',
         'monday',
@@ -21,7 +16,6 @@ class HandlingData
         'saturday',
         'sunday'
     );
-
     private $timeWork = array(
         'Start',
         'End'
@@ -41,70 +35,65 @@ class HandlingData
         // в ответ пользователю
         $_SESSION['error'] = $stringError == null ? 'Ошибка.' : $stringError;
     }
-
-    private function IsFillField()
+    //main.form - start
+    private function IsFillFieldMain()
     {        
         // Тип учереждения
-        $_POST['typeCompany'] = $this->validateData->FilterStringOnHtmlSql($_POST['typeCompany']);
-        if (!$validateData->IsExist($_POST['typeCompanyId'])) {
-            $this->SetError('Присутствуют пустые поля');
-            $bal->RedirectBack();
-        }
+        $_POST['typeCompany'] = $this->IsFillField($_POST['typeCompany']);
         // Направления/услуги
         foreach ($_POST['arrayServices'] as $key => $value) {
-            $_POST['arrayServices'][$key] = $this->validateData->FilterStringOnHtmlSql($value);
-            if (!$validateData->IsExist($_POST['arrayServices'][$key])) {
-                $this->SetError('Присутствуют пустые поля');
-                $bal->RedirectBack();
-            }
+            $_POST['arrayServices'][$key] = $this->IsFillField($value);
         }
         // Страховые компании
         foreach ($_POST['arrayInsuranceCompanes'] as $key => $value) {
-            $_POST['arrayInsuranceCompanes'][$key] = $this->validateData->FilterStringOnHtmlSql($value);
-            if (!$validateData->IsExist($_POST['arrayInsuranceCompanes'][$key])) {
-                $this->SetError('Присутствуют пустые поля');
-                $bal->RedirectBack();
-            }
+            $_POST['arrayInsuranceCompanes'][$key] = $this->IsFillField($value);
         }
         // Название
-        $_POST['nameCompany'] = $this->validateData->FilterStringOnHtmlSql($_POST['nameCompany']);
-        if (!$validateData->IsExist($_POST['nameCompany'])) {
-            $this->SetError('Присутствуют пустые поля');
-            $bal->RedirectBack();
-        }
+        $_POST['nameCompany'] = $this->IsFillField($_POST['nameCompany']);
         // Область
-        $_POST['region'] = $this->validateData->FilterStringOnHtmlSql($_POST['region']);
-        if (!$validateData->IsExist($_POST['region'])) {
-            $this->SetError('Присутствуют пустые поля');
-            $bal->RedirectBack();
-        }
+        $_POST['region'] = $this->IsFillField($_POST['region']);
         // Город
-        $_POST['town'] = $this->validateData->FilterStringOnHtmlSql($_POST['town']);
-        if (!$validateData->IsExist($_POST['town'])) {
-            $this->SetError('Присутствуют пустые поля');
-            $bal->RedirectBack();
-        }
+        $_POST['town'] = $this->IsFillField($_POST['town']);
         // Район
-        $_POST['district'] = $this->validateData->FilterStringOnHtmlSql($_POST['district']);
-        if (!$validateData->IsExist($_POST['district'])) {
+        $_POST['district'] = $this->IsFillField($_POST['town']);
+        // Улица
+        $_POST['street'] = $this->IsFillField($_POST['street']);
+    }
+    
+    private function IsFillField($post){
+        $post = $this->validateData->FilterStringOnHtmlSql($post);
+        if (!$validateData->IsExist($post)) {
             $this->SetError('Присутствуют пустые поля');
             $bal->RedirectBack();
         }
-        // Улица
-        $_POST['street'] = $this->validateData->FilterStringOnHtmlSql($_POST['street']);
-        if (!$validateData->IsExist($_POST['street'])) {
-            $this->SetError('Присутствуют пустые поля');
+        return $post;
+    }
+
+    private function IsValidFildInteger($post){
+        if (!$validateData->ValidInteger($post) {
+            $this->SetError('Не валидное поле.');
             $bal->RedirectBack();
         }
     }
-
-    private function IsValidFild()
+    
+    private function IsValidFildIntegerString($post){
+        if (!$this->validateData->ValidIntegerString($post)) {
+            $this->SetError('Не валидное поле.');
+            $bal->RedirectBack();
+        }
+    }
+    
+    private function IsValidFildString($post){
+        if (!$this->validateData->ValidString($post)) {
+            $this->SetError('Не валидное поле.');
+            $bal->RedirectBack();
+        }
+    }
+    
+    private function IsValidFildMain()
     {
         // Тип учереждения
-        if (!$validateData->ValidInteger($_POST['typeCompanyId'])) {
-                $this->SetError('Не валидное поле.');
-                $bal->RedirectBack();
-            }
+        $this->IsValidFildInteger($_POST['typeCompanyId']);
         // Направления/услуги - чекбоксы (ожидаю в поле только числа) тут прийдет ассоциативный array(1,2,3)
         foreach ($_POST['arrayServices'] as $key => $value){
             if (!$validateData->ValidInteger($_POST['arrayServices'][$key])) {
@@ -121,30 +110,15 @@ class HandlingData
             }
         }
         // Название
-        if (!$this->validateData->ValidIntegerString($_POST['nameCompany'])) {
-            $this->SetError('Не валидное поле.');
-            $bal->RedirectBack();
-        }
+        $this->IsValidFildIntegerString($_POST['nameCompany']);
         //область
-        if (!$this->validateData->ValidString($_POST['region'])) {
-            $this->SetError('Не валидное поле.');
-            $bal->RedirectBack();
-        }
+        $this->IsValidFildString($_POST['region']);
         //город
-        if (!$this->validateData->ValidString($_POST['town'])) {
-            $this->SetError('Не валидное поле.');
-            $bal->RedirectBack();
-        }
+        $this->IsValidFildString($_POST['town']);
         //район области
-        if (! $this->validateData->ValidString($_POST['district'])) {
-            $this->SetError('Не валидное поле.');
-            $bal->RedirectBack();
-        }
+        $this->IsValidFildString($_POST['district']);
         //улица
-        if (! $this->validateData->ValidIntegerString($_POST['street'])) {
-            $this->SetError('Не валидное поле.');
-            $bal->RedirectBack();
-        }
+        $this->IsValidFildIntegerString($_POST['street']);
         // необязательные параметры
         //дом
         if ($validateData->IsExist($_POST['home'])) {
@@ -181,8 +155,8 @@ class HandlingData
 
     public function SaveDataForm()
     {
-        $this->IsFillField();
-        $this->IsValidFild();
+        $this->IsFillFieldMain();
+        $this->IsValidFildMain();
         $this->IsExistId();
         
         if ($_POST['state'] == 'Save') {
@@ -192,36 +166,53 @@ class HandlingData
             $this->bal->Update($_POST);
         }
     }
-// }
-
-
-// if ($auth->IsAuthorized('organization')) {
-//     //методы для организации
-//     if (isset($_POST['save_form_main']) && empty($_POST['save_form_main'])) {
-//         $handling->SaveDataForm();
-//         $bal->RedirectBack();
-//     }
-// }
-// elseif ($auth->IsAuthorized('client')) {
-// //     методы для клиентов
-// }
-// elseif($_POST['submit'] == 'Авторизация') {    
-//     if ($auth->IsLogin($_POST['login'])) {        
-//         $handling->SetError('login', 'notUL');
-//         $bal->RedirectBack();
-//     }//тут понадобиться отслеживать организацию
-//     $handling->SetError('login', 'unset');
-//     $success = $auth->SaveUser($login, $password, $user_category);
-//     if ($success < 0) {       
-//         $handling->SetError('notSafe', 'notUL');
-//         $bal->RedirectBack();
-//     }
-//     $handling->SetError('notSafe', 'unset');
-// }
-// else {
-//     $bal->RedirectBack();
-// }
-//////////////////////////////Сергей///////////////////////////
+    //main.form - end
+    //registration.form compani/user - start
+    private function IsFillFieldRegistrationCompany() {
+        //Название мед учереждения
+        $_POST['mf-title'] = $this->IsFillField($_POST['mf-title']);
+        //Тип заведения
+        $_POST['mf-type'] = $this->IsFillField($_POST['mf-type']);
+        //форма собственности ТОВ
+        $_POST['mf-form_of_ownership'] = $this->IsFillField($_POST['mf-form_of_ownership']);
+        //фио
+        $_POST['mf-contact_person'] = $this->IsFillField($_POST['mf-contact_person']);
+        //должность - может быть пустым
+//         if (isset($_POST['mf-contact_person-post']) && !empty($_POST['mf-contact_person-post'])) {
+//             $_POST['mf-contact_person-post'] = $this->validateData->FilterStringOnHtmlSql($_POST['mf-contact_person-post']);
+//         }
+        //Контактный телефон
+        $_POST['mf-contact_person-tel-number'] = $this->IsFillField($_POST['mf-contact_person-tel-number']);
+        // ава - может быть пустым
+        $_FILES['mf_photo'];//фотографии
+    }
+    
+    private function IsValidFildRegistrationCompany() {
+        //Название мед учереждения
+        $this->IsValidFildIntegerString($_POST['mf-title']);
+        //Тип заведения / тип учереждения
+        $this->IsValidFildInteger($_POST['mf-type']);
+        //форма собственности ТОВ
+        $this->IsValidFildString($_POST['mf-form_of_ownership']);
+//      //фио
+        $this->IsValidFildIntegerString($_POST['mf-contact_person']);
+//      //должность
+        if (isset($_POST['mf-contact_person-post']) && !empty($_POST['mf-contact_person-post'])) {
+            $_POST['mf-contact_person-post'] = $this->validateData->FilterStringOnHtmlSql($_POST['mf-contact_person-post']);
+            $this->IsValidFildString($_POST['mf-contact_person-post']);
+        }
+//      //Контактный телефон
+        $_POST['mf-contact_person-tel-number'] = $bal->ParsePhone($_POST['mf-contact_person-tel-number']);
+        $this->IsValidFildInteger($_POST['mf-contact_person-tel-number']);
+        //фотографии
+//      $_FILES['mf_photo'];
+    }
+    
+    public function SaveRegistrationCompany(){
+        
+    }
+    //registration.form compani/user - end
+//////////////////////////////Сергей///////////начало////////////////
 public function SaveNewsArray($data, $pictures)
 {
     //  if ($this->IsAuthorized($_SESSION['id'], $_SESSION['hash'])) {
@@ -627,19 +618,23 @@ private function SavePics($pictures)
         //} for authorize check
 }
 }
-////////////////////////////Сергей/////////////////////
+////////////////////////////Сергей////////////конец/////////
+//определить организацию и разрешить методы для организации
+$auth = new Authorization();
+$bal = new BAL();
+$handling = new HandlingData();
 
-if ($auth->IsAuthorized('organization')) {
-    //методы для организации
-    if (isset($_POST['save_form_main']) && empty($_POST['save_form_main'])) {
+if ($auth->IsAuthorized('organization')) {    
+    if (isset($_POST['save_form_main']) && empty($_POST['save_form_main'])) {        
         $handling->SaveDataForm();
         $bal->RedirectBack();
     }
-}
-elseif ($auth->IsAuthorized('client')) {
-//     методы для клиентов
-}
-elseif($_POST['submit'] == 'Авторизация') {
+}//определить клиента и разрешить методы для клиента
+elseif($auth->IsAuthorized('client')) {
+    /*.....*/
+}//методы для авторизации
+elseif(isset($_POST['form_authorized']) && empty($_POST['form_authorized'])) 
+{
     if ($auth->IsLogin($_POST['login'])) {
         $handling->SetError('login', 'notUL');
         $bal->RedirectBack();
@@ -651,6 +646,16 @@ elseif($_POST['submit'] == 'Авторизация') {
         $bal->RedirectBack();
     }
     $handling->SetError('notSafe', 'unset');
+}
+elseif(isset($_POST['form_regestration_company']) && empty($_POST['form_regestration_company'])) {
+    $handling->SaveRegistrationCompany();
+    $bal->RedirectMain();
+}
+elseif(isset($_POST['form_regestration_user']) && empty($_POST['form_regestration_user'])) {
+    $_POST['mf-contact_person'];
+    $_POST['mf-contact_person-email'];
+    $_POST['mf-contact_person-tel-number'];
+    $_FILES['mf_photo'];
 }
 else {
     $bal->RedirectBack();
