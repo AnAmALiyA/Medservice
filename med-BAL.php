@@ -197,8 +197,8 @@ class BAL
         return 'save logo';
     }
     ///////// получить данные организации// конец /////////
-    ///////// сохранить данные организации// старт /////////
-    public function Save()
+    ///////// сохранить данные форм// старт /////////
+    public function SaveMain()
     {
         // id пользователя
         $id = $_SESSION['user_id'];
@@ -438,8 +438,43 @@ class BAL
         // обновляю, потому, что сумарная таблица должна бы создана и привязана к пользователю до 1 сохранения
         $this->dal->UpdateOrganizationData($organizationSummaryId, $arrayOrganizationData);
     }
-///////// сохранить данные организации// конец /////////
-////////Методы для перенаправления // начало////////
+    
+    public function SaveCompany(){
+        // id пользователя
+        $id = $_SESSION['user_id'];
+        
+        $strCompany = $_POST['mf-form_of_ownership'].' "'.$_POST['mf-title'].'"';
+        $idCompany = $this->dal->FindCompanyByName($strCompany);
+        if($idCompany == -1){
+            $this->dal->SaveCompany($strCompany);
+            $idCompany = $this->dal->FindCompanyByName($strCompany);
+        }
+        //med_type_institution summary table
+        $idTypeInstitution = $this->dal->FindTypeInstitutionByName($_POST['mf-type']);
+        if($idTypeInstitution == -1){
+            $this->dall->SaveTypeInstitution($_POST['mf-type']);
+            $idTypeInstitution = $this->dal->FindTypeInstitutionByName($_POST['mf-type']);
+        }
+        
+        $fioUser = $_POST['mf-contact_person-company'];
+        
+        $position = null;
+        if (!empty($_POST['mf-contact_person-position'])) {
+            $position = $_POST['mf-contact_person-position'];
+        }
+        
+        $idPhone = $this->dal->Find$_POST['mf-contact_company-tel-number'];
+        if () {
+            ;
+        }
+    }
+    
+    public function SaveClient(){
+        // id пользователя
+        $id = $_SESSION['user_id'];
+    }
+    ///////// сохранить данные форм// конец /////////
+    ////////Методы для перенаправления // начало////////
     public function RedirectBack()
     {
         if (! empty($_SERVER['HTTP_REFERER'])) {
@@ -501,12 +536,7 @@ class BAL
     }
     //////Методы удаления // конец
     //////Методы регистрации /// начало ////
-    public function ParsePhone($number){
-        $temp = '';
-        $temp = trim($number, "+38(");
-        $temp = trim($temp, ")");
-        return trim($temp, "-");
-    }
+
     //////Методы регистрации /// конец ////
     ///////////////////////Сергей///////////начало///////////
     ////v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v////

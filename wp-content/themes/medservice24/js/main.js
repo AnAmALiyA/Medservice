@@ -106,12 +106,53 @@ if(registration != null){
 	setGenerationTypeCompany();
 }
 	
-$('body').on('submit', '#client', function(){
-
+$('body').on('submit', '#organization', function(){
+	let nameCompany = $('#mf-title').val();
+	let typeCompany = $('#mf-type').val();
+	let ownership = $('#mf-form_of_ownership').val();
+	let fio = $('#mf-contact_person-company').val();
+	let position = $('#mf-contact_person-position').val();
+	let phone = $('#mf-contact_company-tel-number').val();
+	phone = parsePhoneNumber(phone);
+	let photo = $('#mf-photo-company').val();
+	let submit = this.val();
+	$.post(
+			"http://medservice24.webspectrum.top/action.php",
+			{
+				mf-title: nameCompany,
+				mf-type: typeCompany,
+				mf-form_of_ownership: ownership,
+				mf-contact_person-company: fio,
+				mf-contact_person-position: position,
+				mf-contact_company-tel-number: phone,
+				mf-photo-company: photo,
+				form_regestration_company: submit
+			},
+			onRedirectKabinet(data, textStatus, jqXHR)
+//			,dataType:'text' // автоматом определяет
+	);
 });
 
-$('body').on('submit', '#organization', function(){
-
+$('body').on('submit', '#client', function(){
+	let fio = $('#mf-contact_person-user').val();
+	let mail = $('#mf-contact_person-email').val();
+	let phone = $('#mf-contact_person-tel-number').val();
+	phone = parsePhoneNumber(phone);
+	let photo = $('#mf-photo-user').val();
+	let submit = this.val();
+	$.post(
+			"http://medservice24.webspectrum.top/action.php",
+			{
+				mf-contact_person-company: fio,
+				mf-contact_person-email: mail,
+				mf-contact_company-tel-number: phone,
+				mf-photo-company: photo,
+				form_regestration_company: submit
+			},
+			onRedirectHome(data, textStatus, jqXHR)
+//			,dataType:'text' // автоматом определяет
+	);
+	
 });
 
   //$(".phone_js").mask("+38(099)999-9999");
@@ -730,4 +771,21 @@ function setGenerationTypeCompany(){
 			let typeCompanyList = generationTypeCompanyList(response.arrayTypeCompanes);
 			$('#mf-type').html(typeCompanyList);
 		});
+}
+
+function parsePhoneNumber(phone){
+	let tempStr = phone.replace('+38(','');
+	tempStr = tempStr.replace(')', '');
+	tempStr = tempStr.replace('-', '');
+	tempStr = tempStr.replace(' ', '');
+	return tempStr;
+}
+
+function onRedirectKabinet(){
+	var url = "http://medservice24.webspectrum.top/kabinet.php";
+	$(location).attr('href',url);
+}
+function onRedirectHome(){
+	var url = "http://medservice24.webspectrum.top";
+	$(location).attr('href',url);
 }

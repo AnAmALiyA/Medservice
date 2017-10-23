@@ -50,8 +50,8 @@ class ValidateData
     public function ValidIntegerString($input_textInteger)
     {
         $input_textInteger = trim($input_textInteger);
-        // if(preg_match('/[^A-Za-zа-яА-Я0-9\.\ \,]/', $input_textInteger)) { //разрешено- « "
-        if (preg_match('/[\\\!\@\#\$\%\^\&\*\(\)\<\>\?\=\+\-\'\;\:]+/', $input_textInteger)) {
+        // if(preg_match('/[^A-Za-zа-яА-Я0-9\.\ \,]/', $input_textInteger)) { //разрешено- @ « "
+        if (preg_match('/[\\\!\#\$\%\^\&\*\(\)\<\>\?\=\+\-\'\;\:]+/', $input_textInteger)) {
             // echo false.' - провал<br>';
             return false;
         } else {

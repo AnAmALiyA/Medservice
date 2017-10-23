@@ -35,7 +35,7 @@ class HandlingData
         // в ответ пользователю
         $_SESSION['error'] = $stringError == null ? 'Ошибка.' : $stringError;
     }
-    //main.form - start
+    /////main.form - start/////
     private function IsFillFieldMain()
     {        
         // Тип учереждения
@@ -70,7 +70,7 @@ class HandlingData
     }
 
     private function IsValidFildInteger($post){
-        if (!$validateData->ValidInteger($post) {
+        if (!$validateData->ValidInteger($post)) {
             $this->SetError('Не валидное поле.');
             $bal->RedirectBack();
         }
@@ -157,16 +157,9 @@ class HandlingData
     {
         $this->IsFillFieldMain();
         $this->IsValidFildMain();
-        $this->IsExistId();
-        
-        if ($_POST['state'] == 'Save') {
-            $this->bal->Save($_POST);
-        }
-        else {
-            $this->bal->Update($_POST);
-        }
+        $this->bal->SaveMain();
     }
-    //main.form - end
+    /////main.form - end/////
     //registration.form compani/user - start
     private function IsFillFieldRegistrationCompany() {
         //Название мед учереждения
@@ -176,15 +169,15 @@ class HandlingData
         //форма собственности ТОВ
         $_POST['mf-form_of_ownership'] = $this->IsFillField($_POST['mf-form_of_ownership']);
         //фио
-        $_POST['mf-contact_person'] = $this->IsFillField($_POST['mf-contact_person']);
+        $_POST['mf-contact_person-company'] = $this->IsFillField($_POST['mf-contact_person-company']);
         //должность - может быть пустым
 //         if (isset($_POST['mf-contact_person-post']) && !empty($_POST['mf-contact_person-post'])) {
 //             $_POST['mf-contact_person-post'] = $this->validateData->FilterStringOnHtmlSql($_POST['mf-contact_person-post']);
 //         }
         //Контактный телефон
-        $_POST['mf-contact_person-tel-number'] = $this->IsFillField($_POST['mf-contact_person-tel-number']);
+        $_POST['mf-contact_company-tel-number'] = $this->IsFillField($_POST['mf-contact_company-tel-number']);
         // ава - может быть пустым
-        $_FILES['mf_photo'];//фотографии
+        //  $_FILES['mf-photo-company'];//фотографии
     }
     
     private function IsValidFildRegistrationCompany() {
@@ -195,23 +188,46 @@ class HandlingData
         //форма собственности ТОВ
         $this->IsValidFildString($_POST['mf-form_of_ownership']);
 //      //фио
-        $this->IsValidFildIntegerString($_POST['mf-contact_person']);
+        $this->IsValidFildIntegerString($_POST['mf-contact_person-company']);
 //      //должность
-        if (isset($_POST['mf-contact_person-post']) && !empty($_POST['mf-contact_person-post'])) {
-            $_POST['mf-contact_person-post'] = $this->validateData->FilterStringOnHtmlSql($_POST['mf-contact_person-post']);
-            $this->IsValidFildString($_POST['mf-contact_person-post']);
+        if (isset($_POST['mf-contact_person-position']) && !empty($_POST['mf-contact_person-position'])) {
+            $_POST['mf-contact_person-position'] = $this->validateData->FilterStringOnHtmlSql($_POST['mf-contact_person-position']);
+            $this->IsValidFildString($_POST['mf-contact_person-position']);
         }
 //      //Контактный телефон
-        $_POST['mf-contact_person-tel-number'] = $bal->ParsePhone($_POST['mf-contact_person-tel-number']);
-        $this->IsValidFildInteger($_POST['mf-contact_person-tel-number']);
+        $_POST['mf-contact_company-tel-number'] = $bal->ParsePhone($_POST['mf-contact_company-tel-number']);
+        $this->IsValidFildInteger($_POST['mf-contact_company-tel-number']);
         //фотографии
 //      $_FILES['mf_photo'];
     }
     
     public function SaveRegistrationCompany(){
-        
+        $this->IsFillFieldRegistrationCompany();
+        $this->IsValidFildRegistrationCompany();
+        $this->bal->SaveCompany();
     }
-    //registration.form compani/user - end
+    //registration.form compani - end
+    //registration.form user - start
+    private function IsFillFieldRegistrationClient(){
+        $_POST['mf-contact_person'] = $this->IsFillField($_POST['mf-contact_person']);
+        $_POST['mf-contact_person-email'] = $this->IsFillField($_POST['mf-contact_person-email']);
+        $_POST['mf-contact_person-tel-number'] = $this->IsFillField($_POST['mf-contact_person-tel-number']);
+        //     $_FILES['mf_photo'];
+    }
+    
+    private function IsValidFildRegistrationClient(){
+        $this->IsValidFildString($_POST['mf-contact_person']);
+        $this->IsValidFildIntegerString($_POST['mf-contact_person-email']);
+        $this->IsValidFildInteger($_POST['mf-contact_person-tel-number']);
+        //     $_FILES['mf_photo'];
+    }
+    
+    public function SaveRegistrationClient(){
+        $this->IsFillFieldRegistrationClient();
+        $this->IsValidFildRegistrationClient();
+        $this->bal->SaveClient()
+    }    
+    //registration.form user - end
 //////////////////////////////Сергей///////////начало////////////////
 public function SaveNewsArray($data, $pictures)
 {
@@ -652,10 +668,10 @@ elseif(isset($_POST['form_regestration_company']) && empty($_POST['form_regestra
     $bal->RedirectMain();
 }
 elseif(isset($_POST['form_regestration_user']) && empty($_POST['form_regestration_user'])) {
-    $_POST['mf-contact_person'];
-    $_POST['mf-contact_person-email'];
-    $_POST['mf-contact_person-tel-number'];
-    $_FILES['mf_photo'];
+//     $_POST['mf-contact_person'];
+//     $_POST['mf-contact_person-email'];
+//     $_POST['mf-contact_person-tel-number'];
+//     $_FILES['mf_photo'];
 }
 else {
     $bal->RedirectBack();

@@ -16,7 +16,7 @@ require_once 'med-BAL.php';
 // $dal = new DAL();
   $dal = new BAL();
 
-  echo "test<br/>";
+  echo "test +38(096)000-0000<br/>";
   
  echo $dal->ParsePhone("+38(096)000-0000");
 // foreach ($_POST as $key => $value){

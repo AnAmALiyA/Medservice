@@ -1259,5 +1259,57 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
         return $arr;
         
     }
+    //для регистрации
+    public function FindCompanyByName($name) {
+        $arrayNamesTableRows = 'name';
+        $arrayValuesTableRows = $name;
+        return $this->FindId($tableOrganization, $arrayNamesTableRows, $arrayValuesTableRows);
+    }
+    
+    public function SaveCompany($company){
+        $arrayNamesTableRows = 'name';
+        $arrayValuesTableRows = $company;
+        $this->QueryInsert($tableOrganization, $arrayNamesColumns, $arrayValuesColumns);
+    }
+    //организация
+    public function FindTypeInstitutionByName($name) {
+        $arrayNamesTableRows = 'type_description';
+        $arrayValuesTableRows = $name;
+        return $this->FindId($tableTypeInstitution, $arrayNamesTableRows, $arrayValuesTableRows);
+    }
+
+    public function SaveTypeInstitution($typeInstitution){
+        $arrayNamesTableRows = 'type_description';
+        $arrayValuesTableRows = $typeInstitution;
+        $this->QueryInsert($tableOrganization, $arrayNamesColumns, $arrayValuesColumns);
+    }
+    
+    public function FindPhoneByNumber($number){
+        $arrayNamesTableRows = 'phone';
+        $arrayValuesTableRows = $number;
+        return $this->FindId($tablePhone, $arrayNamesTableRows, $arrayValuesTableRows);
+    }
+    
+    public function SavePhone($idSummTable, $number){
+        $arrayNamesTableRows = array('summary_table_fk', 'phone');
+        $arrayValuesTableRows = array($idSummTable, $number);
+        $this->QueryInsert($tableOrganization, $arrayNamesColumns, $arrayValuesColumns);
+    }
+    
+    public function CreateSummTable($idCompany, $item = 0){
+        $idLast = $this->FindLastId($tableSummaryTable);
+        
+        $arrayNamesTableRows = array('organization_fk', 'state');
+        $arrayValuesTableRows = array($idCompany, 0);
+        try {
+            $this->QueryInsert($tableSummaryTable, $arrayNamesColumns, $arrayValuesColumns);
+        } catch (Exception $e) {
+            if($item < 30){
+                $item++;
+                $this->CreateSummTable($idCompany, $item);
+            }
+            
+        }        
+    }
 }
 ?>
