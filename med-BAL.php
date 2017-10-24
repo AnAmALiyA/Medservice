@@ -194,7 +194,38 @@ class BAL
     }
     //TODO логотип в BAL
     private function GetLogo(){
-        return 'save logo';
+        return 'get logo';
+    }
+    
+    private function Upload_file($file, $upload_dir = 'images', $allowed_types= array('image/png','image/x-png','image/jpeg','image/webp','image/gif')){
+        
+        $blacklist = array(".php", ".phtml", ".php3", ".php4");
+        $ext = substr($filename, strrpos($filename,'.'), strlen($filename)-1); // В переменную $ext заносим расширение загруженного файла.
+        if(in_array($ext, $blacklist)){
+            return array('error' => 'Запрещено загружать исполняемые файлы');
+        }
+            
+        $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.$upload_dir.DIRECTORY_SEPARATOR; // Место, куда будут загружаться файлы.
+        $max_filesize = 5 * 1024 * 1024;//8388608; // Максимальный размер загружаемого файла в байтах (в данном случае он равен 8 Мб).
+        $prefix = date('Ymd-is_');
+        $filename = $file['name']; // В переменную $filename заносим точное имя файла.
+            
+        if(!is_writable($upload_dir))  // Проверяем, доступна ли на запись папка, определенная нами под загрузку файлов.
+            return array('error' => 'Невозможно загрузить файл в папку "'.$upload_dir.'". Установите права доступа - 777.');
+                
+        if(!in_array($file['type'], $allowed_types))
+            return array('error' => 'Данный тип файла не поддерживается.');
+                    
+        if(filesize($file['tmp_name']) > $max_filesize)
+            return array('error' => 'файл слишком большой. максимальный размер '.intval($max_filesize/(1024*1024)).'мб');
+        
+        @mkdir($upload_dir, 0777);
+            
+        if(!move_uploaded_file($file['tmp_name'],$upload_dir.$prefix.$filename)) // Загружаем файл в указанную папку.
+            return array('error' => 'При загрузке возникли ошибки. Попробуйте ещё раз.');
+                            
+        //return Array('filename' => $prefix.$filename);
+        return Array('filename' => $upload_dir.$prefix.$filename);
     }
     ///////// получить данные организации// конец /////////
     ///////// сохранить данные форм// старт /////////
@@ -463,15 +494,33 @@ class BAL
             $position = $_POST['mf-contact_person-position'];
         }
         
-        $idPhone = $this->dal->Find$_POST['mf-contact_company-tel-number'];
-        if () {
-            ;
+        //save телефон и самари табицу
+        $idsummary = $this->dal->CreateSummTable($idCompany, $idTypeInstitution);
+        $idPhone = $this->dal->FindPhone($_POST['mf-contact_company-tel-number']);
+        if ($idPhone > -1){
+//             throw new Exception('Такой телефон уже есть');
+            return -1;
         }
+        $this->dal->SavePhone($idsummary, $_POST['mf-contact_company-tel-number']);
+        
+        $pathImageLogo = $this->Upload_file($_FILES['mf-photo-company'], 'logo');
+
+        $this->dal->SaveUserCompanyData($id, $fioUser, $position, $idSummary, $pathImageLogo);
     }
-    
+    //TODO написать метод
     public function SaveClient(){
         // id пользователя
         $id = $_SESSION['user_id'];
+        
+        $fioUser = $_POST['mf-contact_person'];
+        
+        $mail = $_POST['mf-contact_person-email'];
+        
+        $phone = $_POST['mf-contact_person-tel-number'];
+        
+        $pathImageLogo = $this->Upload_file($_FILES['mf_photo'], 'logo');
+        
+        $this->dal->SaveUserClientData($id, $fioUser, $mail, $phone, $pathImageLogo);
     }
     ///////// сохранить данные форм// конец /////////
     ////////Методы для перенаправления // начало////////

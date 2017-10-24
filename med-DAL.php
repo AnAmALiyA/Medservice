@@ -36,6 +36,7 @@ class DAL
     private $tableRegion = 'med_region';
     private $tableSummaryTable = 'med_summary_table';
     private $tableUsers = 'med_users';
+    private $tableImage = 'med_image';
     
     public function __construct()
     {
@@ -255,7 +256,7 @@ class DAL
          return $result;
      }
      
-    private function QueryUpdate($Table, $arrayNamesTableRows, $arrayValuesTableRows, $id)
+    private function QueryUpdate($table, $arrayNamesTableRows, $arrayValuesTableRows, $id)
     {
         $set = '';
         echo is_array($arrayNamesTableRows).'<br/>';
@@ -270,7 +271,7 @@ class DAL
             $set .= "$arrayNamesTableRows = '$arrayValuesTableRows'";
         }
         
-        $query = "UPDATE $Table SET $set WHERE id=$id";
+        $query = "UPDATE $table SET $set WHERE id=$id";
         //          $query = "UPDATE $Table SET $nameTableRow = '$valueTableRow' WHERE id=$id";
         echo $query;
         $link = $this->ConnectDB();
@@ -839,7 +840,7 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
 //         return $this->QueryDelete($this->tablePhone, $id);
     }
     ///////////////Удаление данных/////////конец//////////////
-    //////////////////Сергей////////////////////
+//////////////////Сергей//////////начало//////
     //
     public function GetNewsAllCol()
     {
@@ -1006,8 +1007,6 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
     // just downloading pictures
     public function SavePics($id, $name)
     {
-        $table = 'med_image';
-        
         $arrayNamesTabelRows = array(
             'image_userId',
             'image_path'
@@ -1016,12 +1015,7 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
             $id,
             $name
         );
-        $getResult = $this->QueryInsert($table, $arrayNamesTabelRows, $arrayValuesTabelRows);
-        if ($getResult) {
-            return true;
-        }
-        
-        return false;
+        return $this->QueryInsert($this->$tableImage, $arrayNamesTabelRows, $arrayValuesTabelRows);
     }
     
     // findout your expected id
@@ -1259,6 +1253,7 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
         return $arr;
         
     }
+//////////////////Сергей//////////конец//////
     //для регистрации
     public function FindCompanyByName($name) {
         $arrayNamesTableRows = 'name';
@@ -1296,20 +1291,35 @@ for ($i = 0; $i < count($arrayNamesColumns); $i++) {//перебираю мас�
         $this->QueryInsert($tableOrganization, $arrayNamesColumns, $arrayValuesColumns);
     }
     
-    public function CreateSummTable($idCompany, $item = 0){
+    public function CreateSummTable($idCompany, $idTypeInstitution, $item = 0){
         $idLast = $this->FindLastId($tableSummaryTable);
         
-        $arrayNamesTableRows = array('organization_fk', 'state');
-        $arrayValuesTableRows = array($idCompany, 0);
+        $arrayNamesTableRows = array('organization_fk', 'type_institution_fk', 'state');
+        $arrayValuesTableRows = array($idCompany, $idTypeInstitution, 0);
         try {
-            $this->QueryInsert($tableSummaryTable, $arrayNamesColumns, $arrayValuesColumns);
+            if($this->QueryInsert($tableSummaryTable, $arrayNamesColumns, $arrayValuesColumns < 0)){
+                throw new Exception('Id занят');
+            }
+            
         } catch (Exception $e) {
             if($item < 30){
                 $item++;
                 $this->CreateSummTable($idCompany, $item);
             }
-            
-        }        
+        }
+        return $idLast;
+    }
+    
+    public function SaveserCompanyData($id, $fioUser, $position, $idSummary, $imageLogo){
+        $arrayNamesTableRows = array('fio','position','summary_table_fk', 'image_logo');
+        $arrayValuesTableRows = array($fioUser, $position, $idSummary, $imageLogo);
+        $this->QueryUpdate($tableUsers, $arrayNamesTableRows, $arrayValuesTableRows, $id);        
+    }
+    //клиент
+    public function SaveUserClientData($id, $fioUser, $mail, $phone, $imageLogo){
+        $arrayNamesTableRows = array('fio','mail', 'phone_client_fk', 'image_logo');
+        $arrayValuesTableRows = array($fioUser, $mail, $phone, $imageLogo);
+        $this->QueryUpdate($tableUsers, $arrayNamesTableRows, $arrayValuesTableRows, $id);
     }
 }
 ?>

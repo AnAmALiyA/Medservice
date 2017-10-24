@@ -176,8 +176,6 @@ class HandlingData
 //         }
         //Контактный телефон
         $_POST['mf-contact_company-tel-number'] = $this->IsFillField($_POST['mf-contact_company-tel-number']);
-        // ава - может быть пустым
-        //  $_FILES['mf-photo-company'];//фотографии
     }
     
     private function IsValidFildRegistrationCompany() {
@@ -197,8 +195,12 @@ class HandlingData
 //      //Контактный телефон
         $_POST['mf-contact_company-tel-number'] = $bal->ParsePhone($_POST['mf-contact_company-tel-number']);
         $this->IsValidFildInteger($_POST['mf-contact_company-tel-number']);
-        //фотографии
-//      $_FILES['mf_photo'];
+        // ава - может быть пустым
+        //  $_FILES['mf-photo-company'];//фотографии
+        if (file_exists($_FILES['mf-photo-company'])) {
+            //$name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
+            $_FILES['mf-photo-company']['name'] = $this->validateData->FilterStringOnHtmlSql($_FILES['mf-photo-company']['name']);
+        }
     }
     
     public function SaveRegistrationCompany(){
@@ -212,20 +214,22 @@ class HandlingData
         $_POST['mf-contact_person'] = $this->IsFillField($_POST['mf-contact_person']);
         $_POST['mf-contact_person-email'] = $this->IsFillField($_POST['mf-contact_person-email']);
         $_POST['mf-contact_person-tel-number'] = $this->IsFillField($_POST['mf-contact_person-tel-number']);
-        //     $_FILES['mf_photo'];
     }
     
     private function IsValidFildRegistrationClient(){
         $this->IsValidFildString($_POST['mf-contact_person']);
         $this->IsValidFildIntegerString($_POST['mf-contact_person-email']);
         $this->IsValidFildInteger($_POST['mf-contact_person-tel-number']);
-        //     $_FILES['mf_photo'];
+        if (file_exists($_FILES['mf_photo'])) {
+            //$name = htmlentities(stripslashes(strip_tags(trim($name))), ENT_QUOTES, 'UTF-8');
+            $_FILES['mf_photo']['name'] = $this->validateData->FilterStringOnHtmlSql($_FILES['mf_photo']['name']);
+        }
     }
     
     public function SaveRegistrationClient(){
         $this->IsFillFieldRegistrationClient();
         $this->IsValidFildRegistrationClient();
-        $this->bal->SaveClient()
+        $this->bal->SaveClient();
     }    
     //registration.form user - end
 //////////////////////////////Сергей///////////начало////////////////
